@@ -15,13 +15,18 @@ class Address extends Migration
     {
         Schema::create('address', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('project_id')->unsigned()->nullable();
+            $table->integer('user_id')->unsigned()->nullable(); 
             $table->string('country');
             $table->string('state');
             $table->string('city');
             $table->string('zip');
-            $table->string('block');
+            $table->string('block')->nullable();
             $table->string('address');
             $table->timestamps();
+
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onDelete('cascade');
         });
     }
 

@@ -21,13 +21,13 @@ class AuthController extends BaseController
 
     public function index(Request $request)
     {
-        if ($request->privilage == 'superadmin') {
+        // if ($request->privilage == 'superadmin') {
             $user = User::paginate(10);
             return $this->sendResponse($user, 'User successfully registered');    
-        }
-        else{
-            return $this->sendError('Unauthorized', '', 401);
-        }
+        // }
+        // else{
+        //     return $this->sendError('Unauthorized', '', 401);
+        // }
     }
 
     /**

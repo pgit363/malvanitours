@@ -4,6 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\API\V1\ProjectsController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +33,22 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
 });
 
 Route::group(['middleware' => 'api'], function ($router) {
-    Route::get('/contact', [ContactController::class, 'index']);   
-    Route::get('/contact/{id}', [ContactController::class, 'index']);    
+    Route::get('/contact', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);
+    Route::get('/contact/{id}', [ContactController::class, 'index']);    
     Route::put('/contact/{id}', [ContactController::class, 'update']);
     Route::delete('/contact/{id}', [ContactController::class, 'destroy']);
+
+    Route::get('/categories', [CategoriesController::class, 'index']);   
+    Route::post('/categories', [CategoriesController::class, 'store']);
+    Route::get('/categories/{id}', [CategoriesController::class, 'show']);
+    Route::get('/categories/project/{categories_id}', [CategoriesController::class, 'getAllProjects']);   
+    Route::put('/categories/{id}', [CategoriesController::class, 'update']);   
+    Route::delete('/categories/{id}', [CategoriesController::class, 'destroy']);   
+
+    Route::get('/projects', [ProjectsController::class, 'index']);   
+    Route::post('/project', [ProjectsController::class, 'store']);
+    Route::get('/project/{id}', [ProjectsController::class, 'show']);   
+    Route::put('/project/{id}', [ProjectsController::class, 'update']);   
+    Route::delete('/project/{id}', [ProjectsController::class, 'destroy']);   
 });

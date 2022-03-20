@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateUserTable extends Migration
+class UpdateProjectLinkColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateUserTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function($table) {
-            $table->string('privilage');
+        Schema::table('projects', function($table) {
+            $table->boolean('link_status')->default(0);
         });
     }
 
