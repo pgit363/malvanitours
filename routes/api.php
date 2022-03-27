@@ -7,7 +7,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\API\V1\CategoriesController;
 use App\Http\Controllers\API\V1\ProjectsController;
 use App\Http\Controllers\API\V1\ProductsController;
-
+use App\Http\Controllers\API\V1\RolesController;
 
 
 /*
@@ -60,4 +60,12 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/product/{id}', [ProductsController::class, 'show']);   
     Route::put('/product/{id}', [ProductsController::class, 'update']);   
     Route::delete('/product/{id}', [ProductsController::class, 'destroy']);   
+
+    Route::get('/roles', [RolesController::class, 'index']);   
+    Route::post('/role', [RolesController::class, 'store']);
+    Route::get('/role/{id}', [RolesController::class, 'show']);   
+    Route::put('/role/{id}', [RolesController::class, 'update']);   
+    Route::delete('/role/{id}', [RolesController::class, 'destroy']);  
+    Route::get('/role/{id}/users', [RolesController::class, 'getAllUsers']); 
+
 });

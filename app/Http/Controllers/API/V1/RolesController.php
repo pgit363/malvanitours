@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\V1;
 
 use App\Models\Roles;
 use Illuminate\Http\Request;
+use Validator;
+use App\Http\Controllers\BaseController as BaseController;
 
-class RolesController extends Controller
+class RolesController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,8 @@ class RolesController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Roles::paginate(10);
+        return $this->sendResponse($roles, 'Roles successfully Retrieved...!');   
     }
 
     /**
@@ -35,7 +38,18 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|between:2,100',
+            'display_name' => 'required|string|between:2,100',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), '', 400);       
+        }
+      
+        $role = Roles::create($request->all());
+
+        return $this->sendResponse($role, 'Roles added successfully...!');        
     }
 
     /**
@@ -44,9 +58,32 @@ class RolesController extends Controller
      * @param  \App\Models\Roles  $roles
      * @return \Illuminate\Http\Response
      */
-    public function show(Roles $roles)
+    public function show(Request $request, $id)
     {
-        //
+        $role = Roles::find($id);
+        
+        if (is_null($role)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        return $this->sendResponse($role, 'Role successfully Retrieved...!');   
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Roles  $roles
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllUsers(Request $request, $id)
+    {
+        $users = Roles::find($id)->users;
+        
+        if (is_null($users)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        return $this->sendResponse($users, 'Role successfully Retrieved...!');   
     }
 
     /**
@@ -67,9 +104,26 @@ class RolesController extends Controller
      * @param  \App\Models\Roles  $roles
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Roles $roles)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|between:2,100',
+            'display_name' => 'required|string|between:2,100',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), '', 400);       
+        }
+
+        $role = Roles::find($id);
+
+        if (is_null($role)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        $role->update($request->all());
+
+        return $this->sendResponse($role, 'Roles updated successfully...!');   
     }
 
     /**
@@ -78,8 +132,16 @@ class RolesController extends Controller
      * @param  \App\Models\Roles  $roles
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Roles $roles)
+    public function destroy(Request $request, $id)
     {
-        //
+        $role = Roles::find($id);
+
+        if (is_null($role)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        $role->delete($request->all());
+
+        return $this->sendResponse($role, 'Roles deleted successfully...!');   
     }
 }
