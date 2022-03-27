@@ -57,6 +57,6 @@ class Projects extends Model
 
     public function products()
     {
-        return $this->hasMany(products::class, 'project_id');
+        return $this->hasMany(products::class, 'category_id');
     }
 }
