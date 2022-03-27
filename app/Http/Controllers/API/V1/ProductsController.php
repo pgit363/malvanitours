@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\V1;
 
 use App\Models\Products;
 use Illuminate\Http\Request;
+use Validator;
+use App\Http\Controllers\BaseController as BaseController;
 
-class ProductsController extends Controller
+class ProductsController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,8 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        //
+        $products = Products::paginate(10);
+        return $this->sendResponse($products, 'Products successfully Retrieved...!');   
     }
 
     /**
@@ -35,7 +38,22 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|between:2,100',
+            'project_id' => 'required|numeric',
+            'price' => 'required|string',
+            'description' => 'required|string',
+            'ratings' => 'numeric',
+            'picture' => 'string',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), '', 400);       
+        }
+      
+        $product = Products::create($request->all());
+
+        return $this->sendResponse($product, 'Product added successfully...!');        
     }
 
     /**
@@ -44,9 +62,15 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function show(Products $products)
+    public function show(Request $request, $id)
     {
-        //
+        $product = Products::find($id);
+        
+        if (is_null($product)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        return $this->sendResponse($product, 'Product successfully Retrieved...!');   
     }
 
     /**
@@ -67,9 +91,30 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Products $products)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|between:2,100',
+            'project_id' => 'required|numeric',
+            'price' => 'required|string',
+            'description' => 'required|string',
+            'ratings' => 'numeric',
+            'picture' => 'string',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), '', 400);       
+        }
+
+        $products = Products::find($id);
+
+        if (is_null($products)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        $products->update($request->all());
+
+        return $this->sendResponse($products, 'Product updated successfully...!');   
     }
 
     /**
@@ -78,8 +123,16 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Products $products)
+    public function destroy(Request $request, $id)
     {
-        //
+        $products = Products::find($id);
+
+        if (is_null($products)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        $products->delete($request->all());
+
+        return $this->sendResponse($products, 'Products deleted successfully...!');   
     }
 }

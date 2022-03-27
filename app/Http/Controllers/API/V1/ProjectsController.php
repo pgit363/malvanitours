@@ -80,6 +80,22 @@ class ProjectsController extends BaseController
         return $this->sendResponse($projects, 'Projects successfully Retrieved...!');   
     }
 
+
+       /**
+     * Display a listing of the projects.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllProducts($id)
+    {
+        $products = Projects::find($id)->products;
+        
+        if (is_null($products)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        return $this->sendResponse($products, 'Products successfully Retrieved...!'); 
+    }
     /**
      * Show the form for editing the specified resource.
      *

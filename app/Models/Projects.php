@@ -54,4 +54,9 @@ class Projects extends Model
     {
         return $this->belongsTo(categories::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(products::class, 'project_id');
+    }
 }

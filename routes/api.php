@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\API\V1\ProjectsController;
+use App\Http\Controllers\API\V1\ProductsController;
+
 
 
 /*
@@ -51,4 +53,11 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/project/{id}', [ProjectsController::class, 'show']);   
     Route::put('/project/{id}', [ProjectsController::class, 'update']);   
     Route::delete('/project/{id}', [ProjectsController::class, 'destroy']);   
+    Route::get('/project/{id}/products', [ProjectsController::class, 'getAllProducts']); 
+
+    Route::get('/products', [ProductsController::class, 'index']);   
+    Route::post('/product', [ProductsController::class, 'store']);
+    Route::get('/product/{id}', [ProductsController::class, 'show']);   
+    Route::put('/product/{id}', [ProductsController::class, 'update']);   
+    Route::delete('/product/{id}', [ProductsController::class, 'destroy']);   
 });
