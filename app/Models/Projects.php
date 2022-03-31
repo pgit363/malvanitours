@@ -52,11 +52,11 @@ class Projects extends Model
 
     public function categories()
     {
-        return $this->belongsTo(categories::class);
+        return $this->belongsTo(Categories::class);
     }
 
     public function products()
     {
-        return $this->hasMany(products::class, 'project_id');
+        return $this->hasMany(Products::class, 'project_id');
     }
 }
