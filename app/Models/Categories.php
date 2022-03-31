@@ -41,6 +41,6 @@ class Categories extends Model
 
     public function projects()
     {
-        return $this->hasMany(projects::class, 'category_id');
+        return $this->hasMany(Projects::class, 'category_id');
     }
 }
