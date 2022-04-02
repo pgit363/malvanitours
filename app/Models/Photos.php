@@ -4,15 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
 
-class Products extends Model
+class Photos extends Model
 {
-    use HasFactory, Hashidable, HasFactory, Notifiable;
+    use  Hashidable, HasFactory, Notifiable;
     
     /**
      * The attributes that are mass assignable.
@@ -22,10 +20,8 @@ class Products extends Model
     protected $fillable = [
         'name',
         'project_id',
-        'price',
-        'ratings',
-        'picture',
-        'description',
+        'product_id',
+        'url',
     ];
 
     /**
@@ -47,8 +43,8 @@ class Products extends Model
         return $this->belongsTo(Projects::class);
     }
 
-    public function photos()
+    public function products()
     {
-        return $this->HasMany(Photos::class);
+        return $this->belongsTo(Products::class);
     }
 }

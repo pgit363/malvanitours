@@ -60,4 +60,8 @@ class Projects extends Model
         return $this->hasMany(Products::class, 'project_id');
     }
     
+    public function photos()
+    {
+        return $this->HasMany(Photos::class);
+    }
 }

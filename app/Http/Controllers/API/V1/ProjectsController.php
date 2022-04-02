@@ -81,7 +81,7 @@ class ProjectsController extends BaseController
     }
 
 
-       /**
+    /**
      * Display a listing of the projects.
      *
      * @return \Illuminate\Http\Response
@@ -96,6 +96,7 @@ class ProjectsController extends BaseController
 
         return $this->sendResponse($products, 'Products successfully Retrieved...!'); 
     }
+    
     /**
      * Show the form for editing the specified resource.
      *

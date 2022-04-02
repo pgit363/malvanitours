@@ -8,6 +8,8 @@ use App\Http\Controllers\API\V1\CategoriesController;
 use App\Http\Controllers\API\V1\ProjectsController;
 use App\Http\Controllers\API\V1\ProductsController;
 use App\Http\Controllers\API\V1\RolesController;
+use App\Http\Controllers\API\V1\PhotosController;
+
 
 
 /*
@@ -60,6 +62,12 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/product/{id}', [ProductsController::class, 'show']);   
     Route::put('/product/{id}', [ProductsController::class, 'update']);   
     Route::delete('/product/{id}', [ProductsController::class, 'destroy']);   
+
+    Route::get('/photos', [PhotosController::class, 'index']);   
+    Route::post('/photo', [PhotosController::class, 'store']);
+    Route::get('/photo/{id}', [PhotosController::class, 'show']);   
+    Route::put('/photo/{id}', [PhotosController::class, 'update']);   
+    Route::delete('/photo/{id}', [PhotosController::class, 'destroy']);   
 
     Route::get('/roles', [RolesController::class, 'index']);   
     Route::post('/role', [RolesController::class, 'store']);
