@@ -20,13 +20,15 @@ class Address extends Migration
             $table->string('country');
             $table->string('state');
             $table->string('city');
+            $table->integer('city_id')->unsigned()->nullable();
             $table->string('zip');
             $table->string('block')->nullable();
             $table->string('address');
             $table->timestamps();
 
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onDelete('cascade');
+            $table->foreign('project_id')->references('id')->on('projects')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade');
         });
     }
 

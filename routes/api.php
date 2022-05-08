@@ -9,8 +9,8 @@ use App\Http\Controllers\API\V1\ProjectsController;
 use App\Http\Controllers\API\V1\ProductsController;
 use App\Http\Controllers\API\V1\RolesController;
 use App\Http\Controllers\API\V1\PhotosController;
-
-
+use App\Http\Controllers\API\V1\LandingPageController;
+use App\Http\Controllers\API\V1\Admin\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,11 +37,20 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
 });
 
 Route::group(['middleware' => 'api'], function ($router) {
+
+    Route::get('/landingpage', [LandingPageController::class, 'index']);   
+
     Route::get('/contact', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);
     Route::get('/contact/{id}', [ContactController::class, 'index']);    
     Route::put('/contact/{id}', [ContactController::class, 'update']);
     Route::delete('/contact/{id}', [ContactController::class, 'destroy']);
+
+    Route::get('/admin/cities', [CityController::class, 'index']);  
+    Route::post('/admin/city', [CityController::class, 'store']);
+    Route::get('/admin/city/{id}', [CityController::class, 'index']);    
+    Route::put('/admin/city/{id}', [CityController::class, 'update']);
+    Route::delete('/admin/city/{id}', [CityController::class, 'destroy']);
 
     Route::get('/categories', [CategoriesController::class, 'index']);   
     Route::post('/categories', [CategoriesController::class, 'store']);

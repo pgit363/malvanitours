@@ -68,4 +68,10 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 2. php artisan key:generate
 3. php artisan migrate
 4. chmod -R 775 storage
-5. ln -s /home/user/app/public /home/user/public_html
+5. dont use 5.
+6. ln -s /home/user/app/public /home/user/public_html
+
+
+Storage accees
+
+http://127.0.0.1:8000/storage/files/szaBdrNRQgBkm4PxPquENU9cVMHBKgxUgazTZKZH.png
