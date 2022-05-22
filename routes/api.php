@@ -11,10 +11,9 @@ use App\Http\Controllers\API\V1\RolesController;
 use App\Http\Controllers\API\V1\PhotosController;
 use App\Http\Controllers\API\V1\LandingPageController;
 use App\Http\Controllers\API\V1\PlaceController;
-use App\Http\Controllers\API\V1\CityController;
 
 // admin route use
-// use App\Http\Controllers\API\V1\Admin\CityController;
+use App\Http\Controllers\API\V1\Admin\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,9 +54,6 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/admin/city/{id}', [CityController::class, 'index']);    
     Route::put('/admin/city/{id}', [CityController::class, 'update']);
     Route::delete('/admin/city/{id}', [CityController::class, 'destroy']);
-
-    Route::get('/city/places', [CityController::class, 'getAllPlaces']);  
-
 
     Route::get('/places', [PlaceController::class, 'index']);  
     Route::post('/place', [PlaceController::class, 'store']);
