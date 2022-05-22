@@ -1,43 +1,27 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\API\V1\CategoriesController;
-use App\Http\Controllers\API\V1\ProjectsController;
-use App\Http\Controllers\API\V1\ProductsController;
-use App\Http\Controllers\API\V1\RolesController;
-use App\Http\Controllers\API\V1\PhotosController;
 use App\Http\Controllers\API\V1\Admin\CityController;
+use App\Http\Controllers\UsersController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Router;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Admin Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
+| Here is where you can register admin routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| contains the "admin" middleware group. Now create something great!
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::get('/', function() {
+    print('I am an admin');
+});
 
-//  open this routes when admin authentication seperately required
-
-// Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
-//     Route::post('/login', [AuthController::class, 'login']);
-//     Route::post('/register', [AuthController::class, 'register']);
-//     Route::post('/logout', [AuthController::class, 'logout']);
-//     Route::post('/refresh', [AuthController::class, 'refresh']);
-//     Route::get('/user-profile', [AuthController::class, 'userProfile']);  
-//     Route::post('/users', [AuthController::class, 'index']);    
-// });
-
-Route::group(['middleware' => 'api/admin/'], function ($router) {
+Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/cities', [CityController::class, 'index']);  
     Route::post('/city', [CityController::class, 'store']);
     Route::get('/city/{id}', [CityController::class, 'index']);    

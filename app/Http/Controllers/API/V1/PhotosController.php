@@ -39,8 +39,10 @@ class PhotosController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'project_id' => 'required_without:product_id',
-            'product_id' => 'required_without:project_id',
+            'project_id' => 'sometimes|numeric',
+            'product_id' => 'sometimes|numeric',
+            'place_id' => 'sometimes|numeric',
+            'comment_id' => 'sometimes|numeric',            
             'url' => 'string',
         ]);
 

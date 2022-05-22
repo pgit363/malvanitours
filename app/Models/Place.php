@@ -8,9 +8,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
 
-class City extends Model
+class Place extends Model
 {
-    use  Hashidable, HasFactory, Notifiable;
+    use HasFactory, Hashidable, Notifiable;
 
     
     /**
@@ -20,10 +20,18 @@ class City extends Model
      */
     protected $fillable = [
         'name',
-        'tag_line',
-        'famous_for',
+        'city_id',
+        'description',
+        'rules',
         'image_url',
         'bg_image_url',
+        'price',
+        'rating',
+        'visitors_count',
+        'social_media',
+        'contact_details',
+        'categories',
+        'comment_id'
     ];
 
     /**
@@ -38,11 +46,10 @@ class City extends Model
      *
      * @var array
      */
-    protected $casts = [];
-
-
-    public function places()
-    {
-        return $this->hasMany(Place::class, 'category_id');
-    }
+    protected $casts = [
+        'rules' => 'array',
+        'price' => 'array',
+        'social_media' => 'array',
+        'contact_details' => 'array'
+    ];
 }

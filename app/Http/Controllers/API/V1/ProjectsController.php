@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\Categories;
 use App\Http\Controllers\BaseController as BaseController;
+use Illuminate\Support\Facades\Storage;
 
 
 class ProjectsController extends BaseController
@@ -44,10 +45,10 @@ class ProjectsController extends BaseController
             'name' => 'required|string|between:2,100',
             'category_id' => 'required|numeric',
             'domain_name' => 'required|string',
-            'logo' => 'string',
-            'fevicon' => 'string',
+            'logo' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'fevicon' => 'required|mimes:jpeg,jpg,png|max:2048',
             'description' => 'required|string',
-            'ratings' => 'numeric',
+            // 'ratings' => 'numeric',  add into users api
             'picture' => 'string',
             'start_price' => 'numeric',
             'speciality' => 'string',
@@ -58,6 +59,19 @@ class ProjectsController extends BaseController
             return $this->sendError($validator->errors(), '', 400);       
         }
       
+        // Image 1 store      
+        $image1 = $request->file('logo')->getClientOriginalName();
+
+        $logo = $request->file('logo')->store('public/assets/projects/'.$request->name);
+
+        $request->logo = Storage::url($logo);
+
+        $image2 = $request->file('fevicon')->getClientOriginalName();
+
+        $fevicon = $request->file('fevicon')->store('public/assets/projects/'.$request->name);
+
+        $request->fevicon = Storage::url($fevicon);
+ 
         $projects = Projects::create($request->all());
 
         return $this->sendResponse($projects, 'Projects added successfully...!');        

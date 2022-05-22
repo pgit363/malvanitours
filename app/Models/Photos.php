@@ -21,6 +21,8 @@ class Photos extends Model
         'name',
         'project_id',
         'product_id',
+        'place_id',
+        'comment_id',
         'url',
     ];
 
