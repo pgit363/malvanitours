@@ -60,9 +60,9 @@ class CityController extends BaseController
         if ($image = $request->file('image_url')) {
             Log::info("inside upload image_url");
             
-            $image_url = $request->project_id.$request->name.date('YmdHis'). "." . $image->getClientOriginalExtension();
+            $image_url = $request->name.date('YmdHis'). "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('image_url')->store($destinationPath.$request->name);
+            $path = $request->file('image_url')->store(config('constants.upload_path.city').$request->name);
 
             $input['image_url'] = Storage::url($path);
             

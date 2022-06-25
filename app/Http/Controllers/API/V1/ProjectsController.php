@@ -60,8 +60,8 @@ class ProjectsController extends BaseController
         }
       
         $input = $request->all();
+        $date = currentDate(); //for unique naming of project folder
         Log::info("upload file starting");
-        $destinationPath = 'public/assets/projects/';
 
         //Image 1 store      
         if ($image = $request->file('logo')) {
@@ -69,7 +69,7 @@ class ProjectsController extends BaseController
             
             $logo = date('YmdHis') . "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('logo')->store($destinationPath.$request->name);
+            $path = $request->file('logo')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
 
             $input['logo'] = Storage::url($path);
             
@@ -82,7 +82,7 @@ class ProjectsController extends BaseController
             
             $fevicon = date('YmdHis') . "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('fevicon')->store($destinationPath.$request->name);
+            $path = $request->file('fevicon')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
 
             $input['fevicon'] = Storage::url($path);
             

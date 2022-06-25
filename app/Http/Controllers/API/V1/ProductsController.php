@@ -54,14 +54,13 @@ class ProductsController extends BaseController
         }
 
         $input = $request->all();
-        $destinationPath = 'public/assets/products/';
 
         if ($image = $request->file('picture')) {
-            Log::info("inside upload picture");
+            Log::info("inside upload picture" .config('constants.upload_path.product'));
             
             $picture = $request->project_id.$request->name.date('YmdHis'). "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('picture')->store($destinationPath.$request->name);
+            $path = $request->file('picture')->store(config('constants.upload_path.product').$request->project_id.'/'.$request->name);
 
             $input['picture'] = Storage::url($path);
             

@@ -6,6 +6,8 @@ use App\Models\Photos;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Controllers\BaseController as BaseController;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends BaseController
 {
@@ -43,14 +45,30 @@ class PhotosController extends BaseController
             'product_id' => 'sometimes|numeric',
             'place_id' => 'sometimes|numeric',
             'comment_id' => 'sometimes|numeric',            
-            'url' => 'string',
+            'url' => 'mimes:jpeg,jpg,png|max:2048',
         ]);
 
         if($validator->fails()){
             return $this->sendError($validator->errors(), '', 400);       
         }
       
-        $photos = Photos::create($request->all());
+        $input = $request->all();
+        Log::info("upload file starting");
+
+        //Image 1 store      
+        if ($image = $request->file('url')) {
+            Log::info("inside upload url");
+            
+            $url = date('YmdHis') . "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('url')->store(config('constants.upload_path.photo').$request->name);
+
+            $input['url'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['url']);
+        }
+
+        $photos = Photos::create($input);
 
         return $this->sendResponse($photos, 'Photos added successfully...!');        
     }
