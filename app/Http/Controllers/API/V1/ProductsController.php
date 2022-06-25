@@ -6,6 +6,8 @@ use App\Models\Products;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Controllers\BaseController as BaseController;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductsController extends BaseController
 {
@@ -43,15 +45,30 @@ class ProductsController extends BaseController
             'project_id' => 'required|numeric',
             'price' => 'required|string',
             'description' => 'required|string',
-            'ratings' => 'numeric',
-            'picture' => 'string',
+            // 'ratings' => 'numeric',   should given by user
+            'picture' => 'mimes:jpeg,jpg,png|max:2048',
         ]);
 
         if($validator->fails()){
             return $this->sendError($validator->errors(), '', 400);       
         }
+
+        $input = $request->all();
+        $destinationPath = 'public/assets/products/';
+
+        if ($image = $request->file('picture')) {
+            Log::info("inside upload picture");
+            
+            $picture = $request->project_id.$request->name.date('YmdHis'). "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('picture')->store($destinationPath.$request->name);
+
+            $input['picture'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['picture']);
+        }
       
-        $product = Products::create($request->all());
+        $product = Products::create($input);
 
         return $this->sendResponse($product, 'Product added successfully...!');        
     }

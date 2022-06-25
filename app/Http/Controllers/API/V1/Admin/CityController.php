@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class CityController extends BaseController
 {
@@ -52,22 +53,37 @@ class CityController extends BaseController
             return $this->sendError($validator->errors(), '', 400);       
         }
       
+        $input = $request->all();
+        $destinationPath = 'public/assets/cities/'; 
+
         // Image 1 store      
-        $image1 = $request->file('image_url')->getClientOriginalName();
- 
-        $image_path1 = $request->file('image_url')->store('public/assets/city/'.$request->name);
- 
-        $request->image_url = Storage::url($image_path1);
+        if ($image = $request->file('image_url')) {
+            Log::info("inside upload image_url");
+            
+            $image_url = $request->project_id.$request->name.date('YmdHis'). "." . $image->getClientOriginalExtension();
 
-        // Image 2 store
-        $image2 = $request->file('bg_image_url')->getClientOriginalName();
- 
-        $image_path2 = $request->file('bg_image_url')->store('public/assets/city/'.$request->name);
+            $path = $request->file('image_url')->store($destinationPath.$request->name);
 
-        $request->bg_image_url = Storage::url($image_path2);
+            $input['image_url'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['image_url']);
+        }
+
+        // Image 2 store      
+        if ($image = $request->file('bg_image_url')) {
+            Log::info("inside upload bg_image_url");
+            
+            $bg_image_url = $request->name."." . $image->getClientOriginalExtension();
+
+            $path = $request->file('bg_image_url')->store($destinationPath.$request->name);
+
+            $input['bg_image_url'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['bg_image_url']);
+        }
 
         //inserting into table
-        $city = City::create($request->all());
+        $city = City::create($input);
 
         return $this->sendResponse($city, 'City added successfully...!');        
     }

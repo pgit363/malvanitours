@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\Categories;
 use App\Http\Controllers\BaseController as BaseController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-
 
 class ProjectsController extends BaseController
 {
@@ -19,7 +19,7 @@ class ProjectsController extends BaseController
      */
     public function index()
     {
-        $projects = Projects::paginate(10);
+        $projects = Projects::orderBy('id','desc')->paginate(10);
         return $this->sendResponse($projects, 'Projects successfully Retrieved...!');   
     }
 
@@ -45,10 +45,10 @@ class ProjectsController extends BaseController
             'name' => 'required|string|between:2,100',
             'category_id' => 'required|numeric',
             'domain_name' => 'required|string',
-            'logo' => 'required|mimes:jpeg,jpg,png|max:2048',
-            'fevicon' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'logo' => 'mimes:jpeg,jpg,png|max:2048',
+            'fevicon' => 'mimes:jpeg,jpg,png|max:2048',
             'description' => 'required|string',
-            // 'ratings' => 'numeric',  add into users api
+            // 'ratings' => 'numeric',  add into users api, user will give rating
             'picture' => 'string',
             'start_price' => 'numeric',
             'speciality' => 'string',
@@ -59,20 +59,37 @@ class ProjectsController extends BaseController
             return $this->sendError($validator->errors(), '', 400);       
         }
       
-        // Image 1 store      
-        $image1 = $request->file('logo')->getClientOriginalName();
+        $input = $request->all();
+        Log::info("upload file starting");
+        $destinationPath = 'public/assets/projects/';
 
-        $logo = $request->file('logo')->store('public/assets/projects/'.$request->name);
+        //Image 1 store      
+        if ($image = $request->file('logo')) {
+            Log::info("inside upload logo");
+            
+            $logo = date('YmdHis') . "." . $image->getClientOriginalExtension();
 
-        $request->logo = Storage::url($logo);
+            $path = $request->file('logo')->store($destinationPath.$request->name);
 
-        $image2 = $request->file('fevicon')->getClientOriginalName();
+            $input['logo'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['logo']);
+        }
 
-        $fevicon = $request->file('fevicon')->store('public/assets/projects/'.$request->name);
+        //Image 2 store      
+        if ($image = $request->file('fevicon')) {
+            Log::info("inside upload fevicon");
+            
+            $fevicon = date('YmdHis') . "." . $image->getClientOriginalExtension();
 
-        $request->fevicon = Storage::url($fevicon);
- 
-        $projects = Projects::create($request->all());
+            $path = $request->file('fevicon')->store($destinationPath.$request->name);
+
+            $input['fevicon'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['fevicon']);
+        }
+
+        $projects = Projects::create($input);
 
         return $this->sendResponse($projects, 'Projects added successfully...!');        
     }
