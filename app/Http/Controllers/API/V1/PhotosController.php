@@ -63,7 +63,7 @@ class PhotosController extends BaseController
 
             $path = $request->file('url')->store(config('constants.upload_path.photo').$request->name);
 
-            $input['url'] = Storage::url($path);
+            $input['url'] = $path;
             
             Log::info("FILE STORED".$input['url']);
         }
@@ -108,25 +108,49 @@ class PhotosController extends BaseController
      * @param  \App\Models\Photos  $photos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Photos $photos)
+    public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'project_id' => 'required_without:product_id',
-            'product_id' => 'required_without:project_id',
-            'url' => 'string',
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
-        }
-      
-        $photos = Photos::create($request->all());
+        $photos = Photos::find($id);
 
         if (is_null($photos)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        $photos->update($request->all());
+        $validator = Validator::make($request->all(), [
+            'project_id' => 'sometimes|numeric',
+            'product_id' => 'sometimes|numeric',
+            'place_id' => 'sometimes|numeric',
+            'comment_id' => 'sometimes|numeric', 
+            'url' => 'mimes:jpeg,jpg,png|max:2048',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), '', 400);       
+        }
+    
+        $input = $request->all();
+        Log::info("upload file starting");
+
+        if ($image = $request->file('url')) {
+            
+            if(Storage::exists($photos->url)){
+                Log::info("file exist");
+                Storage::delete($photos->url);
+                Log::info("file deleted");
+            }
+
+            Log::info("inside upload url");
+            
+            $url = date('YmdHis') . "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('url')->store(config('constants.upload_path.photo').$request->name);
+
+            $input['url'] = $path;
+            
+            Log::info("FILE STORED".$input['url']);
+        }
+
+        $photos->update($input);
 
         return $this->sendResponse($photos, 'Photos updated successfully...!');   
     }
@@ -145,6 +169,10 @@ class PhotosController extends BaseController
             return $this->sendError('Empty', [], 404);
         }
 
+        if(Storage::exists($photos->url)){
+            Storage::delete($photos->url);
+        }
+        
         $photos->delete($request->all());
 
         return $this->sendResponse($photos, 'Photos deleted successfully...!');   

@@ -71,7 +71,7 @@ class ProjectsController extends BaseController
 
             $path = $request->file('logo')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
 
-            $input['logo'] = Storage::url($path);
+            $input['logo'] = $path;
             
             Log::info("FILE STORED".$input['logo']);
         }
@@ -81,10 +81,10 @@ class ProjectsController extends BaseController
             Log::info("inside upload fevicon");
             
             $fevicon = date('YmdHis') . "." . $image->getClientOriginalExtension();
-
+            
             $path = $request->file('fevicon')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
 
-            $input['fevicon'] = Storage::url($path);
+            $input['fevicon'] = $path;
             
             Log::info("FILE STORED".$input['fevicon']);
         }
@@ -149,13 +149,13 @@ class ProjectsController extends BaseController
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'category_id' => 'required|numeric',
-            'domain_name' => 'required|string',
-            'logo' => 'string',
-            'fevicon' => 'string',
-            'description' => 'required|string',
-            'ratings' => 'numeric',
+            'name' => 'string|between:2,100',
+            'category_id' => 'numeric',
+            'domain_name' => 'string',
+            'logo' => 'mimes:jpeg,jpg,png|max:2048',
+            'fevicon' => 'mimes:jpeg,jpg,png|max:2048',
+            'description' => 'string',
+            // 'ratings' => 'numeric',  add into users api, user will give rating
             'picture' => 'string',
             'start_price' => 'numeric',
             'speciality' => 'string',
@@ -172,7 +172,47 @@ class ProjectsController extends BaseController
             return $this->sendError('Empty', [], 404);
         }
 
-        $projects->update($request->all());
+        $input = $request->all();
+        $date = currentDate(); //for unique naming of project folder
+        Log::info("upload file starting");
+
+        //Image 1 store      
+        if ($image = $request->file('logo')) {
+            
+            if(Storage::exists($projects->logo)){
+                Storage::delete($projects->logo);
+            }
+    
+            Log::info("inside upload logo");
+            
+            $logo = date('YmdHis') . "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('logo')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
+
+            $input['logo'] = $path;
+            
+            Log::info("FILE STORED".$input['logo']);
+        }
+
+        //Image 2 store      
+        if ($image = $request->file('fevicon')) {
+            
+            if(Storage::exists($projects->fevicon)){
+                Storage::delete($projects->fevicon);
+            }
+            
+            Log::info("inside upload fevicon");
+            
+            $fevicon = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            
+            $path = $request->file('fevicon')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
+
+            $input['fevicon'] = $path;
+            
+            Log::info("FILE STORED".$input['fevicon']);
+        }
+
+        $projects->update($input);
 
         return $this->sendResponse($projects, 'Projects updated successfully...!');   
     }
@@ -191,6 +231,14 @@ class ProjectsController extends BaseController
             return $this->sendError('Empty', [], 404);
         }
 
+        if(Storage::exists($projects->logo)){
+            Storage::delete($projects->logo);
+        }
+
+        if(Storage::exists($projects->fevicon)){
+            Storage::delete($projects->fevicon);
+        }
+        
         $projects->delete($request->all());
 
         return $this->sendResponse($projects, 'Projects deleted successfully...!');   

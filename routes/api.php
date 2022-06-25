@@ -71,20 +71,20 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/projects', [ProjectsController::class, 'index']);   
     Route::post('/project', [ProjectsController::class, 'store']);
     Route::get('/project/{id}', [ProjectsController::class, 'show']);   
-    Route::put('/project/{id}', [ProjectsController::class, 'update']);   
+    Route::post('/project/{id}', [ProjectsController::class, 'update']);   
     Route::delete('/project/{id}', [ProjectsController::class, 'destroy']);   
     Route::get('/project/{id}/products', [ProjectsController::class, 'getAllProducts']); 
 
     Route::get('/products', [ProductsController::class, 'index']);   
     Route::post('/product', [ProductsController::class, 'store']);
     Route::get('/product/{id}', [ProductsController::class, 'show']);   
-    Route::put('/product/{id}', [ProductsController::class, 'update']);   
+    Route::post('/product/{id}', [ProductsController::class, 'update']);   //need confirmation PUT cant use form-data
     Route::delete('/product/{id}', [ProductsController::class, 'destroy']);   
 
     Route::get('/photos', [PhotosController::class, 'index']);   
     Route::post('/photo', [PhotosController::class, 'store']);
     Route::get('/photo/{id}', [PhotosController::class, 'show']);   
-    Route::put('/photo/{id}', [PhotosController::class, 'update']);   
+    Route::post('/photo/{id}', [PhotosController::class, 'update']);   
     Route::delete('/photo/{id}', [PhotosController::class, 'destroy']);   
 
     Route::get('/roles', [RolesController::class, 'index']);   

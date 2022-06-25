@@ -64,7 +64,7 @@ class CityController extends BaseController
 
             $path = $request->file('image_url')->store(config('constants.upload_path.city').$request->name);
 
-            $input['image_url'] = Storage::url($path);
+            $input['image_url'] = $path;
             
             Log::info("FILE STORED".$input['image_url']);
         }
@@ -77,7 +77,7 @@ class CityController extends BaseController
 
             $path = $request->file('bg_image_url')->store($destinationPath.$request->name);
 
-            $input['bg_image_url'] = Storage::url($path);
+            $input['bg_image_url'] = $path;
             
             Log::info("FILE STORED".$input['bg_image_url']);
         }

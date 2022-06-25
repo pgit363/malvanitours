@@ -58,11 +58,11 @@ class ProductsController extends BaseController
         if ($image = $request->file('picture')) {
             Log::info("inside upload picture" .config('constants.upload_path.product'));
             
-            $picture = $request->project_id.$request->name.date('YmdHis'). "." . $image->getClientOriginalExtension();
+            $picture = date('YmdHis'). "." . $image->getClientOriginalExtension();
 
             $path = $request->file('picture')->store(config('constants.upload_path.product').$request->project_id.'/'.$request->name);
 
-            $input['picture'] = Storage::url($path);
+            $input['picture'] = $path;
             
             Log::info("FILE STORED".$input['picture']);
         }
@@ -110,12 +110,12 @@ class ProductsController extends BaseController
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'project_id' => 'required|numeric',
-            'price' => 'required|string',
-            'description' => 'required|string',
+            'name' => 'string|between:2,100',
+            'project_id' => 'numeric',
+            'price' => 'string',
+            'description' => 'string',
             'ratings' => 'numeric',
-            'picture' => 'string',
+            'picture' => 'mimes:jpeg,jpg,png|max:2048',
         ]);
 
         if($validator->fails()){
@@ -128,7 +128,28 @@ class ProductsController extends BaseController
             return $this->sendError('Empty', [], 404);
         }
 
-        $products->update($request->all());
+        $input = $request->all();
+
+        if ($image = $request->file('picture')) {
+
+            if(Storage::exists($products->picture)){
+                Log::info("file exist");
+                Storage::delete($products->picture);
+                Log::info("file deleted");
+            }
+
+            Log::info("inside upload picture " .config('constants.upload_path.product'));
+            
+            $picture = date('YmdHis'). "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('picture')->store(config('constants.upload_path.product').$request->project_id.'/'.$request->name);
+
+            $input['picture'] = $path;
+            
+            Log::info("FILE STORED".$input['picture']);
+        }
+            
+        $products->update($input);
 
         return $this->sendResponse($products, 'Product updated successfully...!');   
     }
@@ -147,7 +168,11 @@ class ProductsController extends BaseController
             return $this->sendError('Empty', [], 404);
         }
 
-        $products->delete($request->all());
+        if(Storage::exists($products->picture)){
+            Storage::delete($products->picture);
+        }
+        
+        $products->delete($request->all()); 
 
         return $this->sendResponse($products, 'Products deleted successfully...!');   
     }
