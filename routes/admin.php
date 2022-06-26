@@ -34,7 +34,7 @@ Route::get('/', function() {
 Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/cities', [CityController::class, 'index']);  
     Route::post('/city', [CityController::class, 'store']);
-    Route::get('/city/{id}', [CityController::class, 'index']);    
-    Route::put('/city/{id}', [CityController::class, 'update']);
+    Route::get('/city/{id}', [CityController::class, 'show']);    
+    Route::post('/city/{id}', [CityController::class, 'update']);
     Route::delete('/city/{id}', [CityController::class, 'destroy']);
-});
+}); 

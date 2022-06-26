@@ -41,9 +41,9 @@ class CityController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required_without:product_id',
-            'tag_line' => 'required_without:project_id',
-            'famous_for' => 'required',
+            'name' => 'required|string|unique:cities',
+            'tag_line' => 'required|string',
+            'famous_for' => 'required|string',
             'image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
             'bg_image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
             'url' => 'string',
@@ -54,13 +54,14 @@ class CityController extends BaseController
         }
       
         $input = $request->all();
-        $destinationPath = 'public/assets/cities/'; 
+
+        $date = currentDate(); //for unique naming of project folder
 
         // Image 1 store      
         if ($image = $request->file('image_url')) {
             Log::info("inside upload image_url");
             
-            $image_url = $request->name.date('YmdHis'). "." . $image->getClientOriginalExtension();
+            $image_url = $request->name.$date. "." . $image->getClientOriginalExtension();
 
             $path = $request->file('image_url')->store(config('constants.upload_path.city').$request->name);
 
@@ -75,7 +76,7 @@ class CityController extends BaseController
             
             $bg_image_url = $request->name."." . $image->getClientOriginalExtension();
 
-            $path = $request->file('bg_image_url')->store($destinationPath.$request->name);
+            $path = $request->file('bg_image_url')->store(config('constants.upload_path.city').$request->name);
 
             $input['bg_image_url'] = $path;
             
@@ -114,12 +115,77 @@ class CityController extends BaseController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, City $city)
+    public function update(Request $request, $id)
     {
-        //
+        Log::info($request->all());
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|unique:cities',
+            'tag_line' => 'string',
+            'famous_for' => 'string',
+            'image_url' => 'mimes:jpeg,jpg,png|max:2048',
+            'bg_image_url' => 'mimes:jpeg,jpg,png|max:2048',
+            'url' => 'string',
+        ]);
+        
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), '', 400);       
+        }
+
+        $cities = City::find($id);
+
+        if (is_null($cities)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        $input = $request->all();
+
+        $date = currentDate(); //for unique naming of project folder
+
+        Log::info("upload file starting");
+
+        // Image 1 store      
+        if ($image = $request->file('image_url')) {
+
+            if(Storage::exists($cities->image_url)){
+                Storage::delete($cities->image_url);
+            }
+    
+            Log::info("inside upload image_url");
+            
+            $image_url = $request->name.$date. "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('image_url')->store(config('constants.upload_path.city').$request->name);
+
+            $input['image_url'] = $path;
+            
+            Log::info("FILE STORED".$input['image_url']);
+        }
+
+        // Image 2 store      
+        if ($image = $request->file('bg_image_url')) {
+            
+            if(Storage::exists($cities->bg_image_url)){
+                Storage::delete($cities->bg_image_url);
+            }
+
+            Log::info("inside upload bg_image_url");
+            
+            $bg_image_url = $request->name.$date."." . $image->getClientOriginalExtension();
+
+            $path = $request->file('bg_image_url')->store(config('constants.upload_path.city').$request->name);
+
+            $input['bg_image_url'] = $path;
+            
+            Log::info("FILE STORED".$input['bg_image_url']);
+        }
+
+
+
+        $cities->update($input);
+
+        return $this->sendResponse($cities, 'City updated successfully...!');   
     }
 
     /**
@@ -128,8 +194,24 @@ class CityController extends BaseController
      * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function destroy(City $city)
+    public function destroy(Request $request, $id)
     {
-        //
+        $cities = City::find($id);
+
+        if (is_null($cities)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        if(Storage::exists($cities->image_url)){
+            Storage::delete($cities->image_url);
+        }
+
+        if(Storage::exists($cities->bg_image_url)){
+            Storage::delete($cities->bg_image_url);
+        }
+        
+        $cities->delete($request->all());
+
+        return $this->sendResponse($cities, 'City deleted successfully...!');   
     }
 }
