@@ -95,9 +95,10 @@ class CityController extends BaseController
      * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function show(City $city)
+    public function show($id)
     {
-        //
+        $city = City::whereId($id)->first();
+        return $this->sendResponse($city, 'Cities successfully Retrieved...!');  
     }
 
     /**
