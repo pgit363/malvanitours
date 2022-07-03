@@ -45,7 +45,7 @@ class ProductsController extends BaseController
             'project_id' => 'required|numeric',
             'price' => 'required|string',
             'description' => 'required|string',
-            // 'ratings' => 'numeric',   should given by user
+            'ratings' => 'numeric',  // should given by user
             'picture' => 'mimes:jpeg,jpg,png|max:2048',
         ]);
 

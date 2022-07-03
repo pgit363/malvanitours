@@ -57,8 +57,8 @@ Route::group(['middleware' => 'api'], function ($router) {
 
     Route::get('/places', [PlaceController::class, 'index']);  
     Route::post('/place', [PlaceController::class, 'store']);
-    Route::get('/place/{id}', [PlaceController::class, 'index']);    
-    Route::put('/place/{id}', [PlaceController::class, 'update']);
+    Route::get('/place/{id}', [PlaceController::class, 'show']);    
+    Route::post('/place/{id}', [PlaceController::class, 'update']);
     Route::delete('/place/{id}', [PlaceController::class, 'destroy']);
 
     Route::get('/categories', [CategoriesController::class, 'index']);   
