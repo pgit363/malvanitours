@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Http\Request;
+use App\Http\Controllers\API\V1\PlaceController;
+use App\Http\Controllers\API\V1\Admin\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,10 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/city/{id}', [CityController::class, 'show']);    
     Route::post('/city/{id}', [CityController::class, 'update']);
     Route::delete('/city/{id}', [CityController::class, 'destroy']);
+
+    Route::get('/places', [PlaceController::class, 'index']);  
+    Route::post('/place', [PlaceController::class, 'store']);
+    Route::get('/place/{id}', [PlaceController::class, 'show']);    
+    Route::post('/place/{id}', [PlaceController::class, 'update']);
+    Route::delete('/place/{id}', [PlaceController::class, 'destroy']);
 }); 

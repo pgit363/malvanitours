@@ -11,9 +11,7 @@ use App\Http\Controllers\API\V1\RolesController;
 use App\Http\Controllers\API\V1\PhotosController;
 use App\Http\Controllers\API\V1\LandingPageController;
 use App\Http\Controllers\API\V1\PlaceController;
-
-// admin route use
-use App\Http\Controllers\API\V1\Admin\CityController;
+use App\Http\Controllers\API\V1\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +28,7 @@ use App\Http\Controllers\API\V1\Admin\CityController;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
+Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -49,17 +47,11 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::put('/contact/{id}', [ContactController::class, 'update']);
     Route::delete('/contact/{id}', [ContactController::class, 'destroy']);
 
-    Route::get('/admin/cities', [CityController::class, 'index']);  
-    Route::post('/admin/city', [CityController::class, 'store']);
-    Route::get('/admin/city/{id}', [CityController::class, 'show']);    
-    Route::put('/admin/city/{id}', [CityController::class, 'update']);
-    Route::delete('/admin/city/{id}', [CityController::class, 'destroy']);
-
-    Route::get('/places', [PlaceController::class, 'index']);  
-    Route::post('/place', [PlaceController::class, 'store']);
-    Route::get('/place/{id}', [PlaceController::class, 'show']);    
-    Route::post('/place/{id}', [PlaceController::class, 'update']);
-    Route::delete('/place/{id}', [PlaceController::class, 'destroy']);
+    Route::get('/blogs', [BlogController::class, 'index']);  
+    Route::post('/blog', [BlogController::class, 'store']);
+    Route::get('/blog/{id}', [BlogController::class, 'show']);    
+    Route::put('/blog/{id}', [BlogController::class, 'update']);
+    Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
 
     Route::get('/categories', [CategoriesController::class, 'index']);   
     Route::post('/categories', [CategoriesController::class, 'store']);

@@ -10,6 +10,9 @@ use App\Models\Categories;
 use App\Models\Projects;
 use App\Models\Products;
 use App\Models\Place;
+use App\Models\City;
+use App\Models\Blog;
+
 
 class LandingPageController extends BaseController
 {
@@ -21,14 +24,18 @@ class LandingPageController extends BaseController
     public function index()
     {
         $categories = Categories::get();
-        $projects = Projects::paginate(10);
-        $places = Place::paginate(10);
-        $products = Products::where('ratings', '>=', 3)->paginate(10);
+        $projects = Projects::orderBy('id', 'DESC')->limit(10)->get();
+        $places = Place::orderBy('id', 'DESC')->limit(10)->get();
+        $cities = City::orderBy('id', 'DESC')->get();
+        $blogs = Blog::orderBy('id', 'DESC')->limit(10)->get();
+        $products = Products::where('ratings', '>=', 3)->orderBy('id', 'DESC')->limit(10)->get();
 
         $home =  array_merge(['categories'=> $categories, 
                               'projects'=> $projects, 
                               'places'=>$places, 
-                              'products'=> $products]);
+                              'products'=> $products,
+                              'cities'=> $cities,
+                              'blogs'=>$blogs]);
         
         return $this->sendResponse($home, 'Cities successfully Retrieved...!');  
     }
