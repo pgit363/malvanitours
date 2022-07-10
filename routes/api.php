@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\API\V1\CategoriesController;
 use App\Http\Controllers\API\V1\ProjectsController;
 use App\Http\Controllers\API\V1\ProductsController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\API\V1\PhotosController;
 use App\Http\Controllers\API\V1\LandingPageController;
 use App\Http\Controllers\API\V1\PlaceController;
 use App\Http\Controllers\API\V1\BlogController;
+use App\Http\Controllers\API\V1\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +41,9 @@ Route::group(['middleware' => 'api'], function ($router) {
 
     Route::get('/landingpage', [LandingPageController::class, 'index']);   
 
-    Route::get('/contact', [ContactController::class, 'index']);  
+    Route::get('/contacts', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);
-    Route::get('/contact/{id}', [ContactController::class, 'index']);    
+    Route::get('/contact/{id}', [ContactController::class, 'show']);    
     Route::put('/contact/{id}', [ContactController::class, 'update']);
     Route::delete('/contact/{id}', [ContactController::class, 'destroy']);
 
