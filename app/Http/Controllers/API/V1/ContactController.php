@@ -10,6 +10,15 @@ use App\Http\Controllers\BaseController as BaseController;
 
 class ContactController extends BaseController
 {
+     /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *

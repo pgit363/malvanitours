@@ -35,9 +35,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);  
     Route::post('/users', [AuthController::class, 'index']);    
+    Route::post('/sendOtp', [AuthController::class, 'sendOtp']);
+    Route::post('/verifyOtp', [AuthController::class, 'verifyOtp']);
 });
 
-Route::group(['middleware' => 'api'], function ($router) {
+
+Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
 
     Route::get('/landingpage', [LandingPageController::class, 'index']);   
 
@@ -70,7 +73,7 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/products', [ProductsController::class, 'index']);   
     Route::post('/product', [ProductsController::class, 'store']);
     Route::get('/product/{id}', [ProductsController::class, 'show']);   
-    Route::post('/product/{id}', [ProductsController::class, 'update']);   //need confirmation PUT cant use form-data
+    Route::post('/product/{id}', [ProductsController::class, 'update']);  
     Route::delete('/product/{id}', [ProductsController::class, 'destroy']);   
 
     Route::get('/photos', [PhotosController::class, 'index']);   
