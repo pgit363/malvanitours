@@ -36,8 +36,8 @@ class CategoriesController extends BaseController
      */
     public function getAllProjects($id)
     {
-        $projects = Categories::find($id)->projects;
-        
+        $projects = Categories::with('projects')->whereId($id)->latest()->paginate(10);
+
         if (is_null($projects)) {
             return $this->sendError('Empty', [], 404);
         }

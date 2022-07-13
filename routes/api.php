@@ -57,11 +57,11 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
 
     Route::get('/categories', [CategoriesController::class, 'index']);   
-    Route::post('/categories', [CategoriesController::class, 'store']);
-    Route::get('/categories/{id}', [CategoriesController::class, 'show']);
-    Route::get('/categories/project/{categories_id}', [CategoriesController::class, 'getAllProjects']);   
-    Route::put('/categories/{id}', [CategoriesController::class, 'update']);   
-    Route::delete('/categories/{id}', [CategoriesController::class, 'destroy']);   
+    Route::post('/category', [CategoriesController::class, 'store']);
+    Route::get('/category/{id}', [CategoriesController::class, 'show']);
+    Route::get('/category/project/{categories_id}', [CategoriesController::class, 'getAllProjects']);   
+    Route::put('/category/{id}', [CategoriesController::class, 'update']);   
+    Route::delete('/category/{id}', [CategoriesController::class, 'destroy']);   
 
     Route::get('/projects', [ProjectsController::class, 'index']);   
     Route::post('/project', [ProjectsController::class, 'store']);

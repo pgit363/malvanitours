@@ -128,7 +128,9 @@ class ProjectsController extends BaseController
      */
     public function getAllProducts($id)
     {
-        $products = Projects::find($id)->products;
+        $products = Projects::with('products')->whereId($id)->latest()->paginate(10);
+
+        // $products = Projects::find($id)->products;
         
         if (is_null($products)) {
             return $this->sendError('Empty', [], 404);

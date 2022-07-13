@@ -183,7 +183,6 @@ class AuthController extends BaseController
         }
 
         if ($request->has('email')) {
-
             $user = User::where('email', $request->email)->where('otp', $request->otp)->first();
 
             if ($user) {
@@ -194,12 +193,10 @@ class AuthController extends BaseController
             }
         }
         if ($request->has('mobile')) {
-
             $user = User::where('mobile', $request->mobile)->where('otp', $request->otp)->first();
             
             if ($user) {
                 User::where('mobile', $request->mobile)->update(array('otp' => null));
-
                 return $this->createNewToken(auth()->refresh(), 'Refreshed token...!');
             }
             else{

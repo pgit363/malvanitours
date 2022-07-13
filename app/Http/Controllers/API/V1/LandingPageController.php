@@ -46,6 +46,6 @@ class LandingPageController extends BaseController
                               'cities'=> $cities,
                               'blogs'=>$blogs]);
         
-        return $this->sendResponse($home, 'Cities successfully Retrieved...!');  
+        return $this->sendResponse($home, 'Landing page data successfully Retrieved...!');  
     }
 }
