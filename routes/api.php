@@ -12,6 +12,7 @@ use App\Http\Controllers\API\V1\LandingPageController;
 use App\Http\Controllers\API\V1\PlaceController;
 use App\Http\Controllers\API\V1\BlogController;
 use App\Http\Controllers\API\V1\ContactController;
+use App\Http\Controllers\API\V1\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
 
     Route::get('/landingpage', [LandingPageController::class, 'index']);   
+    Route::post('/search', [HomeController::class, 'search']);   
+
 
     Route::get('/contacts', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);
