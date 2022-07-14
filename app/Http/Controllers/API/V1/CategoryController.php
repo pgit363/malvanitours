@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Models\Categories;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 
-class CategoriesController extends BaseController
+class CategoryController extends BaseController
 {
      /**
      * Create a new AuthController instance.
@@ -25,7 +27,7 @@ class CategoriesController extends BaseController
      */
     public function index()
     {
-        $categories = Categories::paginate(10);
+        $categories = Category::paginate(10);
         return $this->sendResponse($categories, 'Categories successfully Retrieved...!');   
     }
 
@@ -36,7 +38,7 @@ class CategoriesController extends BaseController
      */
     public function getAllProjects($id)
     {
-        $projects = Categories::with('projects')->whereId($id)->latest()->paginate(10);
+        $projects = Category::with('projects')->whereId($id)->latest()->paginate(10);
 
         if (is_null($projects)) {
             return $this->sendError('Empty', [], 404);
@@ -65,13 +67,33 @@ class CategoriesController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
+            'image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'description' => 'required|string',
+            'meta_data' => 'json',
         ]);
 
         if($validator->fails()){
             return $this->sendError($validator->errors(), '', 400);       
         }
       
-        $categories = Categories::create($request->all());
+        $input = $request->all();
+        $date = currentDate(); //for unique naming of project folder
+        Log::info("upload file starting");
+
+        //Image 1 store      
+        if ($image = $request->file('image_url')) {
+            Log::info("inside upload image_url");
+            
+            $image_url = $date . "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('image_url')->store(config('constants.upload_path.category').$request->name);
+
+            $input['image_url'] = $path;
+            
+            Log::info("FILE STORED".$input['image_url']);
+        }
+
+        $categories = Category::create($input);
 
         return $this->sendResponse($categories, 'Categories stored successfully...!');        
     }
@@ -84,7 +106,7 @@ class CategoriesController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        $categories = Categories::find($id);
+        $categories = Category::find($id);
         
         if (is_null($categories)) {
             return $this->sendError('Empty', [], 404);
@@ -115,19 +137,43 @@ class CategoriesController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
+            'image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'description' => 'required|string',
+            'meta_data' => 'json',
         ]);
 
         if($validator->fails()){
             return $this->sendError($validator->errors(), '', 400);       
         }
 
-        $categories = Categories::find($id);
+        $categories = Category::find($id);
 
         if (is_null($categories)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        $categories->update($request->all());
+        $input = $request->all();
+        $date = currentDate(); //for unique naming of project folder
+        Log::info("upload file starting");
+
+        //Image 1 store      
+        if ($image = $request->file('image_url')) {
+            if(Storage::exists($categories->image_url)){
+                Storage::delete($categories->image_url);
+            }
+
+            Log::info("inside upload image_url");
+            
+            $image_url = $date . "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('image_url')->store(config('constants.upload_path.category').$request->name);
+
+            $input['image_url'] = $path;
+            
+            Log::info("FILE STORED".$input['image_url']);
+        }
+
+        $categories->update($input);
 
         return $this->sendResponse($categories, 'Categories updated successfully...!');   
     }
@@ -140,10 +186,14 @@ class CategoriesController extends BaseController
      */
     public function destroy(Request $request, $id)
     {
-        $categories = Categories::find($id);
+        $categories = Category::find($id);
 
         if (is_null($categories)) {
             return $this->sendError('Empty', [], 404);
+        }
+
+        if(Storage::exists($categories->image_url)){
+            Storage::delete($categories->image_url);
         }
 
         $categories->delete($request->all());

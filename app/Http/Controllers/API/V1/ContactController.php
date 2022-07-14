@@ -56,7 +56,7 @@ class ContactController extends BaseController
             'name' => 'required|string|between:2,100',
             'email' => 'required|string|email|between:2,200',
             'phone' => 'required|numeric',           
-            'contact_meta' => 'nullable',
+            'contact_meta' => 'json',
             'message' => 'nullable',
         ]);
 

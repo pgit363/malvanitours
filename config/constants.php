@@ -5,6 +5,7 @@ return [
         'base' => 'public/assets/',
         'user' => 'public/assets/users/',
         'photo' => 'public/assets/gallery',
+        'category' => 'public/assets/categories/',
         'project' => 'public/assets/projects/',
         'product' => 'public/assets/products/',
         'places' => 'public/assets/places/',

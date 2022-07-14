@@ -9,10 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Categories extends Model
+class Category extends Model
 {
-    use HasFactory, Hashidable, HasFactory, Notifiable;
+    use HasFactory, Hashidable, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +23,8 @@ class Categories extends Model
     protected $fillable = [
         'name',
         'description',
-        'meta_data'
+        'meta_data',
+        'image_url',
     ];
 
     /**

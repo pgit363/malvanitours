@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\API\V1\CategoriesController;
+use App\Http\Controllers\API\V1\CategoryController;
 use App\Http\Controllers\API\V1\ProjectsController;
 use App\Http\Controllers\API\V1\ProductsController;
 use App\Http\Controllers\API\V1\RolesController;
@@ -56,12 +56,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::put('/blog/{id}', [BlogController::class, 'update']);
     Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
 
-    Route::get('/categories', [CategoriesController::class, 'index']);   
-    Route::post('/category', [CategoriesController::class, 'store']);
-    Route::get('/category/{id}', [CategoriesController::class, 'show']);
-    Route::get('/category/project/{categories_id}', [CategoriesController::class, 'getAllProjects']);   
-    Route::put('/category/{id}', [CategoriesController::class, 'update']);   
-    Route::delete('/category/{id}', [CategoriesController::class, 'destroy']);   
+    Route::get('/categories', [CategoryController::class, 'index']);   
+    Route::post('/category', [CategoryController::class, 'store']);
+    Route::get('/category/{id}', [CategoryController::class, 'show']);
+    Route::get('/category/project/{categories_id}', [CategoryController::class, 'getAllProjects']);   
+    Route::post('/category/{id}', [CategoryController::class, 'update']);   
+    Route::delete('/category/{id}', [CategoryController::class, 'destroy']);   
 
     Route::get('/projects', [ProjectsController::class, 'index']);   
     Route::post('/project', [ProjectsController::class, 'store']);

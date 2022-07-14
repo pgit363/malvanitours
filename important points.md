@@ -1,4 +1,4 @@
-**Government Departments & there Contacts**
+**Government Departments & their Contacts**
 
 1. id
 2. city id
@@ -36,3 +36,14 @@
 2. 3D map
 3. clear route
 4. VR/360
+
+
+Issues
+
+1.Categories Cruds with file
+
+Features 
+
+1. Dynamic search
+2. VR/360/MAP
+3. Chat
