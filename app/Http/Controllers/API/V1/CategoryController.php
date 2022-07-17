@@ -80,7 +80,7 @@ class CategoryController extends BaseController
         }
       
         $input = $request->all();
-        $date = date('YmdHis'); //for unique naming of project folder
+        $date = currentDate(); //for unique naming of project folder
         Log::info("upload file starting");
 
         //Image 1 store      
