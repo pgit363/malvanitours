@@ -41,8 +41,35 @@ class City extends Model
     protected $casts = [];
 
 
+    /**
+     * Get the city that owns the City
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    /**
+     * Get all of the places for the City
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function places()
     {
-        return $this->hasMany(Place::class, 'category_id');
+        return $this->hasMany(Place::class, 'city_id');
     }
+  
+
+    /**
+     * Get all of the photos for the City
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photos()
+    {
+        return $this->hasMany(Photos::class, 'city_id');
+    }
+    
 }

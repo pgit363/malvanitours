@@ -32,29 +32,40 @@ class LandingPageController extends BaseController
      */
     public function index()
     {
-        // $temp =Category::withCount('projects')
-        //                 ->with(['projects', 
-        //                         'projects.products',
-        //                         'projects.photos',
-        //                         'projects.city',
-        //                         'projects.products.photos'])
-        //                 ->latest()
-        //                 ->paginate(10);
+        $categories = Category::withCount('projects', 'products')
+                        // ->with(['projects.city'])
+                        ->latest()
+                        ->limit(10)
+                        ->get();
 
-        $categories = Category::get();
-        $projects = Projects::orderBy('id', 'DESC')->limit(10)->get();
-        $places = Place::orderBy('id', 'DESC')->limit(10)->get();
-        $cities = City::orderBy('id', 'DESC')->get();
-        $blogs = Blog::orderBy('id', 'DESC')->limit(10)->get();
-        $products = Products::where('ratings', '>=', 3)->orderBy('id', 'DESC')->limit(10)->get();
+        $cities = City::withCount('places','photos')
+                        ->latest()
+                        ->limit(10)
+                        ->get();
 
-        $temp =  array_merge(['categories'=> $categories, 
-                              'projects'=> $projects, 
-                              'places'=>$places, 
-                              'products'=> $products,
-                              'cities'=> $cities,
-                              'blogs'=>$blogs]);
-        
-        return $this->sendResponse($temp, 'Landing page data successfully Retrieved...!');  
+        $projects = Projects::where('ratings', '>=', 3)
+                              ->withCount('products','photos')
+                              ->latest()
+                              ->limit(10)
+                              ->get();
+
+        $places = Place::where('rating', '>=', 3)
+                         ->orWhere('visitors_count', '>=', 10)
+                         ->withCount('photos')
+                         ->latest()
+                         ->limit(10)
+                         ->get();
+
+        $blogs = Blog::latest()
+                       ->limit(10)
+                       ->get();
+                       
+        $temp3 =  array_merge(['categories'=> $categories, 
+                            'cities'=>$cities,
+                            'projects'=>$projects,
+                            'places'=>$places,
+                            'blogs'=>$blogs]);
+    
+        return $this->sendResponse($temp3, 'Landing page data successfully Retrieved...!');  
     }
 }

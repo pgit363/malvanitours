@@ -41,8 +41,25 @@ class Category extends Model
      */
     protected $casts = [];
 
+
+    /**
+     * Get all of the projects for the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function projects()
     {
-        return $this->hasOne(Projects::class, 'category_id');
+        return $this->hasMany(Projects::class, 'category_id');
+    }
+
+
+    /**
+     * Get all of the products for the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function products()
+    {
+        return $this->hasManyThrough(products::class, projects::class, 'category_id', 'project_id');
     }
 }

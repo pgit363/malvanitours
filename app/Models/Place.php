@@ -52,4 +52,25 @@ class Place extends Model
         'social_media' => 'array',
         'contact_details' => 'array'
     ];
+
+    /**
+     * Get the city that owns the Place
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    /**
+     * Get all of the photos for the Place
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photos()
+    {
+        return $this->hasMany(Photos::class, 'place_id');
+    }           
+
 }
