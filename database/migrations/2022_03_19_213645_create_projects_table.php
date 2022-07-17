@@ -15,8 +15,9 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
             $table->integer('category_id')->unsigned()->nullable();
+            $table->integer('city_id')->unsigned();
+            $table->string('name');
             $table->string('domain_name')->nullable();
             $table->string('logo')->nullable();
             $table->string('fevicon')->nullable();
@@ -25,10 +26,12 @@ class CreateProjectsTable extends Migration
             $table->string('picture')->nullable();
             $table->integer('start_price')->nullable();
             $table->string('speciality')->nullable();
+            $table->boolean('link_status')->default(0);
             $table->string('project_meta')->nullable();
             $table->timestamps();
 
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

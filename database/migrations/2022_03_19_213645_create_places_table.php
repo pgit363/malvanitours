@@ -22,14 +22,13 @@ class CreatePlacesTable extends Migration
             $table->string('image_url');
             $table->string('bg_image_url');
             $table->json('price');
-            $table->integer('rating');
-            $table->integer('visitors_count');
+            $table->integer('rating')->nullable();
+            $table->integer('visitors_count')->nullable();
             $table->json('social_media');
             $table->json('contact_details');
-            $table->string('categories');            
             $table->timestamps();
 
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

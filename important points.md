@@ -37,13 +37,9 @@
 3. clear route
 4. VR/360
 
-
 Issues
 
-1.Categories Cruds with file
+Features
 
-Features 
-
-1. Dynamic search
-2. VR/360/MAP
-3. Chat
+1. VR/360/MAP
+2. Chat

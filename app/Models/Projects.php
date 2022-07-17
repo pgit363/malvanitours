@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
+use App\Models\Category;
 
 class Projects extends Model
 {
@@ -21,6 +22,7 @@ class Projects extends Model
      */
     protected $fillable = [
         'name',
+        'city_id',
         'category_id',
         'domain_name',
         'logo',
@@ -50,9 +52,9 @@ class Projects extends Model
         'link_status'  => 'boolean',
     ];
 
-    public function categories()
+    public function category()
     {
-        return $this->belongsTo(Categories::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function products()
@@ -62,6 +64,16 @@ class Projects extends Model
     
     public function photos()
     {
-        return $this->HasMany(Photos::class);
+        return $this->HasMany(Photos::class, 'project_id');
+    }
+    
+    /**
+     * Get the City that owns the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 }

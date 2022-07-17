@@ -32,7 +32,7 @@ Route::get('/', function() {
     print('I am an admin');
 });
 
-Route::group(['middleware' => 'api'], function ($router) {
+Route::group(['middleware' => 'api', 'prefix' => 'api'], function ($router) {
     Route::get('/cities', [CityController::class, 'index']);  
     Route::post('/city', [CityController::class, 'store']);
     Route::get('/city/{id}', [CityController::class, 'show']);    

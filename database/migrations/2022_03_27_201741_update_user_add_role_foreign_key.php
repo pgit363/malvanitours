@@ -14,8 +14,8 @@ class UpdateUserAddRoleForeignKey extends Migration
     public function up()
     {
         Schema::table('users', function($table) {
-            $table->integer('role_id')->unsigned()->nullable();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade')->onDelete('cascade');
+            $table->integer('role_id')->unsigned()->nullable()->after('id');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

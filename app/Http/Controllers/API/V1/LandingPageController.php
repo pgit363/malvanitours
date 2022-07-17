@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Controllers\BaseController as BaseController;
-use App\Models\Categories;
+use App\Models\Category;
 use App\Models\Projects;
 use App\Models\Products;
 use App\Models\Place;
@@ -32,20 +32,29 @@ class LandingPageController extends BaseController
      */
     public function index()
     {
-        $categories = Categories::get();
+        // $temp =Category::withCount('projects')
+        //                 ->with(['projects', 
+        //                         'projects.products',
+        //                         'projects.photos',
+        //                         'projects.city',
+        //                         'projects.products.photos'])
+        //                 ->latest()
+        //                 ->paginate(10);
+
+        $categories = Category::get();
         $projects = Projects::orderBy('id', 'DESC')->limit(10)->get();
         $places = Place::orderBy('id', 'DESC')->limit(10)->get();
         $cities = City::orderBy('id', 'DESC')->get();
         $blogs = Blog::orderBy('id', 'DESC')->limit(10)->get();
         $products = Products::where('ratings', '>=', 3)->orderBy('id', 'DESC')->limit(10)->get();
 
-        $home =  array_merge(['categories'=> $categories, 
+        $temp =  array_merge(['categories'=> $categories, 
                               'projects'=> $projects, 
                               'places'=>$places, 
                               'products'=> $products,
                               'cities'=> $cities,
                               'blogs'=>$blogs]);
         
-        return $this->sendResponse($home, 'Landing page data successfully Retrieved...!');  
+        return $this->sendResponse($temp, 'Landing page data successfully Retrieved...!');  
     }
 }

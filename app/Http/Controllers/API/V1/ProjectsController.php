@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\V1;
 use App\Models\Projects;
 use Illuminate\Http\Request;
 use Validator;
-use App\Models\Categories;
 use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +27,10 @@ class ProjectsController extends BaseController
      */
     public function index()
     {
-        $projects = Projects::orderBy('id','desc')->paginate(10);
+        $projects = Projects::with(['category', 'products', 'photos'])
+        // ->whereId($id)
+        ->latest()
+        ->paginate(10); //orderBy('id','desc')->paginate(10);
         return $this->sendResponse($projects, 'Projects successfully Retrieved...!');   
     }
 
@@ -52,6 +54,7 @@ class ProjectsController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
+            'city_id' => 'required|numeric',
             'category_id' => 'required|numeric',
             'domain_name' => 'required|string',
             'logo' => 'mimes:jpeg,jpg,png|max:2048',
@@ -128,9 +131,10 @@ class ProjectsController extends BaseController
      */
     public function getAllProducts($id)
     {
-        $products = Projects::with('products')->whereId($id)->latest()->paginate(10);
-
-        // $products = Projects::find($id)->products;
+        $products = Projects::with(['category', 'products', 'photos'])
+                            ->whereId($id)
+                            ->latest()
+                            ->paginate(10);
         
         if (is_null($products)) {
             return $this->sendError('Empty', [], 404);

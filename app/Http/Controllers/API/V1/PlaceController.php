@@ -152,7 +152,6 @@ class PlaceController extends BaseController
             'visitors_count' => 'numeric',
             'social_media' => 'json',
             'contact_details' => 'json',
-            'categories' => 'string',
         ]);
 
         if($validator->fails()){

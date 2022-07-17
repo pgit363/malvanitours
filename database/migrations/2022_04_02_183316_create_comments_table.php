@@ -18,16 +18,18 @@ class CreateCommentsTable extends Migration
             $table->integer('city_id')->unsigned()->nullable();
             $table->integer('project_id')->unsigned()->nullable();
             $table->integer('product_id')->unsigned()->nullable();
+            $table->integer('place_id')->unsigned()->nullable();
+            $table->integer('blog_id')->unsigned()->nullable();
             $table->string('comment');
             $table->string('image_url');
-            $table->integer('react_id')->unsigned()->nullable();
             $table->integer('count');          
             $table->timestamps();
 
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('react_id')->references('id')->on('reacts')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('place_id')->references('id')->on('places')->onDelete('cascade')->onUpdate('cascade')->onUpdate('cascade');
+            $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade')->onUpdate('cascade')->onUpdate('cascade');
         });
     }
 

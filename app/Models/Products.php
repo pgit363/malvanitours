@@ -49,6 +49,6 @@ class Products extends Model
 
     public function photos()
     {
-        return $this->HasMany(Photos::class);
+        return $this->HasMany(Photos::class, 'product_id');
     }
 }
