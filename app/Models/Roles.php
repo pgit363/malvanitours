@@ -35,6 +35,11 @@ class Roles extends Model
      */
     protected $casts = [];
 
+    /**
+     * Get all of the users for the Roles
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function users()
     {
         return $this->hasMany(User::class, 'role_id');

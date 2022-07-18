@@ -46,9 +46,19 @@ class City extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function city(): BelongsTo
+    public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    /**
+     * Get all of the projects for the City
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        return $this->hasMany(Projects::class, 'city_id');
     }
 
     /**
@@ -60,7 +70,6 @@ class City extends Model
     {
         return $this->hasMany(Place::class, 'city_id');
     }
-  
 
     /**
      * Get all of the photos for the City
@@ -72,4 +81,13 @@ class City extends Model
         return $this->hasMany(Photos::class, 'city_id');
     }
     
+    /**
+     * Get all of the comments for the City
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'city_id');
+    }
 }

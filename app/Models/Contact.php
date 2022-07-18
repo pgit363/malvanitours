@@ -40,4 +40,34 @@ class Contact extends Model
      * @var array
      */
     protected $casts = [];
+
+    /**
+     * Get the users that owns the Contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the projects that owns the Contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function projects()
+    {
+        return $this->belongsTo(projects::class);
+    }
+
+    /**
+     * Get the products that owns the Contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function products()
+    {
+        return $this->belongsTo(Products::class);
+    }
 }

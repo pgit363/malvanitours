@@ -38,6 +38,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'api'], function ($router) {
     Route::get('/city/{id}', [CityController::class, 'show']);    
     Route::post('/city/{id}', [CityController::class, 'update']);
     Route::delete('/city/{id}', [CityController::class, 'destroy']);
+    Route::get('/city/{id}/detail', [CityController::class, 'getAllcities']); 
 
     Route::get('/places', [PlaceController::class, 'index']);  
     Route::post('/place', [PlaceController::class, 'store']);

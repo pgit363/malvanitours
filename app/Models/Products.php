@@ -42,13 +42,33 @@ class Products extends Model
      */
     protected $casts = [];
 
+    /**
+     * Get the projects that owns the Products
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function projects()
     {
         return $this->belongsTo(Projects::class);
     }
 
+    /**
+     * Get all of the photos for the Products
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function photos()
     {
-        return $this->HasMany(Photos::class, 'product_id');
+        return $this->hasMany(Photos::class, 'product_id');
+    }
+
+    /**
+     * Get all of the contacts for the Products
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, 'product_id');
     }
 }

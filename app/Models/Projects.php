@@ -52,19 +52,34 @@ class Projects extends Model
         'link_status'  => 'boolean',
     ];
 
+    /**
+     * Get the category that owns the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * Get all of the products for the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function products()
     {
         return $this->hasMany(Products::class, 'project_id');
     }
     
+    /**
+     * Get all of the photos for the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function photos()
     {
-        return $this->HasMany(Photos::class, 'project_id');
+        return $this->hasMany(Photos::class, 'project_id');
     }
     
     /**
@@ -75,5 +90,15 @@ class Projects extends Model
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id');
+    }
+
+    /**
+     * Get all of the contacts for the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, 'project_id');
     }
 }

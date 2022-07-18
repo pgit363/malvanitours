@@ -51,4 +51,14 @@ class Comment extends Model
         'social_media' => 'array',
         'contact_details' => 'array'
     ];
+
+    /**
+     * Get the City that owns the Comment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

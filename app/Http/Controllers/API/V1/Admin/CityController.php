@@ -27,7 +27,10 @@ class CityController extends BaseController
      */
     public function index()
     {
-        $cities = City::paginate(10);
+        $cities = City::withCount(['projects', 'places', 'photos', 'comments'])
+                        ->latest()                
+                        ->paginate(10);
+
         return $this->sendResponse($cities, 'Cities successfully Retrieved...!');  
     }
 
@@ -106,10 +109,35 @@ class CityController extends BaseController
      */
     public function show($id)
     {
-        $city = City::whereId($id)->first();
+        $city = City::withCount(['projects', 'places', 'photos', 'comments'])
+                    // ->with(['projects', 'places', 'photos', 'comments'])
+                    ->whereId($id)
+                    ->latest()
+                    ->paginate(10);
+
         return $this->sendResponse($city, 'Cities successfully Retrieved...!');  
     }
 
+     /**
+     * Display a listing of the city.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllcities($id)
+    {
+        $cities = City::withCount(['projects', 'places', 'photos', 'comments'])
+                        ->with(['projects', 'places', 'photos', 'comments'])
+                        ->whereId($id)
+                        ->latest()
+                        ->paginate(10);
+        
+        if (is_null($cities)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        return $this->sendResponse($cities, 'Cities successfully Retrieved...!'); 
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *

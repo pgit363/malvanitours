@@ -40,18 +40,34 @@ class Photos extends Model
      */
     protected $casts = [];
 
+    
+    /**
+     * Get the projects that owns the Contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function projects()
     {
-        return $this->belongsTo(Projects::class);
+        return $this->belongsTo(projects::class);
     }
 
+    /**
+     * Get the products that owns the Contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function products()
     {
         return $this->belongsTo(Products::class);
     }
-
+    
+     /**
+     * Get the City that owns the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function city()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class, 'city_id');
     }
 }

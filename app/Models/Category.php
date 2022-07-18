@@ -53,18 +53,13 @@ class Category extends Model
     }
 
 
-    // /**
-    //  * Get all of the products for the Category
-    //  *
-    //  * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-    //  */
-    // public function products()
-    // {
-    //     return $this->hasManyThrough(products::class, projects::class,'category_id', 'project_id');
-    // }
-
+    /**
+     * Get all of the products for the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function products()
     {
-        return $this->hasManyThrough(Products::class, Projects::class, 'category_id', 'project_id');
+        return $this->hasManyThrough(Products::class, Projects::class,'category_id', 'project_id');
     }
 }
