@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Routing\Router;
 use Illuminate\Http\Request;
-use App\Http\Controllers\API\V1\PlaceController;
-use App\Http\Controllers\API\V1\Admin\CityController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\PlaceController;
+use App\Http\Controllers\Admin\CityController;
+use Illuminate\Routing\Router;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,9 @@ use App\Http\Controllers\API\V1\Admin\CityController;
 | contains the "admin" middleware group. Now create something great!
 |
 */
-
+Route::get('/', function() {
+    print('I am an admin');
+});
 
 Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     Route::post('/login', [AuthController::class, 'login']);
@@ -26,10 +29,6 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);  
     Route::post('/users', [AuthController::class, 'index']);    
-});
-
-Route::get('/', function() {
-    print('I am an admin');
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'api'], function ($router) {

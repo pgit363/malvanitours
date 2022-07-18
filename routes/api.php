@@ -13,6 +13,7 @@ use App\Http\Controllers\API\V1\PlaceController;
 use App\Http\Controllers\API\V1\BlogController;
 use App\Http\Controllers\API\V1\ContactController;
 use App\Http\Controllers\API\V1\HomeController;
+use App\Http\Controllers\API\V1\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,13 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::get('/landingpage', [LandingPageController::class, 'index']);   
     Route::post('/search', [HomeController::class, 'search']);   
 
-
+    Route::get('/cities', [CityController::class, 'index']);  
+    Route::get('/city/{id}', [CityController::class, 'show']);    
+    Route::get('/city/{id}/detail', [CityController::class, 'getAllcities']); 
+    
+    Route::get('/places', [PlaceController::class, 'index']);  
+    Route::get('/place/{id}', [PlaceController::class, 'show']);    
+    
     Route::get('/contacts', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);
     Route::get('/contact/{id}', [ContactController::class, 'show']);    

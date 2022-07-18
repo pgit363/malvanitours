@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V1\Admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\City;
 use Illuminate\Http\Request;

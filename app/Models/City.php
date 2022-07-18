@@ -41,15 +41,15 @@ class City extends Model
     protected $casts = [];
 
 
-    /**
-     * Get the city that owns the City
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function city()
-    {
-        return $this->belongsTo(City::class);
-    }
+    // /**
+    //  * Get the city that owns the City
+    //  *
+    //  * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    //  */
+    // public function city()
+    // {
+    //     return $this->belongsTo(City::class);
+    // }
 
     /**
      * Get all of the projects for the City
