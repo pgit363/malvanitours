@@ -43,10 +43,16 @@ class CityController extends BaseController
     public function show($id)
     {
         $city = City::withCount(['projects', 'places', 'photos', 'comments'])
-                    // ->with(['projects', 'places', 'photos', 'comments'])
-                    ->whereId($id)
-                    ->latest()
-                    ->paginate(10);
+                      ->with(['comments', 'comments.users'])
+                      ->latest()
+                      ->limit(10)
+                      ->find($id);
+    
+                    // withCount(['projects', 'places', 'photos', 'comments'])
+                    // // ->with(['projects', 'places', 'photos', 'comments'])
+                    // ->whereId($id)
+                    // ->latest()
+                    // ->paginate(10);
 
         return $this->sendResponse($city, 'Cities successfully Retrieved...!');  
     }

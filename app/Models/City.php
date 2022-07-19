@@ -82,12 +82,12 @@ class City extends Model
     }
     
     /**
-     * Get all of the comments for the City
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the product's comments.
      */
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'city_id');
+        return $this->morphMany('App\Models\Comment', 'commentable');
     }
+
+    
 }

@@ -88,4 +88,22 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Contact::class, 'user_id');
     }
+
+    /**
+     * Get all of the comments for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function commentsOfUser()
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
+
+     /**
+     * Get all of the product's comments.
+     */
+    public function commentsOnUser()
+    {
+        return $this->morphMany('App\Models\Comment', 'commentable');
+    }
 }

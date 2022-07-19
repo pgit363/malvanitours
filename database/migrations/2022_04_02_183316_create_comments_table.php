@@ -13,23 +13,16 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {     
             $table->increments('id');
-            $table->integer('city_id')->unsigned()->nullable();
-            $table->integer('project_id')->unsigned()->nullable();
-            $table->integer('product_id')->unsigned()->nullable();
-            $table->integer('place_id')->unsigned()->nullable();
-            $table->integer('blog_id')->unsigned()->nullable();
+            $table->integer('parent_id')->unsigned()->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->string('comment');
-            $table->string('image_url');
-            $table->integer('count');          
+            $table->morphs('commentable');
             $table->timestamps();
 
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('place_id')->references('id')->on('places')->onDelete('cascade')->onUpdate('cascade')->onUpdate('cascade');
-            $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade')->onUpdate('cascade')->onUpdate('cascade');
+            $table->foreign('parent_id')->references('id')->on('comments')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

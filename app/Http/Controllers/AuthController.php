@@ -23,7 +23,8 @@ class AuthController extends BaseController
     public function index(Request $request)
     {
         // if ($request->privilage == 'superadmin') {
-            $user = User::paginate(10);
+            $user = User::with('commentsOfUser', 'commentsOnUser')
+            ->paginate(10);
             return $this->sendResponse($user, 'User successfully registered');    
         // }
         // else{

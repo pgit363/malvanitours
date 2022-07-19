@@ -53,12 +53,40 @@ class Comment extends Model
     ];
 
     /**
-     * Get the City that owns the Comment
+     * Get the Comments that owns the Comment
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function city()
+    public function comment()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Commnet::class);
+    }
+
+    /**
+     * Get all of the comments for the Comment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
+    }
+    
+    /**
+     * Get the users that owns the Comment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get all of the models that own comments.
+     */
+    public function commentable()
+    {
+        return $this->morphTo();
     }
 }

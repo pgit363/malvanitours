@@ -5,8 +5,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\CityController;
-use Illuminate\Routing\Router;
-
 
 /*
 |--------------------------------------------------------------------------
