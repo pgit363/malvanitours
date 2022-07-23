@@ -48,8 +48,8 @@ class RolesController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'display_name' => 'required|string|between:2,100',
+            'name' => 'required|string|unique:roles|between:2,100',
+            'display_name' => 'required|string|unique:roles|between:2,100',
         ]);
 
         if($validator->fails()){

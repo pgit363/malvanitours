@@ -24,7 +24,7 @@ class AuthController extends BaseController
     {
         // if ($request->privilage == 'superadmin') {
             $user = User::with('commentsOfUser', 'commentsOnUser')
-            ->paginate(10);
+                          ->paginate(10);
             return $this->sendResponse($user, 'User successfully registered');    
         // }
         // else{
