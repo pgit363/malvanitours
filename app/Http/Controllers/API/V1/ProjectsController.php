@@ -32,7 +32,7 @@ class ProjectsController extends BaseController
 
         $string = $request->string;
 
-        $field = getDbColumns('Projects');
+        $field = getDbColumns('projects');
 
         $records = Projects::withCount(['products', 'photos', 'users', 'contacts'])
                             ->with(['city', 'category', 'user'])
