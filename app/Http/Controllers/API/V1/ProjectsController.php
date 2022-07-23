@@ -27,10 +27,11 @@ class ProjectsController extends BaseController
      */
     public function index()
     {
-        $projects = Projects::with(['category', 'products', 'photos', 'user', 'users'])
-        // ->whereId($id)
-        ->latest()
-        ->paginate(10); //orderBy('id','desc')->paginate(10);
+        $projects = Projects::withCount(['products', 'photos', 'users', 'contacts'])
+                            ->with(['city', 'category', 'user'])
+                            // ->whereId($id)
+                            ->latest()
+                            ->paginate(10); //orderBy('id','desc')->paginate(10);
         return $this->sendResponse($projects, 'Projects successfully Retrieved...!');   
     }
 
@@ -115,7 +116,11 @@ class ProjectsController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        $projects = Projects::find($id);
+        $projects = Projects::withCount(['products', 'photos', 'users', 'contacts'])
+                            ->with(['city', 'category', 'user', 'products', 'photos', 'users', 'contacts'])
+                            ->whereId($id)
+                            ->latest()
+                            ->paginate(10);
         
         if (is_null($projects)) {
             return $this->sendError('Empty', [], 404);
@@ -141,7 +146,7 @@ class ProjectsController extends BaseController
             return $this->sendError('Empty', [], 404);
         }
 
-        return $this->sendResponse($products, 'Products successfully Retrieved...!'); 
+        return $this->sendResponse($products, 'Not in use Products successfully Retrieved...!'); 
     }
     
     /**
