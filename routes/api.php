@@ -73,7 +73,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::post('/category/{id}', [CategoryController::class, 'update']);   
     Route::delete('/category/{id}', [CategoryController::class, 'destroy']);   
 
-    Route::get('/projects', [ProjectsController::class, 'index']);   
+    Route::post('/projects', [ProjectsController::class, 'index']);   
     Route::post('/project', [ProjectsController::class, 'store']);
     Route::get('/project/{id}', [ProjectsController::class, 'show']);   
     Route::post('/project/{id}', [ProjectsController::class, 'update']);   

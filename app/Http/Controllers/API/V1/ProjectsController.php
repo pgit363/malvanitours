@@ -8,6 +8,7 @@ use Validator;
 use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProjectsController extends BaseController
 {
@@ -25,14 +26,33 @@ class ProjectsController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Projects::withCount(['products', 'photos', 'users', 'contacts'])
+        Log::info('Showing the search results for global search: '.$request->string);
+
+        $string = $request->string;
+
+        $field = getDbColumns('Projects');
+
+        $records = Projects::withCount(['products', 'photos', 'users', 'contacts'])
                             ->with(['city', 'category', 'user'])
-                            // ->whereId($id)
                             ->latest()
-                            ->paginate(10); //orderBy('id','desc')->paginate(10);
-        return $this->sendResponse($projects, 'Projects successfully Retrieved...!');   
+                            ->Where(function ($query) use($string, $field) {
+                                for ($i = 0; $i < count($field); $i++){
+                                    $query->orwhere($field[$i], 'like',  '%' . $string .'%');
+                                }})
+                            ->paginate(10); 
+
+        Log::info("Records fetched");
+
+        return $this->sendResponse($records, 'Records successfully Retrieved...!');
+
+        // $projects = Projects::withCount(['products', 'photos', 'users', 'contacts'])
+        //                     ->with(['city', 'category', 'user'])
+        //                     // ->whereId($id)
+        //                     ->latest()
+        //                     ->paginate(10); //orderBy('id','desc')->paginate(10);
+        // return $this->sendResponse($projects, 'Projects successfully Retrieved...!');   
     }
 
     /**
