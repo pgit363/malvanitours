@@ -25,7 +25,7 @@ class RolesController extends BaseController
      */
     public function index()
     {
-        $roles = Roles::paginate(10);
+        $roles = Roles::with('users')->paginate(10);
         return $this->sendResponse($roles, 'Roles successfully Retrieved...!');   
     }
 

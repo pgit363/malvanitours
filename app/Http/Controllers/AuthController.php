@@ -23,7 +23,7 @@ class AuthController extends BaseController
     public function index(Request $request)
     {
         // if ($request->privilage == 'superadmin') {
-            $user = User::with('commentsOfUser', 'commentsOnUser')
+            $user = User::with('roles', 'commentsOfUser', 'commentsOnUser', 'project', 'projects')
                           ->paginate(10);
             return $this->sendResponse($user, 'User successfully registered');    
         // }
@@ -62,6 +62,7 @@ class AuthController extends BaseController
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
             'role_id' => 'required',
+            'project_id' => 'numeric',
             'name' => 'required|string|between:2,100',
             'email' => 'sometimes|string|email|max:100|unique:users',
             'mobile' => 'sometimes|string|between:2,100',

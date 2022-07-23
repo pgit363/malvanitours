@@ -27,7 +27,7 @@ class ProjectsController extends BaseController
      */
     public function index()
     {
-        $projects = Projects::with(['category', 'products', 'photos'])
+        $projects = Projects::with(['category', 'products', 'photos', 'user', 'users'])
         // ->whereId($id)
         ->latest()
         ->paginate(10); //orderBy('id','desc')->paginate(10);
@@ -56,6 +56,7 @@ class ProjectsController extends BaseController
             'name' => 'required|string|between:2,100',
             'city_id' => 'required|numeric',
             'category_id' => 'required|numeric',
+            'user_id' => 'required|numeric',
             'domain_name' => 'required|string',
             'logo' => 'mimes:jpeg,jpg,png|max:2048',
             'fevicon' => 'mimes:jpeg,jpg,png|max:2048',
@@ -166,6 +167,7 @@ class ProjectsController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'string|between:2,100',
             'category_id' => 'numeric',
+            'user_id' => 'numeric',
             'domain_name' => 'string',
             'logo' => 'mimes:jpeg,jpg,png|max:2048',
             'fevicon' => 'mimes:jpeg,jpg,png|max:2048',

@@ -24,6 +24,7 @@ class Projects extends Model
         'name',
         'city_id',
         'category_id',
+        'user_id',
         'domain_name',
         'logo',
         'fevicon',
@@ -100,5 +101,25 @@ class Projects extends Model
     public function contacts()
     {
         return $this->hasMany(Contact::class, 'project_id');
+    }
+
+    /**
+     * Get the users that owns the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all of the users for the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class, 'project_id');
     }
 }

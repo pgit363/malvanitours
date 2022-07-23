@@ -22,6 +22,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'role_id',
+        'project_id',
         'name',
         'email',
         'password',
@@ -69,15 +70,15 @@ class User extends Authenticatable implements JWTSubject
         return [];
     } 
 
-    /**
-     * Get the roles that owns the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function roles()
-    {
-        return $this->belongsTo(Role::class);
-    }
+ /**
+  * Get the roles that owns the User
+  *
+  * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+  */
+ public function roles()
+ {
+     return $this->belongsTo(Roles::class, 'role_id');
+ }
 
     /**
      * Get all of the contacts for the User
@@ -105,5 +106,25 @@ class User extends Authenticatable implements JWTSubject
     public function commentsOnUser()
     {
         return $this->morphMany('App\Models\Comment', 'commentable');
+    }
+
+    /**
+     * Get the project that owns the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function project()
+    {
+        return $this->belongsTo(projects::class);
+    }
+
+    /**
+     * Get all of the projects for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        return $this->hasMany(Projects::class, 'user_id');
     }
 }
