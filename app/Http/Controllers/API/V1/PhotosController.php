@@ -72,7 +72,7 @@ class PhotosController extends BaseController
 
             $path = $request->file('url')->store(config('constants.upload_path.photo').$request->name);
 
-            $input['url'] = $path;
+            $input['url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['url']);
         }
@@ -154,7 +154,7 @@ class PhotosController extends BaseController
 
             $path = $request->file('url')->store(config('constants.upload_path.photo').$request->name);
 
-            $input['url'] = $path;
+            $input['url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['url']);
         }

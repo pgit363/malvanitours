@@ -80,7 +80,7 @@ class PlaceController extends BaseController
 
             $path = $request->file('image_url')->store(config('constants.upload_path.places').$request->city_id.'/'.$request->name);
 
-            $input['image_url'] = $path;
+            $input['image_url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['image_url']);
         }
@@ -93,7 +93,7 @@ class PlaceController extends BaseController
             
             $path = $request->file('bg_image_url')->store(config('constants.upload_path.places').$request->city_id.'/'.$request->name);
 
-            $input['bg_image_url'] = $path;
+            $input['bg_image_url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['bg_image_url']);
         }
@@ -181,7 +181,7 @@ class PlaceController extends BaseController
 
             $path = $request->file('image_url')->store(config('constants.upload_path.places').$request->city_id.'/'.$request->name);
 
-            $input['image_url'] = $path;
+            $input['image_url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['image_url']);
         }
@@ -199,7 +199,7 @@ class PlaceController extends BaseController
             
             $path = $request->file('bg_image_url')->store(config('constants.upload_path.places').$request->city_id.'/'.$request->name);
 
-            $input['bg_image_url'] = $path;
+            $input['bg_image_url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['bg_image_url']);
         }

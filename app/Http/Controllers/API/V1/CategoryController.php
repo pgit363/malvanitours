@@ -91,7 +91,7 @@ class CategoryController extends BaseController
 
             $path = $request->file('image_url')->store(config('constants.upload_path.category').$request->name);
 
-            $input['image_url'] = $path;
+            $input['image_url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['image_url']);
         }
@@ -171,7 +171,7 @@ class CategoryController extends BaseController
 
             $path = $request->file('image_url')->store(config('constants.upload_path.category').$request->name);
 
-            $input['image_url'] = $path;
+            $input['image_url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['image_url']);
         }

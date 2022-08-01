@@ -105,7 +105,7 @@ class ProjectsController extends BaseController
 
             $path = $request->file('logo')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
 
-            $input['logo'] = $path;
+            $input['logo'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['logo']);
         }
@@ -118,7 +118,7 @@ class ProjectsController extends BaseController
             
             $path = $request->file('fevicon')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
 
-            $input['fevicon'] = $path;
+            $input['fevicon'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['fevicon']);
         }
@@ -231,7 +231,7 @@ class ProjectsController extends BaseController
 
             $path = $request->file('logo')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
 
-            $input['logo'] = $path;
+            $input['logo'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['logo']);
         }
@@ -249,7 +249,7 @@ class ProjectsController extends BaseController
             
             $path = $request->file('fevicon')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
 
-            $input['fevicon'] = $path;
+            $input['fevicon'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['fevicon']);
         }

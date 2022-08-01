@@ -71,7 +71,7 @@ class ProductsController extends BaseController
 
             $path = $request->file('picture')->store(config('constants.upload_path.product').$request->project_id.'/'.$request->name);
 
-            $input['picture'] = $path;
+            $input['picture'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['picture']);
         }
@@ -153,7 +153,7 @@ class ProductsController extends BaseController
 
             $path = $request->file('picture')->store(config('constants.upload_path.product').$request->project_id.'/'.$request->name);
 
-            $input['picture'] = $path;
+            $input['picture'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['picture']);
         }
