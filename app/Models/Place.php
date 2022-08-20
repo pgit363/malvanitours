@@ -73,4 +73,12 @@ class Place extends Model
         return $this->hasMany(Photos::class, 'place_id');
     }           
 
+    /**
+     * Get all of the plce's comments.
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
 }

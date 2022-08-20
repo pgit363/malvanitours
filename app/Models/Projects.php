@@ -122,4 +122,12 @@ class Projects extends Model
     {
         return $this->hasMany(User::class, 'project_id');
     }
+
+    /**
+     * Get all of the project's comments.
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

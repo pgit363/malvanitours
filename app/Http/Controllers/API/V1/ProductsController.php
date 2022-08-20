@@ -27,7 +27,10 @@ class ProductsController extends BaseController
      */
     public function index()
     {
-        $products = Products::paginate(10);
+        $products = Products::withCount(['photos', 'comments'])
+                              ->with('projects')
+                              ->paginate(10);
+
         return $this->sendResponse($products, 'Products successfully Retrieved...!');   
     }
 
@@ -89,7 +92,12 @@ class ProductsController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        $product = Products::find($id);
+        logger("here");
+        logger($id);
+        $product = Products::whereId($id)
+                            ->withCount(['photos', 'comments', 'projects'])
+                            ->with('projects', 'photos', 'comments',)
+                            ->paginate(10);
         
         if (is_null($product)) {
             return $this->sendError('Empty', [], 404);

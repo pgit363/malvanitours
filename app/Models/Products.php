@@ -49,7 +49,7 @@ class Products extends Model
      */
     public function projects()
     {
-        return $this->belongsTo(Projects::class);
+        return $this->belongsTo(Projects::class,  'project_id');
     }
 
     /**
@@ -70,5 +70,13 @@ class Products extends Model
     public function contacts()
     {
         return $this->hasMany(Contact::class, 'product_id');
+    }
+
+    /**
+     * Get all of the product's comments.
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

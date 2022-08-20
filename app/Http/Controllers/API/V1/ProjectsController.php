@@ -34,7 +34,7 @@ class ProjectsController extends BaseController
 
         $field = getDbColumns('projects');
 
-        $records = Projects::withCount(['products', 'photos', 'users', 'contacts'])
+        $records = Projects::withCount(['products', 'photos', 'users', 'contacts', 'comments'])
                             ->with(['city', 'category', 'user'])
                             ->latest()
                             ->Where(function ($query) use($string, $field) {
@@ -136,8 +136,8 @@ class ProjectsController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        $projects = Projects::withCount(['products', 'photos', 'users', 'contacts'])
-                            ->with(['city', 'category', 'user', 'products', 'photos', 'users', 'contacts'])
+        $projects = Projects::withCount(['products', 'photos', 'users', 'contacts', 'comments'])
+                            ->with(['city', 'category', 'user', 'products', 'photos', 'users', 'contacts', 'comments'])
                             ->whereId($id)
                             ->latest()
                             ->paginate(10);

@@ -27,7 +27,9 @@ class PlaceController extends BaseController
      */
     public function index()
     {
-        $places = Place::paginate(10);
+        $places = Place::withCount(['photos', 'comments'])
+                        ->with('photos','city')
+                        ->paginate(10);
         return $this->sendResponse($places, 'Places successfully Retrieved...!');
     }
 
@@ -111,8 +113,11 @@ class PlaceController extends BaseController
      */
     public function show($id)
     {
-        $place = Place::find($id);
-        
+        $place = Place::whereId($id)
+                ->withCount(['photos', 'comments'])
+                ->with('photos','city', 'comments')
+                ->paginate(10);
+
         if (is_null($place)) {
             return $this->sendError('Empty', [], 404);
         }

@@ -105,9 +105,10 @@ class User extends Authenticatable implements JWTSubject
      */
     public function commentsOnUser()
     {
-        return $this->morphMany('App\Models\Comment', 'commentable');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
+    
     /**
      * Get the project that owns the User
      *

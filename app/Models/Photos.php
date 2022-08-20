@@ -70,4 +70,12 @@ class Photos extends Model
     {
         return $this->belongsTo(City::class, 'city_id');
     }
+
+    /**
+     * Get all of the photo's comments.
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }
