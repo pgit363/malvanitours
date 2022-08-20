@@ -13,6 +13,10 @@ return [
         'react' => 'public/assets/reacts/',
         'comments' => 'public/assets/comments/',
     ],
+    'models' => [
+        'City' => 'App\Models\City',
+        'User' => 'App\Models\User',
+    ],
 ];
 
 ?>

@@ -14,6 +14,7 @@ use App\Http\Controllers\API\V1\BlogController;
 use App\Http\Controllers\API\V1\ContactController;
 use App\Http\Controllers\API\V1\HomeController;
 use App\Http\Controllers\API\V1\CityController;
+use App\Http\Controllers\API\V1\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,5 +99,11 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::put('/role/{id}', [RolesController::class, 'update']);   
     Route::delete('/role/{id}', [RolesController::class, 'destroy']);  
     Route::get('/role/{id}/users', [RolesController::class, 'getAllUsers']); 
+
+    Route::get('/comments', [CommentController::class, 'index']);   
+    Route::post('/comment', [CommentController::class, 'store']);
+    Route::get('/comment/{id}', [CommentController::class, 'show']);   
+    Route::put('/comment/{id}', [CommentController::class, 'update']);   
+    Route::delete('/comment/{id}', [CommentController::class, 'destroy']);   
 
 });

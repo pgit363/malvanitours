@@ -18,19 +18,11 @@ class Comment extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'city_id',
-        'description',
-        'rules',
-        'image_url',
-        'bg_image_url',
-        'price',
-        'rating',
-        'visitors_count',
-        'social_media',
-        'contact_details',
-        'categories',
-        'comment_id'
+        'parent_id',
+        'user_id',
+        'comment',
+        'commentable_type',
+        'commentable_id',
     ];
 
     /**
@@ -45,12 +37,7 @@ class Comment extends Model
      *
      * @var array
      */
-    protected $casts = [
-        'rules' => 'array',
-        'price' => 'array',
-        'social_media' => 'array',
-        'contact_details' => 'array'
-    ];
+    protected $casts = [];
 
     /**
      * Get the Comments that owns the Comment
