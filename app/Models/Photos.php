@@ -23,6 +23,8 @@ class Photos extends Model
         'product_id',
         'place_id',
         'comment_id',
+        'title',
+        'description',
         'url',
     ];
 

@@ -53,8 +53,10 @@ class PhotosController extends BaseController
             'project_id' => 'sometimes|numeric',
             'product_id' => 'sometimes|numeric',
             'place_id' => 'sometimes|numeric',
-            'comment_id' => 'sometimes|numeric',            
-            'url' => 'mimes:jpeg,jpg,png|max:2048',
+            'comment_id' => 'sometimes|numeric',      
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'url' => 'mimes:jpeg,jpg,png,webp|max:2048',
         ]);
 
         if($validator->fails()){
@@ -130,6 +132,8 @@ class PhotosController extends BaseController
             'product_id' => 'sometimes|numeric',
             'place_id' => 'sometimes|numeric',
             'comment_id' => 'sometimes|numeric', 
+            'title' => 'nullable|string',
+            'description' => 'nullable|string',
             'url' => 'mimes:jpeg,jpg,png|max:2048',
         ]);
 

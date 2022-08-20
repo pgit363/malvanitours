@@ -19,7 +19,6 @@ class CreatePhotosTable extends Migration
             $table->integer('product_id')->unsigned()->nullable(); 
             $table->integer('comment_id')->unsigned()->nullable();
             $table->integer('place_id')->unsigned()->nullable();
-            $table->integer('blog_id')->unsigned()->nullable();
             $table->integer('city_id')->unsigned()->nullable();
             $table->string('url');
             $table->timestamps();
@@ -28,7 +27,6 @@ class CreatePhotosTable extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('place_id')->references('id')->on('places')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
