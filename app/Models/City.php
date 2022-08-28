@@ -21,7 +21,7 @@ class City extends Model
     protected $fillable = [
         'name',
         'tag_line',
-        'famous_for',
+        'description',
         'image_url',
         'bg_image_url',
     ];

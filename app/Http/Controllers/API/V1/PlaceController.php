@@ -44,7 +44,7 @@ class PlaceController extends BaseController
         $place = Place::whereId($id)
                         ->withCount(['photos', 'comments'])
                         ->with('photos','city', 'comments')
-                        ->paginate(10);
+                        ->get();
         
         if (is_null($place)) {
             return $this->sendError('Empty', [], 404);

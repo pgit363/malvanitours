@@ -55,7 +55,7 @@ class CityController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|unique:cities',
             'tag_line' => 'required|string',
-            'famous_for' => 'required|string',
+            'description' => 'required|string',
             'image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
             'bg_image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
             'url' => 'string',
@@ -161,7 +161,7 @@ class CityController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'string|unique:cities',
             'tag_line' => 'string',
-            'famous_for' => 'string',
+            'description' => 'string',
             'image_url' => 'mimes:jpeg,jpg,png|max:2048',
             'bg_image_url' => 'mimes:jpeg,jpg,png|max:2048',
             'url' => 'string',
