@@ -41,10 +41,9 @@ class PlaceController extends BaseController
      */
     public function show($id)
     {
-        $place = Place::whereId($id)
-                        ->withCount(['photos', 'comments'])
+        $place = Place::withCount(['photos', 'comments'])
                         ->with('photos','city', 'comments')
-                        ->get();
+                        ->find($id);
         
         if (is_null($place)) {
             return $this->sendError('Empty', [], 404);
