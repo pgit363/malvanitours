@@ -130,4 +130,12 @@ class Projects extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+     /**
+    //  * Get all of the project's Favourites.
+    //  */
+    // public function favourites()
+    // {
+    //     return $this->morphMany(Favourite::class, 'favouritable');
+    // }
 }

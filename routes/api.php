@@ -15,6 +15,7 @@ use App\Http\Controllers\API\V1\ContactController;
 use App\Http\Controllers\API\V1\HomeController;
 use App\Http\Controllers\API\V1\CityController;
 use App\Http\Controllers\API\V1\CommentController;
+use App\Http\Controllers\API\V1\FavouriteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +105,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::post('/comment', [CommentController::class, 'store']);
     Route::get('/comment/{id}', [CommentController::class, 'show']);   
     Route::put('/comment/{id}', [CommentController::class, 'update']);   
-    Route::delete('/comment/{id}', [CommentController::class, 'destroy']);   
+    Route::delete('/comment/{id}', [CommentController::class, 'destroy']); 
+    
+    Route::get('/favourites', [FavouriteController::class, 'index']);   
+    Route::post('/favourite', [FavouriteController::class, 'store']);
+    Route::get('/favourite/{user_id}', [FavouriteController::class, 'show']);   
+    // Route::put('/favourite/{id}', [FavouriteController::class, 'update']);   
+    Route::delete('/favourite/{id}', [FavouriteController::class, 'destroy']); 
 
 });
