@@ -86,9 +86,12 @@ class FavouriteController extends BaseController
      */
     public function show($user_id)
     {
-        $favourites  = Favourite::with('favouritable')
+        $favourites  = Favourite::
+        // select(\DB::raw('favouritable_id, favouritable_id'))
+                               with('favouritable')
                                 // ->groupBy('favouritable_id')
-                                ->orderBy('created_at', 'desc')
+                                // ->groupBy('favouritable_type')
+                                // ->orderBy('created_at', 'desc')
                                 // ->latest()      
                                 ->where('user_id', $user_id)                  
                                 ->get();

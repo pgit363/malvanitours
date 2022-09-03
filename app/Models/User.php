@@ -128,4 +128,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Projects::class, 'user_id');
     }
+
+
+     /**
+     * Get all of the project's comments.
+     */
+    public function favourites()
+    {
+        return $this->hasMany(Favourite::class, 'user_id')->groupBy('favourites.favouritable_type');
+    }
 }

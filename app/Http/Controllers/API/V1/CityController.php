@@ -43,7 +43,7 @@ class CityController extends BaseController
     public function show($id)
     {
         $city = City::withCount(['projects', 'places', 'photos', 'comments'])
-                      ->with(['comments', 'comments.users'])
+                      ->with(['comments', 'comments.comments', 'comments.comments.users', 'places', 'photos', 'comments.users'])
                       ->latest()
                       ->limit(10)
                       ->find($id);

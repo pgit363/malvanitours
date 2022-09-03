@@ -109,7 +109,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     
     Route::get('/favourites', [FavouriteController::class, 'index']);   
     Route::post('/favourite', [FavouriteController::class, 'store']);
-    Route::get('/favourite/{user_id}', [FavouriteController::class, 'show']);   
+    Route::get('/favourite/{user_id}', [AuthController::class, 'getAllFavourites']);   
     // Route::put('/favourite/{id}', [FavouriteController::class, 'update']);   
     Route::delete('/favourite/{id}', [FavouriteController::class, 'destroy']); 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Favourite;
 use Validator;
 use App\Http\Controllers\BaseController as BaseController;
 use Mail;
@@ -207,6 +208,29 @@ class AuthController extends BaseController
         }
 
         return response(['user' => 'failed']);                    
+    }
+
+    public function getAllFavourites($id)
+    {
+        $favourites  = User::
+        // select(\DB::raw('favouritable_id, favouritable_id'))
+                               withCount('favourites')
+                               ->with('favourites')
+                                ->groupBy('favourites.favouritable_id')
+                                // ->groupBy('favouritable_type')
+                                // ->orderBy('created_at', 'desc')
+                                ->latest()      
+                                ->whereId($id)  ;
+                                
+
+                                logger($favourites->toSql());
+                                // ->get();
+        
+        if (is_null($favourites)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        return $this->sendResponse($favourites, 'Favourites successfully Retrieved...!');  
     }
 
 }
