@@ -77,7 +77,7 @@ class ProjectsController extends BaseController
             'name' => 'required|string|between:2,100',
             'city_id' => 'required|numeric',
             'category_id' => 'required|numeric',
-            'user_id' => 'required|numeric',
+            'user_id' => 'nullable|numeric',
             'domain_name' => 'required|string',
             'logo' => 'mimes:jpeg,jpg,png|max:2048',
             'fevicon' => 'mimes:jpeg,jpg,png|max:2048',
@@ -137,10 +137,9 @@ class ProjectsController extends BaseController
     public function show(Request $request, $id)
     {
         $projects = Projects::withCount(['products', 'photos', 'users', 'contacts', 'comments'])
-                            ->with(['city', 'category', 'user', 'products', 'photos', 'users', 'comments'])
-                            ->whereId($id)
+                            ->with(['city', 'category', 'user', 'products', 'photos', 'users', 'comments',  'comments.comments', 'comments.users', 'comments.comments.users'])
                             ->latest()
-                            ->get();
+                            ->find($id);
         
         if (is_null($projects)) {
             return $this->sendError('Empty', [], 404);

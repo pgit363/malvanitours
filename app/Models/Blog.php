@@ -20,6 +20,7 @@ class Blog extends Model
         'name',
         'title',
         'description',
+        'image',
         'ratings',
         'count'
     ];
@@ -37,4 +38,12 @@ class Blog extends Model
      * @var array
      */
     protected $casts = [];
+
+    /**
+     * Get all of the product's comments.
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

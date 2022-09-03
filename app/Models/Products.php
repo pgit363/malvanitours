@@ -72,11 +72,11 @@ class Products extends Model
         return $this->hasMany(Contact::class, 'product_id');
     }
 
-    /**
+     /**
      * Get all of the product's comments.
      */
     public function comments()
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 }

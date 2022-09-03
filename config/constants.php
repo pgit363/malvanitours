@@ -11,6 +11,7 @@ return [
         'places' => 'public/assets/places/',
         'city' => 'public/assets/cities/',
         'react' => 'public/assets/reacts/',
+        'blog' => 'public/assets/blogs/',
         'comments' => 'public/assets/comments/',
     ],
     'models' => [

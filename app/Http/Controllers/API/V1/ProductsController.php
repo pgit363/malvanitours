@@ -92,13 +92,11 @@ class ProductsController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        logger("here");
-        logger($id);
-        $product = Products::whereId($id)
-                            ->withCount(['photos', 'comments', 'projects'])
-                            ->with('projects', 'photos', 'comments',)
-                            ->paginate(10);
-        
+        $product = Products::withCount(['photos', 'comments'])
+                            ->with(['projects', 'photos', 'comments', 'comments.comments', 'comments.users', 'comments.comments.users'])
+                            ->latest()
+                            ->find($id);
+
         if (is_null($product)) {
             return $this->sendError('Empty', [], 404);
         }

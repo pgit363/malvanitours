@@ -6,6 +6,7 @@ use App\Models\Blog;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 
 class BlogController extends BaseController
@@ -51,8 +52,9 @@ class BlogController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
-            'title' => 'required|string|between:2,200',
-            'description' => 'required|string',           
+            'title' => 'required|single_word|between:2,200',
+            'description' => 'required|string', 
+            'image' => 'nullable|mimes:jpeg,jpg,png,webp|max:2048',
             'ratings' => 'nullable|numeric',
             'count' => 'nullable|numeric',
         ]);
@@ -61,7 +63,23 @@ class BlogController extends BaseController
             return $this->sendError($validator->errors(), '', 400);       
         }
 
-        $blog = Blog::create($request->all());
+        $input = $request->all();
+        Log::info("upload file starting");
+
+        //Image 1 store      
+        if ($image = $request->file('image')) {
+            Log::info("inside upload image");
+            
+            $url = date('YmdHis') . "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('image')->store(config('constants.upload_path.blog').$request->title);
+
+            $input['image'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['image']);
+        }
+
+        $blog = Blog::create($input);
 
         return $this->sendResponse($blog, 'Blog added successfully...!');        
     }
@@ -103,10 +121,17 @@ class BlogController extends BaseController
      */
     public function update(Request $request, $id)
     {
+        $blog = Blog::find($id);
+
+        if (is_null($blog)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
         $validator = Validator::make($request->all(), [
-            'name' => 'string|between:2,100',
-            'title' => 'string|between:2,200',
-            'description' => 'string',           
+            'name' => 'nullable|string|between:2,100',
+            'title' => 'nullable|string|between:2,200',
+            'description' => 'nullable|string',   
+            'image' => 'nullable|mimes:jpeg,jpg,png,webp|max:2048',        
             'ratings' => 'nullable|numeric',
             'count' => 'nullable|numeric',
         ]);
@@ -115,13 +140,29 @@ class BlogController extends BaseController
             return $this->sendError($validator->errors(), '', 400);       
         }
 
-        $blog = Blog::find($id);
+        $input = $request->all();
+        Log::info("upload file starting");
 
-        if (is_null($blog)) {
-            return $this->sendError('Empty', [], 404);
+        //Image 1 store      
+        if ($image = $request->file('image')) {
+            Log::info("inside upload image");
+            
+            if(Storage::exists($photos->image)){
+                Log::info("file exist");
+                Storage::delete($photos->image);
+                Log::info("file deleted");
+            }
+
+            $url = date('YmdHis') . "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('image')->store(config('constants.upload_path.blog').$request->title);
+
+            $input['image'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['image']);
         }
 
-        $blog->update($request->all());
+        $blog->update($input);
 
         return $this->sendResponse($blog, 'Blogs updated successfully...!');   
     }
