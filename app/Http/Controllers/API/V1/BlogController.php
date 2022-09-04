@@ -28,6 +28,7 @@ class BlogController extends BaseController
     public function index()
     {
         $blogs = Blog::withCount(['category', 'photos', 'comments'])
+                    ->orderBy('id', 'desc')
                     ->latest()                
                     ->paginate(10);
 
