@@ -65,6 +65,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::get('/blogs', [BlogController::class, 'index']);  
     Route::post('/blog', [BlogController::class, 'store']);
     Route::get('/blog/{id}', [BlogController::class, 'show']);    
+    Route::get('/blog/category/{id}', [BlogController::class, 'blogByCategory']);    
     Route::put('/blog/{id}', [BlogController::class, 'update']);
     Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
 

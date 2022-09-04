@@ -6,6 +6,7 @@ use App\Models\Place;
 use App\Models\Projects;
 use App\Models\Products;
 use App\Models\Photos;
+use App\Models\Blog;
 
 function currentDate()
 {
@@ -43,6 +44,10 @@ function getData($id, $model)
 
         case 'Photos':
             $data = Photos::find($id);
+        break;
+
+        case 'Blog':
+            $data = Blog::find($id);
         break;
 
         default:

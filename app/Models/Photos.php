@@ -74,6 +74,15 @@ class Photos extends Model
     }
 
     /**
+     * Get the blog that owns the Photos
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function blog()
+    {
+        return $this->belongsTo(Blog::class, 'blog_id');
+    }
+    /**
      * Get all of the photo's comments.
      */
     public function comments()

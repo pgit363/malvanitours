@@ -14,6 +14,8 @@ class UpdateBlogTableAddImageCol extends Migration
     public function up()
     {
         Schema::table('blogs', function($table) {
+            $table->integer('category_id')->unsigned()->nullable()->after('id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->string('image')->nullable()->after('description');
         });
     }

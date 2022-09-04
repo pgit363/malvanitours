@@ -41,7 +41,7 @@ class CategoryController extends BaseController
         $projects = Category::with('projects')
                               ->whereId($id)
                               ->latest()
-                              ->paginate(10);
+                              ->get();
 
         if (is_null($projects)) {
             return $this->sendError('Empty', [], 404);

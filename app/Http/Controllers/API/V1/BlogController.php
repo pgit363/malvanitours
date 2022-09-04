@@ -27,7 +27,9 @@ class BlogController extends BaseController
      */
     public function index()
     {
-        $blogs = Blog::paginate(10);
+        $blogs = Blog::withCount(['category', 'photos', 'comments'])
+                    ->latest()                
+                    ->paginate(10);
 
         return $this->sendResponse($blogs, 'Blogs successfully Retrieved...!');
     }
@@ -51,8 +53,9 @@ class BlogController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'category_id' => 'nullable|numeric',
             'name' => 'required|string|between:2,100',
-            'title' => 'required|single_word|between:2,200',
+            'title' => 'required|string|between:2,200',
             'description' => 'required|string', 
             'image' => 'nullable|mimes:jpeg,jpg,png,webp|max:2048',
             'ratings' => 'nullable|numeric',
@@ -92,7 +95,31 @@ class BlogController extends BaseController
      */
     public function show($id)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::withCount(['photos', 'comments'])
+                      ->with(['category', 'photos', 'comments', 'comments.comments', 'comments.users', 'comments.comments.users'])
+                      ->latest()
+                      ->find($id);
+        
+        if (is_null($blog)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        return $this->sendResponse($blog, 'Blog successfully Retrieved...!');  
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Blog  $blog
+     * @return \Illuminate\Http\Response
+     */
+    public function blogByCategory($id)
+    {
+        $blog = Blog::withCount(['photos', 'comments'])
+                      ->with(['category', 'photos', 'comments', 'comments.comments', 'comments.users', 'comments.comments.users'])
+                      ->latest()
+                      ->where('category_id', $id)
+                      ->get();
         
         if (is_null($blog)) {
             return $this->sendError('Empty', [], 404);
@@ -128,6 +155,7 @@ class BlogController extends BaseController
         }
 
         $validator = Validator::make($request->all(), [
+            'category_id' => 'nullable|numeric',
             'name' => 'nullable|string|between:2,100',
             'title' => 'nullable|string|between:2,200',
             'description' => 'nullable|string',   

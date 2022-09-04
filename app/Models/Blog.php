@@ -17,6 +17,7 @@ class Blog extends Model
      * @var string[]
      */
     protected $fillable = [
+        'category_id',
         'name',
         'title',
         'description',
@@ -39,11 +40,32 @@ class Blog extends Model
      */
     protected $casts = [];
 
+     /**
+     * Get the category that owns the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    
+    /**
+     * Get all of the photos for the Projects
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photos()
+    {
+        return $this->hasMany(Photos::class, 'blog_id');
+    }
+
     /**
      * Get all of the product's comments.
      */
     public function comments()
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
+    
 }
