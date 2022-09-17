@@ -54,7 +54,7 @@ class BlogController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category_id' => 'nullable|numeric',
+            'category_id' => 'nullable|numeric|exists:categories,id',
             'name' => 'required|string|between:2,100',
             'title' => 'required|string|between:2,200',
             'description' => 'required|string', 

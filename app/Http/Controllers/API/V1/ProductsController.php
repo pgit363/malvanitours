@@ -54,7 +54,7 @@ class ProductsController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
-            'project_id' => 'required|numeric',
+            'project_id' => 'required|numeric|exists:projects,id',
             'price' => 'required|string',
             'description' => 'required|string',
             'ratings' => 'numeric',  // should given by user

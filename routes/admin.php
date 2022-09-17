@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\PlaceCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,13 @@ Route::group(['middleware' => 'api', 'prefix' => 'api'], function ($router) {
     Route::post('/city/{id}', [CityController::class, 'update']);
     Route::delete('/city/{id}', [CityController::class, 'destroy']);
     Route::get('/city/{id}/detail', [CityController::class, 'getAllcities']); 
+
+    Route::get('/placecategories', [PlaceCategoryController::class, 'index']);   
+    Route::post('/placecategory', [PlaceCategoryController::class, 'store']);
+    Route::get('/placecategory/{id}', [PlaceCategoryController::class, 'show']);
+    Route::get('/placecategory/places/{place_categories_id}', [PlaceCategoryController::class, 'getAllPlaces']);   
+    Route::post('/placecategory/{id}', [PlaceCategoryController::class, 'update']);   
+    Route::delete('/placecategory/{id}', [PlaceCategoryController::class, 'destroy']);   
 
     Route::get('/places', [PlaceController::class, 'index']);  
     Route::post('/place', [PlaceController::class, 'store']);

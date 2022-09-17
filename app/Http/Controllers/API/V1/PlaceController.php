@@ -41,6 +41,7 @@ class PlaceController extends BaseController
      */
     public function show($id)
     {
+        //write visitors count update here by one
         $place = Place::withCount(['photos', 'comments'])
                         ->with(['photos', 'city', 'comments', 'comments.comments', 'comments.users', 'comments.comments.users'])
                         ->find($id);

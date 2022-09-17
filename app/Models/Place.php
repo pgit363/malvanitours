@@ -11,7 +11,6 @@ use App\Traits\Hashidable;
 class Place extends Model
 {
     use HasFactory, Hashidable, Notifiable;
-
     
     /**
      * The attributes that are mass assignable.

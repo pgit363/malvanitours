@@ -106,6 +106,7 @@ class ContactController extends BaseController
      */
     public function update(Request $request, $id)
     {
+        //add polymorphic relationship 
         $validator = Validator::make($request->all(), [
             'project_id' => 'sometimes|numeric',
             'product_id' => 'sometimes|numeric',

@@ -76,7 +76,7 @@ class ProjectsController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
             'city_id' => 'required|numeric',
-            'category_id' => 'required|numeric',
+            'category_id' => 'required|numeric|exists:categories,id',
             'user_id' => 'nullable|numeric',
             'domain_name' => 'required|string',
             'logo' => 'mimes:jpeg,jpg,png|max:2048',

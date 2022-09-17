@@ -53,7 +53,7 @@ class PlaceController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
-            'city_id' => 'required|numeric',
+            'city_id' => 'required|numeric|exists:cities,id',
             'description' => 'required|string',
             'rules' => 'json',
             'image_url' => 'required|mimes:jpeg,jpg,png|max:2048',

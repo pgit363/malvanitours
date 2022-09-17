@@ -54,8 +54,8 @@ class CommentController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'parent_id' => 'nullable|numeric',
-            'user_id' => 'nullable|numeric',
+            'parent_id' => 'nullable|numeric|exists:comments,id',
+            'user_id' => 'nullable|numeric|exists:users,id',
             'comment' => 'required|string',
             'commentable_type' => 'required|string',
             'commentable_id' => 'required|numeric',

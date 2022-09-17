@@ -13,6 +13,7 @@ return [
         'react' => 'public/assets/reacts/',
         'blog' => 'public/assets/blogs/',
         'comments' => 'public/assets/comments/',
+        'placecategory' => 'public/assets/placecategory/'
     ],
     'models' => [
         'City' => 'App\Models\City',

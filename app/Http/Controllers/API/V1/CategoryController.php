@@ -31,7 +31,7 @@ class CategoryController extends BaseController
         return $this->sendResponse($categories, 'Categories successfully Retrieved...!');   
     }
 
-      /**
+    /**
      * Display a listing of the projects.
      *
      * @return \Illuminate\Http\Response
