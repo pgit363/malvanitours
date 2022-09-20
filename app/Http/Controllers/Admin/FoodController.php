@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
+use App\Models\Food;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 
-class CategoryController extends BaseController
+class FoodController extends BaseController
 {
-     /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
@@ -19,7 +19,7 @@ class CategoryController extends BaseController
     public function __construct() {
         $this->middleware('auth:api');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -27,41 +27,9 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $categories = Category::paginate(10);
-        return $this->sendResponse($categories, 'Categories successfully Retrieved...!');   
-    }
+        $food = Food::paginate(10);
 
-    /**
-     * Display a listing of the projects.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllProjects($id)
-    {
-        $projects = Category::with('projects')
-                              ->whereId($id)
-                              ->latest()
-                              ->get();
-
-        if (is_null($projects)) {
-            return $this->sendError('Empty', [], 404);
-        }
-
-        return $this->sendResponse($projects, 'Projects successfully Retrieved...!'); 
-    }
-
-    public function getAllowedProductCategories($id)
-    {
-        $productCategory = Category::with('allowedproductCategory', 'allowedproductCategory.productCategory')
-                            // ->where('category', $id)
-                            ->latest()
-                            ->get();
-
-        if (is_null($productCategory)) {
-            return $this->sendError('Empty', [], 404);
-        }
-
-        return $this->sendResponse($productCategory, 'Allowed Product Categories successfully Retrieved...!'); 
+        return $this->sendResponse($food, 'Food successfully Retrieved...!'); 
     }
 
     /**
@@ -84,8 +52,11 @@ class CategoryController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
-            'image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'food_type' => 'required|string',
             'description' => 'required|string',
+            'nuetritional_info' => 'json',
+            'image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'visitor_count' => 'numeric',
             'meta_data' => 'json',
         ]);
 
@@ -103,42 +74,42 @@ class CategoryController extends BaseController
             
             $image_url = $date . "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('image_url')->store(config('constants.upload_path.category').$request->name);
+            $path = $request->file('image_url')->store(config('constants.upload_path.food').$request->name);
 
             $input['image_url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['image_url']);
         }
 
-        $categories = Category::create($input);
+        $food = Food::create($input);
 
-        return $this->sendResponse($categories, 'Categories stored successfully...!');        
+        return $this->sendResponse($food, 'Food stored successfully...!');        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Categories  $categories
+     * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
-        $categories = Category::find($id);
+        $food = Food::find($id);
         
-        if (is_null($categories)) {
+        if (is_null($food)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        return $this->sendResponse($categories, 'Categories successfully Retrieved...!');   
+        return $this->sendResponse($food, 'Food item successfully Retrieved...!'); 
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Categories  $categories
+     * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function edit(Categories $categories)
+    public function edit(Food $food)
     {
         //
     }
@@ -147,25 +118,28 @@ class CategoryController extends BaseController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Categories  $categories
+     * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'image_url' => 'required|mimes:jpeg,jpg,png|max:2048',
-            'description' => 'required|string',
+            'name' => 'string|between:2,100',
+            'food_type' => 'string',
+            'description' => 'string',
+            'nuetritional_info' => 'json',
+            'image_url' => 'mimes:jpeg,jpg,png|max:2048',
+            'visitor_count' => 'numeric',
             'meta_data' => 'json',
         ]);
 
         if($validator->fails()){
             return $this->sendError($validator->errors(), '', 400);       
         }
+      
+        $food = Food::find($id);
 
-        $categories = Category::find($id);
-
-        if (is_null($categories)) {
+        if (is_null($food)) {
             return $this->sendError('Empty', [], 404);
         }
 
@@ -175,46 +149,46 @@ class CategoryController extends BaseController
 
         //Image 1 store      
         if ($image = $request->file('image_url')) {
-            if(Storage::exists($categories->image_url)){
-                Storage::delete($categories->image_url);
+            if(Storage::exists($food->image_url)){
+                Storage::delete($food->image_url);
             }
 
             Log::info("inside upload image_url");
             
             $image_url = $date . "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('image_url')->store(config('constants.upload_path.category').$request->name);
+            $path = $request->file('image_url')->store(config('constants.upload_path.food').$request->name);
 
             $input['image_url'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['image_url']);
+            
+        $food->update($input);
+
         }
-
-        $categories->update($input);
-
-        return $this->sendResponse($categories, 'Categories updated successfully...!');   
+        return $this->sendResponse($food, 'Food item updated successfully...!');        
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Categories  $categories
+     * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        $categories = Category::find($id);
+        $food = Food::find($id);
 
-        if (is_null($categories)) {
+        if (is_null($food)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        if(Storage::exists($categories->image_url)){
-            Storage::delete($categories->image_url);
+        if(Storage::exists($food->icon)){
+            Storage::delete($food->icon);
         }
 
-        $categories->delete($request->all());
+        $food->delete();
 
-        return $this->sendResponse($categories, 'Categories deleted successfully...!');   
+        return $this->sendResponse($food, 'Food item deleted successfully...!');  
     }
 }

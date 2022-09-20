@@ -8,10 +8,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
 
-class PlaceCategory extends Model
+class ProductCategory extends Model
 {
     use HasFactory, Hashidable, Notifiable;
-
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -38,5 +38,4 @@ class PlaceCategory extends Model
     protected $casts = [
         'meta_data' => 'json'
     ];
-
 }

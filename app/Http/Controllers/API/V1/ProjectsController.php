@@ -136,8 +136,10 @@ class ProjectsController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        $projects = Projects::withCount(['products', 'photos', 'users', 'contacts', 'comments'])
-                            ->with(['city', 'category', 'user', 'products', 'photos', 'users', 'comments',  'comments.comments', 'comments.users', 'comments.comments.users'])
+        $projects = Projects::withCount(['products', 'photos', 'contacts', 'comments'])
+                            ->with(['city', 'category', 'products.productable', 'photos', 'users', 'comments',  'comments.comments', 'comments.users', 'comments.comments.users'])
+                                // ->groupBy('productable_type')
+                                // ->groupBy('productable_id')
                             ->latest()
                             ->find($id);
         

@@ -52,7 +52,15 @@ class Category extends Model
         return $this->hasMany(Projects::class, 'category_id');
     }
 
-    
+    /**
+     * Get all of the productCategory for the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function allowedproductCategory()
+    {
+        return $this->hasMany(AllowedProductCategory::class, 'category_id');
+    }
     /**
      * Get all of the blogs for the Category
      *

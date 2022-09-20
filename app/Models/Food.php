@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
 
-class PlaceCategory extends Model
+class Food extends Model
 {
     use HasFactory, Hashidable, Notifiable;
 
@@ -19,7 +19,11 @@ class PlaceCategory extends Model
      */
     protected $fillable = [
         'name',
-        'icon',
+        'food_type',
+        'description',
+        'nuetritional_info',
+        'image_url',
+        'visitor_count',
         'meta_data'
     ];
 
@@ -36,7 +40,22 @@ class PlaceCategory extends Model
      * @var array
      */
     protected $casts = [
+        'nuetritional_info' => 'json',
         'meta_data' => 'json'
     ];
 
+     /**
+     * Get all of the models that own products.
+     */
+    public function products(){
+        return $this->morphOne(Product::class, 'productable'); 
+    }
+
+     /**
+    * Get all of the Food's comments.
+    */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
+    }
 }

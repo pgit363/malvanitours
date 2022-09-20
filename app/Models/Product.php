@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
 
-class Products extends Model
+class Product extends Model
 {
     use HasFactory, Hashidable, HasFactory, Notifiable;
     
@@ -20,12 +20,11 @@ class Products extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name',
         'project_id',
-        'price',
-        'ratings',
-        'picture',
-        'description',
+        'product_category_id',
+        'productable_type',
+        'productable_id',
+        'meta_data',
     ];
 
     /**
@@ -40,7 +39,9 @@ class Products extends Model
      *
      * @var array
      */
-    protected $casts = [];
+    protected $casts = [
+        'meta_data' => 'json'
+    ];
 
     /**
      * Get the projects that owns the Products
@@ -49,34 +50,32 @@ class Products extends Model
      */
     public function projects()
     {
-        return $this->belongsTo(Projects::class,  'project_id');
+        return $this->belongsTo(Projects::class, 'project_id');
     }
 
     /**
-     * Get all of the photos for the Products
+     * Get the productCategory that owns the Products
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function photos()
+    public function productCategory()
     {
-        return $this->hasMany(Photos::class, 'product_id');
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
     }
 
     /**
-     * Get all of the contacts for the Products
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the models that own products.
      */
-    public function contacts()
+    public function productable()
     {
-        return $this->hasMany(Contact::class, 'product_id');
+        return $this->morphTo();
     }
-
-     /**
-     * Get all of the product's comments.
-     */
-    public function comments()
-    {
-        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
-    }
+    
+    // /**
+    // * Get all of the product's comments.
+    // */
+    // public function comments()
+    // {
+    //     return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
+    // }
 }

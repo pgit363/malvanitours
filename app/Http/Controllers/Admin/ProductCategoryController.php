@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\PlaceCategory;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController as BaseController;
 
-class PlaceCategoryController extends BaseController
+class ProductCategoryController extends BaseController
 {
     /**
      * Create a new AuthController instance.
@@ -27,8 +27,9 @@ class PlaceCategoryController extends BaseController
      */
     public function index()
     {
-        $placeCategory = PlaceCategory::paginate(10);
-        return $this->sendResponse($placeCategory, 'Place Category successfully Retrieved...!');  
+        $productCategory = ProductCategory::paginate(10);
+
+        return $this->sendResponse($productCategory, 'Product Category successfully Retrieved...!');  
     }
 
     /**
@@ -51,7 +52,7 @@ class PlaceCategoryController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
-            'icon' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'icon' => 'required|mimes:jpeg,jpg,png,webp|max:2048',
             'meta_data' => 'json',
         ]);
 
@@ -69,61 +70,42 @@ class PlaceCategoryController extends BaseController
             
             $icon = $date . "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('icon')->store(config('constants.upload_path.placecategory').$request->name);
+            $path = $request->file('icon')->store(config('constants.upload_path.productCategory').$request->name);
 
             $input['icon'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['icon']);
         }
 
-        $placeCategory = PlaceCategory::create($input);
+        $productCategory = ProductCategory::create($input);
 
-        return $this->sendResponse($placeCategory, 'Place Category stored successfully...!');        
+        return $this->sendResponse($productCategory, 'Product Category stored successfully...!');        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PlaceCategory  $placeCategory
+     * @param  \App\Models\ProductCategory  $productCategory
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $placeCategory = PlaceCategory::find($id);
+        $productCategory = ProductCategory::find($id);
         
-        if (is_null($placeCategory)) {
+        if (is_null($productCategory)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        return $this->sendResponse($placeCategory, 'Place Category successfully Retrieved...!'); 
-    }
-
-    /**
-     * Display a listing of the Places from catgory.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllPlaces($id)
-    {
-        $places = PlaceCategory::with('places')
-                              ->whereId($id)
-                              ->latest()
-                              ->get();
-
-        if (is_null($places)) {
-            return $this->sendError('Empty', [], 404);
-        }
-
-        return $this->sendResponse($places, 'Places successfully Retrieved...!'); 
+        return $this->sendResponse($productCategory, 'Product Category successfully Retrieved...!'); 
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PlaceCategory  $placeCategory
+     * @param  \App\Models\ProductCategory  $productCategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(PlaceCategory $placeCategory)
+    public function edit(ProductCategory $productCategory)
     {
         //
     }
@@ -132,7 +114,7 @@ class PlaceCategoryController extends BaseController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PlaceCategory  $placeCategory
+     * @param  \App\Models\ProductCategory  $productCategory
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -147,9 +129,9 @@ class PlaceCategoryController extends BaseController
             return $this->sendError($validator->errors(), '', 400);       
         }
 
-        $placeCategory = PlaceCategory::find($id);
+        $productCategory = ProductCategory::find($id);
 
-        if (is_null($placeCategory)) {
+        if (is_null($productCategory)) {
             return $this->sendError('Empty', [], 404);
         }
       
@@ -159,46 +141,46 @@ class PlaceCategoryController extends BaseController
 
         //Image 1 store      
         if ($image = $request->file('icon')) {
-            if(Storage::exists($placeCategory->icon)){
-                Storage::delete($placeCategory->icon);
+            if(Storage::exists($productCategory->icon)){
+                Storage::delete($productCategory->icon);
             }
 
             Log::info("inside upload icon");
             
             $icon = $date . "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('icon')->store(config('constants.upload_path.placecategory').$request->name);
+            $path = $request->file('icon')->store(config('constants.upload_path.productCategory').$request->name);
 
             $input['icon'] = Storage::url($path);
             
             Log::info("FILE STORED".$input['icon']);
         }
 
-        $placeCategory->update($input);
+        $productCategory->update($input);
 
-        return $this->sendResponse($placeCategory, 'Place Category stored successfully...!');
+        return $this->sendResponse($productCategory, 'Product Category stored successfully...!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PlaceCategory  $placeCategory
+     * @param  \App\Models\ProductCategory  $productCategory
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $placeCategory = PlaceCategory::find($id);
+        $productCategory = ProductCategory::find($id);
 
-        if (is_null($placeCategory)) {
+        if (is_null($productCategory)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        if(Storage::exists($placeCategory->icon)){
-            Storage::delete($placeCategory->icon);
+        if(Storage::exists($productCategory->icon)){
+            Storage::delete($productCategory->icon);
         }
 
-        $placeCategory->delete();
+        $productCategory->delete();
 
-        return $this->sendResponse($placeCategory, 'Place Category deleted successfully...!');   
+        return $this->sendResponse($productCategory, 'product Category deleted successfully...!');   
     }
 }

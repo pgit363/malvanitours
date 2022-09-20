@@ -13,7 +13,9 @@ return [
         'react' => 'public/assets/reacts/',
         'blog' => 'public/assets/blogs/',
         'comments' => 'public/assets/comments/',
-        'placecategory' => 'public/assets/placecategory/'
+        'placecategory' => 'public/assets/placecategory/',
+        'productCategory' => 'public/assets/productcategory/',
+        'food' => 'public/assets/food/'
     ],
     'models' => [
         'City' => 'App\Models\City',

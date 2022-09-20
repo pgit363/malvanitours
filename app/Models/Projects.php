@@ -70,7 +70,7 @@ class Projects extends Model
      */
     public function products()
     {
-        return $this->hasMany(Products::class, 'project_id');
+        return $this->hasMany(Product::class, 'project_id');
     }
     
     /**
@@ -131,11 +131,11 @@ class Projects extends Model
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
-     /**
-    //  * Get all of the project's Favourites.
-    //  */
-    // public function favourites()
-    // {
-    //     return $this->morphMany(Favourite::class, 'favouritable');
-    // }
+    /**
+     * Get all of the project's Favourites.
+     */
+    public function favourites()
+    {
+        return $this->morphMany(Favourite::class, 'favouritable');
+    }
 }

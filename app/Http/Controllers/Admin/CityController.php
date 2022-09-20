@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class CityController extends BaseController
 {
-     /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
