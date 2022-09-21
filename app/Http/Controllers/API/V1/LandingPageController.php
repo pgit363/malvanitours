@@ -32,7 +32,7 @@ class LandingPageController extends BaseController
      */
     public function index()
     {
-        $categories = Category::withCount('projects', 'products')
+        $categories = Category::withCount('projects')
                         // ->with(['projects.city'])
                         ->latest()
                         ->limit(10)
@@ -44,7 +44,7 @@ class LandingPageController extends BaseController
                         ->get();
 
         $projects = Projects::where('ratings', '>=', 3)
-                              ->withCount('products','photos')
+                              ->withCount('photos')
                               ->latest()
                               ->limit(10)
                               ->get();
