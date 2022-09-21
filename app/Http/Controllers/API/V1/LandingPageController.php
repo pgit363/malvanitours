@@ -49,11 +49,11 @@ class LandingPageController extends BaseController
                               ->limit(10)
                               ->get();
 
-        $products = Products::where('ratings', '>=', 3)
-                            ->withCount('comments','photos')
-                            ->latest()
-                            ->limit(6)
-                            ->get();
+        // $products = Products::where('ratings', '>=', 3)
+        //                     ->withCount('comments','photos')
+        //                     ->latest()
+        //                     ->limit(6)
+        //                     ->get();
 
         $places = Place::where('rating', '>=', 3)
                          ->orWhere('visitors_count', '>=', 10)
@@ -69,7 +69,7 @@ class LandingPageController extends BaseController
         $temp3 =  array_merge(['categories'=> $categories, 
                             'cities'=>$cities,
                             'projects'=>$projects,
-                            'products'=>$products,
+                            // 'products'=>$products,
                             'places'=>$places,
                             'blogs'=>$blogs]);
     
