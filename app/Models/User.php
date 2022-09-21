@@ -30,7 +30,8 @@ class User extends Authenticatable implements JWTSubject
         'code',
         'gender',
         'dob',
-        'privilage'
+        'privilage',
+        'profile_picture'
     ];
 
     /**

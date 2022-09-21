@@ -9,6 +9,9 @@ use App\Models\Favourite;
 use Validator;
 use App\Http\Controllers\BaseController as BaseController;
 use Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends BaseController
 {
@@ -68,6 +71,7 @@ class AuthController extends BaseController
             'email' => 'sometimes|string|email|max:100|unique:users',
             'mobile' => 'sometimes|string|between:2,100',
             'password' => 'string|confirmed|min:6',
+            'profile_picture' => 'required|mimes:jpeg,jpg,png,webp|max:2048',
         ]);
 
         if($validator->fails()){
@@ -80,8 +84,25 @@ class AuthController extends BaseController
             $password = $request->password;
         }
         
+        $input = $validator->validated();
+        $date = currentDate(); 
+        Log::info("upload file starting");
+
+        //upload profile Image      
+        if ($image = $request->file('profile_picture')) {
+            Log::info("inside upload profile_picture");
+            
+            $profile_picture = date('YmdHis') . "." . $image->getClientOriginalExtension();
+
+            $path = $request->file('profile_picture')->store(config('constants.upload_path.profile_picture').$request->category_id.'/'.$request->name);
+
+            $input['profile_picture'] = Storage::url($path);
+            
+            Log::info("FILE STORED".$input['profile_picture']);
+        }
+
         $user = User::create(array_merge(
-                    $validator->validated(),
+                    $input,
                     ['password' => bcrypt($password)]
                 ));
 
