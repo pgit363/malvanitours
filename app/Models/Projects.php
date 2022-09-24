@@ -94,16 +94,6 @@ class Projects extends Model
     }
 
     /**
-     * Get all of the contacts for the Projects
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function contacts()
-    {
-        return $this->hasMany(Contact::class, 'project_id');
-    }
-
-    /**
      * Get the users that owns the Projects
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -138,4 +128,13 @@ class Projects extends Model
     {
         return $this->morphMany(Favourite::class, 'favouritable');
     }
+
+    /**
+     * Get all of the contact's comments.
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
+    }
+
 }

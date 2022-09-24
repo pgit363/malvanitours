@@ -50,23 +50,44 @@ class ContactController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'project_id' => 'sometimes|numeric',
-            'product_id' => 'sometimes|numeric',
-            'user_id' => 'sometimes|numeric',
+            'user_id' => 'required|numeric|exists:users,id',
             'name' => 'required|string|between:2,100',
-            'email' => 'required|string|email|between:2,200',
-            'phone' => 'required|numeric',           
-            'contact_meta' => 'json',
-            'message' => 'nullable',
+            'email' => 'sometimes|string|email|between:2,200',
+            'phone' => 'sometimes|numeric',           
+            'message' => 'required',
+            'contactable_type' => 'required|string',
+            'contactable_id' => 'required|numeric',
         ]);
 
         if($validator->fails()){
             return $this->sendError($validator->errors(), '', 400);       
         }
 
-        $contacts = Contact::create($request->all());
+        // $data = json_encode(DB::table($request->contactable_type)->find($request->contactable_id));//getData($request->commentable_id, $request->commentable_type);
+        $data = getData($request->contactable_id, $request->contactable_type);
 
-        return $this->sendResponse($contacts, 'Query submited successfully...!');    
+        if (!$data) {
+            return $this->sendError($request->contactable_type.' Not Exist..!', '', 400);       
+        }
+
+        $contact = new Contact;
+
+        $contact->user_id = $request->get('user_id');
+
+        $contact->name = $request->get('name');
+        
+        $contact->email = $request->get('email');
+        
+        $contact->phone = $request->get('phone');
+        
+        $contact->message = $request->get('message');
+
+        $contact->contactable()->associate($data);
+
+        // $contact = $contact->save();       
+        $contact = Contact::create(json_decode($contact, true));
+
+        return $this->sendResponse($contact, 'Query submited successfully...!');    
     }
 
     /**
@@ -108,14 +129,11 @@ class ContactController extends BaseController
     {
         //add polymorphic relationship 
         $validator = Validator::make($request->all(), [
-            'project_id' => 'sometimes|numeric',
-            'product_id' => 'sometimes|numeric',
-            'user_id' => 'sometimes|numeric',
+            'user_id' => 'numeric|exists:users,id',
             'name' => 'string|between:2,100',
-            'email' => 'string|email|between:2,200',
-            'phone' => 'numeric',           
-            'contact_meta' => 'nullable',
-            'message' => 'nullable',
+            'email' => 'sometimes|string|email|between:2,200',
+            'phone' => 'sometimes|numeric',           
+            'message' => 'required',
         ]);
 
         if($validator->fails()){

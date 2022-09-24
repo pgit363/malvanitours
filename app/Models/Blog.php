@@ -68,4 +68,11 @@ class Blog extends Model
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
     
+     /**
+     * Get all of the contact's comments.
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
+    }
 }

@@ -71,24 +71,14 @@ class User extends Authenticatable implements JWTSubject
         return [];
     } 
 
- /**
-  * Get the roles that owns the User
-  *
-  * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-  */
- public function roles()
- {
-     return $this->belongsTo(Roles::class, 'role_id');
- }
-
     /**
-     * Get all of the contacts for the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function contacts()
+     * Get the roles that owns the User
+    *
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
+    public function roles()
     {
-        return $this->hasMany(Contact::class, 'user_id');
+        return $this->belongsTo(Roles::class, 'role_id');
     }
 
     /**
@@ -137,5 +127,13 @@ class User extends Authenticatable implements JWTSubject
     public function favourites()
     {
         return $this->hasMany(Favourite::class, 'user_id')->groupBy('favourites.favouritable_type');
+    }
+
+     /**
+     * Get all of the contact's comments.
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
     }
 }

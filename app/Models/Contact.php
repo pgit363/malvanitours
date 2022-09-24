@@ -17,14 +17,13 @@ class Contact extends Model
      * @var string[]
      */
     protected $fillable = [
-        'project_id',
-        'product_id',
         'user_id',
         'name',
         'email',
         'phone',
-        'contact_meta',
-        'message'
+        'message',
+        'contactable_id',
+        'contactable_type',
     ];
 
     /**
@@ -52,22 +51,10 @@ class Contact extends Model
     }
 
     /**
-     * Get the projects that owns the Contact
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get all of the models that own contacts.
      */
-    public function projects()
+    public function contactable()
     {
-        return $this->belongsTo(projects::class);
-    }
-
-    /**
-     * Get the products that owns the Contact
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function products()
-    {
-        return $this->belongsTo(Products::class);
+        return $this->morphTo();
     }
 }
