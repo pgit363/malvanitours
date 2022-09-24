@@ -16,6 +16,8 @@ use App\Http\Controllers\API\V1\HomeController;
 use App\Http\Controllers\API\V1\CityController;
 use App\Http\Controllers\API\V1\CommentController;
 use App\Http\Controllers\API\V1\FavouriteController;
+use App\Http\Controllers\Admin\PlaceCategoryController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +55,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::get('/city/{id}', [CityController::class, 'show']);    
     Route::get('/city/{id}/detail', [CityController::class, 'getAllcities']); 
     
+    Route::get('/placecategories', [PlaceCategoryController::class, 'index']);   
+
     Route::get('/places', [PlaceController::class, 'index']);  
     Route::get('/place/{id}', [PlaceController::class, 'show']);    
     
