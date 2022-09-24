@@ -70,7 +70,17 @@ class Place extends Model
     public function photos()
     {
         return $this->hasMany(Photos::class, 'place_id');
-    }           
+    }  
+    
+    /**
+     * Get the placeCategory that owns the Place
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function placeCategory()
+    {
+        return $this->belongsTo(PlaceCategory::class);
+    }
 
     // /**
     //  * Get all of the plce's comments.

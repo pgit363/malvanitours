@@ -39,4 +39,13 @@ class PlaceCategory extends Model
         'meta_data' => 'json'
     ];
 
+    /**
+     * Get all of the places for the PlaceCategory
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function places()
+    {
+        return $this->hasMany(Place::class, 'place_category_id');
+    }
 }
