@@ -136,5 +136,12 @@ class Projects extends Model
     {
         return $this->morphMany(Contact::class, 'contactable');
     }
-
+    
+    /**
+     * Get all of the address's projects.
+     */
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
 }

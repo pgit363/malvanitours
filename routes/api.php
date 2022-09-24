@@ -16,6 +16,7 @@ use App\Http\Controllers\API\V1\HomeController;
 use App\Http\Controllers\API\V1\CityController;
 use App\Http\Controllers\API\V1\CommentController;
 use App\Http\Controllers\API\V1\FavouriteController;
+use App\Http\Controllers\API\V1\AddressController;
 use App\Http\Controllers\Admin\PlaceCategoryController;
 
 
@@ -65,6 +66,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::get('/contact/{id}', [ContactController::class, 'show']);    
     Route::put('/contact/{id}', [ContactController::class, 'update']);
     Route::delete('/contact/{id}', [ContactController::class, 'destroy']);
+
+    Route::post('/address', [AddressController::class, 'store']);
+    Route::put('/address/{id}', [AddressController::class, 'update']);
 
     Route::get('/blogs', [BlogController::class, 'index']);  
     Route::post('/blog', [BlogController::class, 'store']);

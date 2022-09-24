@@ -145,7 +145,8 @@ class ProjectsController extends BaseController
                                     }, 
                                     'category'=> function ($query) {
                                         $query->select('id', 'name');
-                                    }, 
+                                    },
+                                    'addresses',
                                     'products' => function ($query) {
                                         $query->select('id', 'project_id', 'product_category_id', 'productable_type', 'productable_id')
                                               ->limit(10);

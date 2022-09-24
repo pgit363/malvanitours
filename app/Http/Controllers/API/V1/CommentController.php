@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Comment;
-use App\Models\City;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\DB;
