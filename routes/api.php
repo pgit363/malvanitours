@@ -69,6 +69,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
 
     Route::post('/address', [AddressController::class, 'store']);
     Route::put('/address/{id}', [AddressController::class, 'update']);
+    Route::delete('/address/{id}', [AddressController::class, 'destroy']);
 
     Route::get('/blogs', [BlogController::class, 'index']);  
     Route::post('/blog', [BlogController::class, 'store']);

@@ -173,8 +173,16 @@ class AddressController extends BaseController
      * @param  \App\Models\Address  $address
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Address $address)
+    public function destroy($id)
     {
-        //
+        $address = Address::find($id);
+
+        if (is_null($address)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        $address->delete($id);
+
+        return $this->sendResponse($address, 'Address deleted successfully...!');  
     }
 }
