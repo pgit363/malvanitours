@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ProductCategory extends Model
 {
@@ -36,6 +37,13 @@ class ProductCategory extends Model
      * @var array
      */
     protected $casts = [
-        'meta_data' => 'json'
     ];
+
+    public function setCategoryNameAttribute($value){
+        $this->attributes['meta_data'] = json_encode($value);
+    }
+
+    public function getCategoryNameAttribute($value){
+        $this->attributes['meta_data'] = json_decode($value, true);
+    }
 }

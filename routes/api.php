@@ -10,7 +10,7 @@ use App\Http\Controllers\API\V1\RolesController;
 use App\Http\Controllers\API\V1\PhotosController;
 use App\Http\Controllers\API\V1\LandingPageController;
 use App\Http\Controllers\API\V1\PlaceController;
-use App\Http\Controllers\API\V1\ContactController;
+use App\Http\Controllers\API\V1\{ ContactController, RatingController};
 use App\Http\Controllers\API\V1\BlogController;
 use App\Http\Controllers\API\V1\HomeController;
 use App\Http\Controllers\API\V1\CityController;
@@ -124,4 +124,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     // Route::put('/favourite/{id}', [FavouriteController::class, 'update']);   
     Route::delete('/favourite/{id}', [FavouriteController::class, 'destroy']); 
 
+    Route::get('/ratings', [RatingController::class, 'index']);  
+    Route::post('/rating', [RatingController::class, 'store']);
+    Route::put('/rating/{id}', [RatingController::class, 'update']);
+    Route::delete('/rating/{id}', [RatingController::class, 'destroy']);
 });

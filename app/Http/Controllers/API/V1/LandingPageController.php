@@ -33,37 +33,41 @@ class LandingPageController extends BaseController
     public function index()
     {
         $categories = Category::withCount('projects')
-                        // ->with(['projects.city'])
+                            ->latest()
+                            ->limit(5)
+                            ->get();
+
+        $cities = City::withAvg("rateable", 'rate')
+                        // ->having('rateable_avg_rate', '>', 3)
+                        ->withCount('places','photos')
                         ->latest()
-                        ->limit(10)
+                        ->limit(5)
                         ->get();
 
-        $cities = City::withCount('places','photos')
-                        ->latest()
-                        ->limit(10)
-                        ->get();
+        $projects = Projects::withAvg("rateable", 'rate')
+                            ->having('rateable_avg_rate', '>', 3)
+                            ->withCount('photos')
+                            ->latest()
+                            ->limit(5)
+                            ->get();
 
-        $projects = Projects::where('ratings', '>=', 3)
-                              ->withCount('photos')
-                              ->latest()
-                              ->limit(10)
-                              ->get();
-
-        // $products = Products::where('ratings', '>=', 3)
+        // $products = Products::withAvg("rateable", 'rate')
+        //                     ->having('rateable_avg_rate', '>', 3)
         //                     ->withCount('comments','photos')
         //                     ->latest()
         //                     ->limit(6)
         //                     ->get();
 
-        $places = Place::where('rating', '>=', 3)
-                         ->orWhere('visitors_count', '>=', 10)
-                         ->withCount('photos')
-                         ->latest()
-                         ->limit(10)
-                         ->get();
+        $places = Place::withAvg("rateable", 'rate')
+                        // ->having('rateable_avg_rate', '>', 3)
+                        ->orWhere('visitors_count', '>=', 5)
+                        ->withCount('photos')
+                        ->latest()
+                        ->limit(5)
+                        ->get();
 
         $blogs = Blog::latest()
-                       ->limit(10)
+                       ->limit(5)
                        ->get();
                        
         $temp3 =  array_merge(['categories'=> $categories, 

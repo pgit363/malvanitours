@@ -113,4 +113,12 @@ class Place extends Model
     {
         return $this->morphMany(Address::class, 'addressable');
     }
+
+    /**
+     * Get all of the address's projects.
+     */
+    public function rateable()
+    {
+        return $this->morphMany(Rating::class, 'rateable');
+    }
 }

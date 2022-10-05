@@ -123,7 +123,10 @@ class CategoryController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        $categories = Category::find($id);
+        $categories = Category::with('allowedproductCategory')
+                            ->whereId($id)
+                            ->latest()
+                            ->get();
         
         if (is_null($categories)) {
             return $this->sendError('Empty', [], 404);

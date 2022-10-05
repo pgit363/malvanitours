@@ -10,11 +10,13 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\Hashidable;
 use App\Models\Category;
+use SaiAshirwadInformatia\SecureIds\Models\Traits\HasSecureIds;
 
 class Projects extends Model
 {
     use HasFactory, Hashidable, HasFactory, Notifiable;
-    
+    // use HasSecureIds;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -143,5 +145,13 @@ class Projects extends Model
     public function addresses()
     {
         return $this->morphMany(Address::class, 'addressable');
+    }
+
+    /**
+     * Get all of the address's projects.
+     */
+    public function rateable()
+    {
+        return $this->morphMany(Rating::class, 'rateable');
     }
 }

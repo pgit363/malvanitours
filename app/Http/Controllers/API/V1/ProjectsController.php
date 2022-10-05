@@ -137,6 +137,7 @@ class ProjectsController extends BaseController
     public function show(Request $request, $id)
     {
         $projects = Projects::withCount(['products', 'photos', 'contacts', 'comments'])
+                            ->withAvg("rateable", 'rate')
                             ->with(['city' => function ($query) {
                                         $query->select('id', 'name');
                                     }, 

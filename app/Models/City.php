@@ -96,4 +96,12 @@ class City extends Model
     {
         return $this->morphMany(Contact::class, 'contactable');
     }
+
+     /**
+     * Get all of the address's projects.
+     */
+    public function rateable()
+    {
+        return $this->morphMany(Rating::class, 'rateable');
+    }
 }
