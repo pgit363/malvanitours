@@ -93,6 +93,25 @@ class ProductController extends BaseController
         return $this->sendResponse($products, 'Product successfully Retrieved...!'); 
     }
 
+     /**
+     * Display a listing of the products.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllProductsByProjectId($id)
+    {
+        $products = Product::with(['productCategory'])
+                            ->where('project_id', '=', $id)
+                            ->latest()
+                            ->paginate(10);
+        
+        if (is_null($products)) {
+            return $this->sendError('Empty', [], 404);
+        }
+
+        return $this->sendResponse($products, 'Products successfully Retrieved...!'); 
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
