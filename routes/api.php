@@ -22,6 +22,8 @@ use App\Http\Controllers\API\V1\FavouriteController;
 use App\Http\Controllers\API\V1\AddressController;
 use App\Http\Controllers\Admin\PlaceCategoryController;
 
+use App\Http\Controllers\Admin\FoodController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +104,10 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::post('/product', [ProductsController::class, 'store']);
     Route::post('/product/{id}', [ProductsController::class, 'update']);  
     Route::delete('/product/{id}', [ProductsController::class, 'destroy']);   
+
+
+    Route::get('/food/{id}', [FoodController::class, 'show']);    
+
 
     Route::get('/photos', [PhotosController::class, 'index']);   
     Route::post('/photo', [PhotosController::class, 'store']);
