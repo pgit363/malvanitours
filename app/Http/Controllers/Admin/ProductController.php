@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends BaseController
 {
+     /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth:api');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -100,7 +109,7 @@ class ProductController extends BaseController
      */
     public function getAllProductsByProjectId($id)
     {
-        $products = Product::with(['productCategory'])
+        $products = Product::with(['productCategory', 'productable'])
                             ->where('project_id', '=', $id)
                             ->latest()
                             ->paginate(10);
