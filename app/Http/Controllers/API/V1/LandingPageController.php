@@ -45,7 +45,7 @@ class LandingPageController extends BaseController
                         ->get();
 
         $projects = Projects::withAvg("rateable", 'rate')
-                            ->having('rateable_avg_rate', '>', 3)
+                            // ->having('rateable_avg_rate', '>', 3) //this condiion is working
                             ->withCount('photos')
                             ->latest()
                             ->limit(5)
@@ -62,6 +62,11 @@ class LandingPageController extends BaseController
                         // ->having('rateable_avg_rate', '>', 3)
                         ->orWhere('visitors_count', '>=', 5)
                         ->withCount('photos')
+                        ->with(['placeCategory' => function ($query) {
+                            $query->select('id', 'name', 'icon');
+                        }, 'city' => function ($query) {
+                            $query->select('id', 'name', 'image_url');
+                        }])
                         ->latest()
                         ->limit(5)
                         ->get();
