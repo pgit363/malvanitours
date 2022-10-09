@@ -48,7 +48,7 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function projects()
+    public function project()
     {
         return $this->belongsTo(Projects::class, 'project_id');
     }

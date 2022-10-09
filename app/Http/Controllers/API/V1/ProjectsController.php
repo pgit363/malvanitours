@@ -148,24 +148,34 @@ class ProjectsController extends BaseController
                                         $query->select('id', 'name');
                                     },
                                     'addresses',
-                                    'products' => function ($query) {
+                                    'category',
+                                    'category.allowedproductCategory' => function ($query) {
+                                        $query->select('id', 'category_id', 'product_category_id');
+                                    },
+                                    'category.allowedproductCategory.productCategory'=> function ($query) {
+                                        $query->select('id', 'name', 'icon', 'meta_data');
+                                    },
+                                    'category.allowedproductCategory.productCategory.products' => function ($query) use ($id){
                                         $query->select('id', 'project_id', 'product_category_id', 'productable_type', 'productable_id')
-                                              ->limit(10);
-                                    }, 
-                                    'products.productable' => function ($query) {
-                                        $query->select('id', 'name', 'food_type', 'image_url', 'visitor_count');
-                                    }, 
+                                              ->where('project_id', '=', $id)
+                                              ->limit(5);                                
+                                    },
+                                    'category.allowedproductCategory.productCategory.products.productable',                        
                                     'photos' => function ($query) {
                                         $query->limit(10);
                                     }, 
                                     'comments' => function ($query) {
                                         $query->limit(10);
                                     },  
-                                    'comments.comments'=> function ($query) {
+                                    'comments.comments' => function ($query) {
                                         $query->limit(5);
                                     },
-                                    'comments.users', 
-                                    'comments.comments.users'])
+                                    'comments.users' => function ($query) {
+                                        $query->select('id', 'name', 'email', 'profile_picture');
+                                    }, 
+                                    'comments.comments.users' => function ($query) {
+                                        $query->select('id', 'name', 'email', 'profile_picture');
+                                    }])
                             ->latest()
                             ->find($id);
         
@@ -177,24 +187,38 @@ class ProjectsController extends BaseController
     }
 
 
-    /**
-     * Display a listing of the projects.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllProducts($id)
-    {
-        $products = Projects::with(['category', 'products', 'photos'])
-                            ->whereId($id)
-                            ->latest()
-                            ->paginate(10);
-        
-        if (is_null($products)) {
-            return $this->sendError('Empty', [], 404);
-        }
+    // below method is currently not in use if need product page with all allowed product categories
 
-        return $this->sendResponse($products, 'Not in use Products successfully Retrieved...!'); 
-    }
+    // /**
+    //  * Display a listing of the projects.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function getAllProducts($id)
+    // {
+    //     $products   =   Projects::with(['category',
+    //                                     'category.allowedproductCategory' => function ($query) {
+    //                                         $query->select('id', 'category_id', 'product_category_id');
+    //                                     },
+    //                                     'category.allowedproductCategory.productCategory'=> function ($query) {
+    //                                         $query->select('id', 'name', 'icon', 'meta_data');
+    //                                     }, 
+    //                                     'category.allowedproductCategory.productCategory.products' => function ($query) use ($id){
+    //                                         $query->select('id', 'project_id', 'product_category_id', 'productable_type', 'productable_id')
+    //                                             ->where('project_id', '=', $id);
+    //                                     },
+    //                                     'category.allowedproductCategory.productCategory.products.productable'
+    //                                 ])
+    //                                 ->whereId($id)
+    //                                 ->latest()
+    //                                 ->paginate(10);
+        
+    //     if (is_null($products)) {
+    //         return $this->sendError('Empty', [], 404);
+    //     }
+
+    //     return $this->sendResponse($products, 'Products successfully Retrieved...!'); 
+    // }
     
     /**
      * Show the form for editing the specified resource.

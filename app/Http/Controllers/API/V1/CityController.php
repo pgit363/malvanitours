@@ -42,18 +42,44 @@ class CityController extends BaseController
      */
     public function show($id)
     {
-        $city = City::withCount(['projects', 'places', 'photos', 'comments'])
-                      ->with(['comments', 'comments.comments', 'comments.comments.users', 'places', 'photos', 'comments.users'])
-                      ->latest()
-                      ->limit(10)
-                      ->find($id);
+        $city   =   City::withCount(['projects', 'places', 'photos', 'comments'])
+                        ->withAvg("rateable", 'rate')
+                        ->with(['projects.category' => function ($query) {
+                                    $query->select('id', 'name')
+                                        ->limit(5);
+                                },
+                                'projects' => function ($query) {
+                                    $query->select('id', 'category_id', 'name', 'logo', 'city_id')
+                                        ->limit(5);
+                                },  
+                                'projects.city'=> function ($query) {
+                                    $query->select('id', 'name', 'image_url')
+                                        ->limit(5);
+                                },
+                                'places' => function ($query) {
+                                    $query->select('id', 'name', 'city_id', 'image_url')
+                                        ->limit(5);
+                                }, 
+                                'comments' => function ($query) {
+                                    $query->select('id', 'parent_id', 'user_id', 'comment', 'commentable_type', 'commentable_id')
+                                    ->limit(5);
+                                }, 
+                                'comments.comments' => function ($query) {
+                                    $query->select('id', 'parent_id', 'user_id', 'comment', 'commentable_type', 'commentable_id')
+                                    ->limit(5);
+                                }, 
+                                'comments.users' => function ($query) {
+                                    $query->select('id', 'name', 'email', 'profile_picture');
+                                },
+                                'comments.comments.users' => function ($query) {
+                                    $query->select('id', 'name', 'email', 'profile_picture');
+                                },                            
+                                'photos'
+                                ])
+                        ->latest()
+                        ->limit(5)
+                        ->find($id);
     
-                    // withCount(['projects', 'places', 'photos', 'comments'])
-                    // // ->with(['projects', 'places', 'photos', 'comments'])
-                    // ->whereId($id)
-                    // ->latest()
-                    // ->paginate(10);
-
         return $this->sendResponse($city, 'Cities successfully Retrieved...!');  
     }
 

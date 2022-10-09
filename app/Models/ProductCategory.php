@@ -46,4 +46,14 @@ class ProductCategory extends Model
     public function getCategoryNameAttribute($value){
         $this->attributes['meta_data'] = json_decode($value, true);
     }
+
+    /**
+     * Get all of the products for the ProductCategory
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'product_category_id');
+    }
 }

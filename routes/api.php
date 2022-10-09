@@ -5,10 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\API\V1\CategoryController;
 use App\Http\Controllers\API\V1\ProjectsController;
-use App\Http\Controllers\API\V1\ProductsController;
-
-use App\Http\Controllers\Admin\ProductController;
-
+use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\RolesController;
 use App\Http\Controllers\API\V1\PhotosController;
 use App\Http\Controllers\API\V1\LandingPageController;
@@ -98,12 +95,11 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::delete('/project/{id}', [ProjectsController::class, 'destroy']);   
     // Route::get('/project/{id}/products', [ProjectsController::class, 'getAllProducts']); 
 
-    Route::get('/products', [ProductsController::class, 'index']);   
-    Route::get('/product/{id}', [ProductsController::class, 'show']);   
-    Route::get('project/{id}/products', [ProductController::class, 'getAllProductsByProjectId']);   
-    Route::post('/product', [ProductsController::class, 'store']);
-    Route::post('/product/{id}', [ProductsController::class, 'update']);  
-    Route::delete('/product/{id}', [ProductsController::class, 'destroy']);   
+    // Route::get('/products', [ProductsController::class, 'index']);   
+    Route::post('/project/{project_id}/products', [ProductController::class, 'getAllProductsByProjectId']);   
+    // Route::post('/product', [ProductsController::class, 'store']);
+    // Route::post('/product/{id}', [ProductsController::class, 'update']);  
+    // Route::delete('/product/{id}', [ProductsController::class, 'destroy']);   
 
 
     Route::get('/food/{id}', [FoodController::class, 'show']);    
