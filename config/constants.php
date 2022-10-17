@@ -16,7 +16,8 @@ return [
         'placecategory'     => 'public/assets/placecategory/',
         'productCategory'   => 'public/assets/productcategory/',
         'food'              => 'public/assets/food/',
-        'profile_image'     => 'public/assets/profile_image/'
+        'profile_image'     => 'public/assets/profile_image/',
+        'tourpackage'       => 'public/assets/tourpackage/',
     ],
     'models' => [
         'City' => 'App\Models\City',
