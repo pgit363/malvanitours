@@ -10,8 +10,8 @@ use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\AllowedProductCategoryController;
 use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\TourPackageController;
-
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AccomodationCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,4 +84,10 @@ Route::group(['middleware' => 'api', 'prefix' => 'api'], function ($router) {
     Route::get('/tourpackage/{id}', [TourPackageController::class, 'show']);    
     Route::post('/tourpackage/{id}', [TourPackageController::class, 'update']);
     Route::delete('/tourpackage/{id}', [TourPackageController::class, 'destroy']);
+
+    Route::get('/accomodationcategories', [AccomodationCategoryController::class, 'index']);  
+    Route::post('/accomodationcategory', [AccomodationCategoryController::class, 'store']);
+    Route::get('/accomodationcategory/{id}', [AccomodationCategoryController::class, 'show']);    
+    Route::post('/accomodationcategory/{id}', [AccomodationCategoryController::class, 'update']);
+    Route::delete('/accomodationcategory/{id}', [AccomodationCategoryController::class, 'destroy']);
 }); 

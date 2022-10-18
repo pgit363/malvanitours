@@ -18,6 +18,7 @@ return [
         'food'              => 'public/assets/food/',
         'profile_image'     => 'public/assets/profile_image/',
         'tourpackage'       => 'public/assets/tourpackage/',
+        'accomCategory'     => 'public/assets/accomCategory/',
     ],
     'models' => [
         'City' => 'App\Models\City',
