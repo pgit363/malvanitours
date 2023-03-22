@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Favourite;
 use Validator;
 use App\Http\Controllers\BaseController as BaseController;
 use Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 class AuthController extends BaseController
 {
@@ -101,10 +98,9 @@ class AuthController extends BaseController
             Log::info("FILE STORED".$input['profile_picture']);
         }
 
-        $user = User::create(array_merge(
-                    $input,
-                    ['password' => bcrypt($password)]
-                ));
+        $input['password'] = bcrypt($password);
+
+        $user = User::create($input);
 
         return $this->sendResponse($user, 'User successfully registered');        
     }
