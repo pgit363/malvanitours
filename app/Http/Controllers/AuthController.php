@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Validator;
 use App\Http\Controllers\BaseController as BaseController;
 use Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends BaseController
 {
@@ -68,7 +68,7 @@ class AuthController extends BaseController
             'email' => 'sometimes|string|email|max:100|unique:users',
             'mobile' => 'sometimes|string|between:2,100',
             'password' => 'string|confirmed|min:6',
-            'profile_picture' => 'required|mimes:jpeg,jpg,png,webp|max:2048',
+            'profile_picture' => 'mimes:jpeg,jpg,png,webp|max:2048',
         ]);
 
         if($validator->fails()){

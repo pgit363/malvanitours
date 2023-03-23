@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\TourPackageController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\AccomodationCategoryController;
+use App\Http\Controllers\Admin\BusTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,4 +91,11 @@ Route::group(['middleware' => 'api', 'prefix' => 'api'], function ($router) {
     Route::get('/accomodationcategory/{id}', [AccomodationCategoryController::class, 'show']);    
     Route::post('/accomodationcategory/{id}', [AccomodationCategoryController::class, 'update']);
     Route::delete('/accomodationcategory/{id}', [AccomodationCategoryController::class, 'destroy']);
+
+    Route::get('/bustypes', [BusTypeController::class, 'index']);  
+    Route::post('/bustype', [BusTypeController::class, 'store']);
+    Route::get('/bustype/{id}', [BusTypeController::class, 'show']);    
+    Route::post('/bustype/{id}', [BusTypeController::class, 'update']);
+    Route::delete('/bustype/{id}', [BusTypeController::class, 'destroy']);
 }); 
+
