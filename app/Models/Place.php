@@ -20,6 +20,8 @@ class Place extends Model
     protected $fillable = [
         'name',
         'city_id',
+        'parent_id',
+        'place_category_id',
         'description',
         'rules',
         'image_url',
@@ -29,8 +31,9 @@ class Place extends Model
         'visitors_count',
         'social_media',
         'contact_details',
-        'categories',
-        'comment_id'
+        'latitude',
+        'longitude',
+        'meta_data',
     ];
 
     /**

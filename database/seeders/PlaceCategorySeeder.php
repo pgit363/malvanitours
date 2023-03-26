@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Imports\CityImport;
+use App\Imports\PlaceCategoryImport;
 use Illuminate\Database\Seeder;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CitySeeder extends Seeder
+class PlaceCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class CitySeeder extends Seeder
      */
     public function run()
     {
-        $path = 'excels/cities.xls';
-		Excel::import(new CityImport, $path);
+        $path = 'excels/place_categories.xls';
+		Excel::import(new PlaceCategoryImport, $path);
     }
 }

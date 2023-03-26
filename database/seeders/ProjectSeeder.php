@@ -24,8 +24,8 @@ class ProjectSeeder extends Seeder
         
         for($i = 0; $i < 5; $i++){
             DB::table("projects")->insert([
-                'category_id' => $faker->numberBetween(1, Category::count()),
-                'city_id' => $faker->numberBetween(1, City::count()),
+                'category_id' => User::all()->random()->id,
+                'city_id' => City::all()->random()->id,
                 'user_id' =>  $i/3==0 ? null :  User::all()->random()->id,
                 'name' => $faker->word,
                 'domain_name' => $faker->randomElement(['www.google.com', 'www.pranavkamble.in', 'www.youtube.com', 'www.laravel.com', 'wwwvasantvijay.com']),

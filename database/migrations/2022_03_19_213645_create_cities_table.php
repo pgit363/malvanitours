@@ -18,8 +18,8 @@ class CreateCitiesTable extends Migration
             $table->string("name");
             $table->string('tag_line');
             $table->string('famous_for');
-            $table->string('image_url');
-            $table->string('bg_image_url');
+            $table->string('image_url')->nullable();
+            $table->string('bg_image_url')->nullable();
             $table->timestamps();
         });
     }

@@ -18,14 +18,14 @@ class CreatePlacesTable extends Migration
             $table->string('name');
             $table->integer('city_id')->unsigned()->nullable();
             $table->string('description');
-            $table->json('rules');
-            $table->string('image_url');
-            $table->string('bg_image_url');
-            $table->json('price');
+            $table->json('rules')->nullable();
+            $table->string('image_url')->nullable();
+            $table->string('bg_image_url')->nullable();
+            $table->json('price')->nullable();
             $table->integer('rating')->nullable();
             $table->integer('visitors_count')->nullable();
-            $table->json('social_media');
-            $table->json('contact_details');
+            $table->json('social_media')->nullable();
+            $table->json('contact_details')->nullable();
             $table->timestamps();
 
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');

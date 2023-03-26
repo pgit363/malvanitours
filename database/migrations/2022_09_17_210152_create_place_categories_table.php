@@ -16,8 +16,8 @@ class CreatePlaceCategoriesTable extends Migration
         Schema::create('place_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('icon');
-            $table->json('meta_data');
+            $table->string('icon')->nullable();
+            $table->json('meta_data')->nullable();
             $table->timestamps();
         });
     }
