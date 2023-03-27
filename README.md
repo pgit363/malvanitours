@@ -79,11 +79,9 @@ http://127.0.0.1:8000/storage/files/szaBdrNRQgBkm4PxPquENU9cVMHBKgxUgazTZKZH.png
 
 blog: https://medium.com/@arvind.mailto/how-to-create-custom-routes-for-protected-admin-manager-area-in-laravel-8-75e5b5a20b88
 
+* See
 
-
-* Seeder
-
-* [ ] Bus type Seeder from Excel
+* [X] Bus type Seeder from array
 * [ ] Bus Seeder (Low Priority) Excel
-* [ ] Routes Seeder Excel
+* [X] Routes Seeder Excel
 * [ ] Routes Stops Logical

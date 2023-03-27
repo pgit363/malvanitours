@@ -18,7 +18,7 @@ class CreateRoutesTable extends Migration
             $table->integer('source_place_id')->unsigned()->nullable();
             $table->integer('destination_place_id')->unsigned()->nullable();
             $table->string('name')->nullable();
-            $table->json('description')->nullable();
+            $table->string('description')->nullable();
             $table->json('meta_data')->nullable();
             $table->timestamp('departure_time')->nullable();
             $table->timestamp('arrival_time')->nullable();
