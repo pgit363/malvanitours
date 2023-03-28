@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Place;
 use App\Models\Route;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class RouteSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class RouteSeeder extends Seeder
 
         $string = '[{"Format":"I25","Content":"172284201241"}]';
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $source_place =  Place::all()->random();
             $destination_place = Place::all()->except($source_place->id)->random();
 
