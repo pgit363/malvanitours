@@ -17,7 +17,7 @@ use App\Http\Controllers\API\V1\CityController;
 use App\Http\Controllers\API\V1\CommentController;
 use App\Http\Controllers\API\V1\FavouriteController;
 use App\Http\Controllers\API\V1\AddressController;
-use App\Http\Controllers\Admin\PlaceCategoryController;
+use App\Http\Controllers\API\V1\PlaceCategoryController;
 
 use App\Http\Controllers\Admin\FoodController;
 
@@ -63,6 +63,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::get('/places', [PlaceController::class, 'index']);  
     Route::get('/place/{id}', [PlaceController::class, 'show']);    
     
+    Route::get('/stops', [PlaceController::class, 'stops']);  
+
     Route::get('/contacts', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);
     Route::get('/contact/{id}', [ContactController::class, 'show']);    

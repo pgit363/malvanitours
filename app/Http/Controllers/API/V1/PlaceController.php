@@ -11,15 +11,16 @@ use App\Http\Controllers\BaseController as BaseController;
 
 class PlaceController extends BaseController
 {
-     /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -28,9 +29,26 @@ class PlaceController extends BaseController
     public function index()
     {
         $places = Place::withCount(['photos', 'comments'])
-                        ->with('photos','city')
-                        ->paginate(10);
+            ->with('photos', 'city:id,name,image_url')
+            ->paginate(10);
         return $this->sendResponse($places, 'Places successfully Retrieved...!');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function stops()
+    {
+        $places = Place::withCount(['photos', 'comments'])
+            ->with(['photos', 'city:id,name,image_url', 'placeCategory:id,name,icon'])
+            ->join('place_categories', 'places.place_category_id', '=', 'place_categories.id')
+            ->whereIn('place_categories.name', ['Bus Stop', 'Bus Depo'])
+            ->select('places.id', 'places.name', 'places.city_id', 'places.parent_id', 'places.place_category_id', 'places.image_url', 'places.bg_image_url', 'places.visitors_count')
+            ->paginate(10);
+
+        return $this->sendResponse($places, 'Stops successfully Retrieved...!');
     }
 
     /**
@@ -43,9 +61,9 @@ class PlaceController extends BaseController
     {
         //write visitors count update here by one
         $place = Place::withCount(['photos', 'comments'])
-                        ->with(['photos', 'city', 'comments', 'comments.comments', 'comments.users', 'comments.comments.users'])
-                        ->find($id);
-        
+            ->with(['photos', 'city', 'comments', 'comments.comments', 'comments.users', 'comments.comments.users'])
+            ->find($id);
+
         // $city = City::withCount(['projects', 'places', 'photos', 'comments'])
         //             ->with(['comments', 'comments.comments', 'comments.users', 'comments.comments.users', 'places', 'photos'])
         //             ->latest()
@@ -56,6 +74,6 @@ class PlaceController extends BaseController
             return $this->sendError('Empty', [], 404);
         }
 
-        return $this->sendResponse($place, 'Place successfully Retrieved...!');  
+        return $this->sendResponse($place, 'Place successfully Retrieved...!');
     }
 }
