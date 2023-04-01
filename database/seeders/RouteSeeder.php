@@ -19,7 +19,7 @@ class RouteSeeder extends Seeder
 
         $string = '[{"Format":"I25","Content":"172284201241"}]';
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $source_place =  Place::all()->random();
             $destination_place = Place::all()->except($source_place->id)->random();
 

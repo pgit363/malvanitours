@@ -64,6 +64,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     Route::get('/place/{id}', [PlaceController::class, 'show']);    
     
     Route::get('/stops', [PlaceController::class, 'stops']);  
+    Route::get('/searchPlace', [PlaceController::class, 'searchPlace']);  
 
     Route::get('/contacts', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);

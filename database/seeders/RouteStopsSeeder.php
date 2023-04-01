@@ -46,6 +46,7 @@ class RouteStopsSeeder extends Seeder
                 if (!$exist) {
                     $data = array(
                         'meta_data' => $string,
+                        'serial_no' => $i+1,
                         'route_id' => $value['id'],
                         'place_id' => $place_id
                     );

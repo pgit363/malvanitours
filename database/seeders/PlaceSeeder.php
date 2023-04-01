@@ -21,7 +21,7 @@ class PlaceSeeder extends Seeder
 
         $string = '[{"Format":"I25","Content":"172284201241"}]';
         
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $place_category =  PlaceCategory::all()->random();
             
             DB::table("places")->insert([

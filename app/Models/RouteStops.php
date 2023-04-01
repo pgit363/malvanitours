@@ -19,6 +19,7 @@ class RouteStops extends Model
     protected $fillable = [
         'route_id',
         'place_id',
+        'serial_no',
         'meta_data'
     ];
 

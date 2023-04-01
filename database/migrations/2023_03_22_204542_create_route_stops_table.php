@@ -15,8 +15,9 @@ class CreateRouteStopsTable extends Migration
     {
         Schema::create('route_stops', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('route_id')->unsigned()->nullable();
-            $table->integer('place_id')->unsigned()->nullable()->comment('Bus stop or Bus depo id');
+            $table->integer('serial_no')->unsigned();
+            $table->integer('route_id')->unsigned();
+            $table->integer('place_id')->unsigned()->comment('Bus stop or Bus depo id');
             $table->json('meta_data')->nullable();
             $table->timestamps();
 
