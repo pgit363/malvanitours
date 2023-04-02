@@ -46,4 +46,34 @@ class Route extends Model
         'total_time' => 'array',
         'delayed_time' => 'array'
     ];
+    
+    /**
+     * Get the sourcePlace that owns the Route
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function sourcePlace()
+    {
+        return $this->belongsTo(Place::class);
+    }    
+
+     /**
+     * Get the sourcePlace that owns the Route
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function destinationPlace()
+    {
+        return $this->belongsTo(Place::class);
+    }   
+
+    /**
+     * Get all of the routeStops for the Route
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function routeStops()
+    {
+        return $this->hasMany(RouteStops::class, 'route_id');
+    }
 }

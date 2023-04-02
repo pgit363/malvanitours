@@ -4,23 +4,11 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Models\Place;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Validator;
-use Illuminate\Support\Facades\Log;
+
 use App\Http\Controllers\BaseController as BaseController;
 
 class PlaceController extends BaseController
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -69,7 +57,7 @@ class PlaceController extends BaseController
     {
         $data = $request->validate([
             'search' => 'sometimes|nullable|string|alpha|max:255',
-            'type' => 'sometimes|nullable|string|max:255',
+            'type' => 'sometimes|nullable|string|max:255|in:bus',
         ]);
 
         $places = Place::withCount(['photos', 'comments'])

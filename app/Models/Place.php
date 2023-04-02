@@ -124,4 +124,14 @@ class Place extends Model
     {
         return $this->morphMany(Rating::class, 'rateable');
     }
+
+    /**
+     * Get all of the routes for the Place
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function routes()
+    {
+        return $this->hasMany(Route::class, 'source_place_id');
+    }
 }

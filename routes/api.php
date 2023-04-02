@@ -10,7 +10,7 @@ use App\Http\Controllers\API\V1\RolesController;
 use App\Http\Controllers\API\V1\PhotosController;
 use App\Http\Controllers\API\V1\LandingPageController;
 use App\Http\Controllers\API\V1\PlaceController;
-use App\Http\Controllers\API\V1\{ ContactController, RatingController};
+use App\Http\Controllers\API\V1\{ ContactController, RatingController, RouteController};
 use App\Http\Controllers\API\V1\BlogController;
 use App\Http\Controllers\API\V1\HomeController;
 use App\Http\Controllers\API\V1\CityController;
@@ -49,7 +49,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 });
 
 
-Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
+Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function ($router) {
 
     Route::get('/landingpage', [LandingPageController::class, 'index']);   
     Route::post('/search', [HomeController::class, 'search']);   
@@ -65,6 +65,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
     
     Route::get('/stops', [PlaceController::class, 'stops']);  
     Route::get('/searchPlace', [PlaceController::class, 'searchPlace']);  
+
+    Route::get('/routes', [RouteController::class, 'routes']);  
 
     Route::get('/contacts', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);

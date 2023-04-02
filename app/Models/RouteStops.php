@@ -38,4 +38,34 @@ class RouteStops extends Model
     protected $casts = [
         'meta_data' => 'array'
     ];
+
+     /**
+     * Get the sourcePlace that owns the Route
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function places()
+    {
+        return $this->belongsTo(Place::class, 'place_id');
+    }
+
+    /**
+     * Get the routes that owns the RouteStops
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function routes()
+    {
+        return $this->belongsTo(Route::class, 'place_id');
+    }
+
+    /**
+     * Get the place that owns the RouteStops
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function place()
+    {
+        return $this->belongsTo(Place::class, 'place_id');
+    }
 }
