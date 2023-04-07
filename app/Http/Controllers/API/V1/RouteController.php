@@ -24,6 +24,26 @@ class RouteController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
+    public function listroutes()
+    {
+        $routes = Route::withCount(['routeStops'])
+        ->with([
+            'sourcePlace:id,name,place_category_id',
+            'sourcePlace.placeCategory:id,name,icon',
+            'destinationPlace:id,name,place_category_id',
+            'destinationPlace.placeCategory:id,name,icon'
+        ])
+            ->select('id', 'source_place_id', 'destination_place_id', 'name')
+            ->paginate();
+
+        return $this->sendResponse($routes, 'Routes successfully Retrieved...!');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function routes(Request $request)
     {
         $data = $request->validate([
