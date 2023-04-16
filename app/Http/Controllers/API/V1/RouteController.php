@@ -27,12 +27,12 @@ class RouteController extends BaseController
     public function listroutes()
     {
         $routes = Route::withCount(['routeStops'])
-        ->with([
-            'sourcePlace:id,name,place_category_id',
-            'sourcePlace.placeCategory:id,name,icon',
-            'destinationPlace:id,name,place_category_id',
-            'destinationPlace.placeCategory:id,name,icon'
-        ])
+            ->with([
+                'sourcePlace:id,name,place_category_id',
+                'sourcePlace.placeCategory:id,name,icon',
+                'destinationPlace:id,name,place_category_id',
+                'destinationPlace.placeCategory:id,name,icon'
+            ])
             ->select('id', 'source_place_id', 'destination_place_id', 'name')
             ->paginate();
 
@@ -47,8 +47,8 @@ class RouteController extends BaseController
     public function routes(Request $request)
     {
         $data = $request->validate([
-            'source_place_id' => 'exists:places,id|required_with:destination_place_id',
-            'destination_place_id' => 'exists:places,id|required_with:source_place_id',
+            'source_place_id' => 'required|exists:places,id|required_with:destination_place_id',
+            'destination_place_id' => 'required|exists:places,id|required_with:source_place_id',
         ]);
 
         $routeIds = Route::whereHas('routeStops', function ($query) use ($data) {

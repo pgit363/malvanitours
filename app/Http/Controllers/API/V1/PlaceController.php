@@ -62,10 +62,10 @@ class PlaceController extends BaseController
 
         $places = Place::withCount(['photos', 'comments'])
             ->with(['photos', 'city:id,name,image_url', 'placeCategory:id,name,icon'])
-            ->when($data['search'], function ($query, $search) {
+            ->when($data['search'] ?? null, function ($query, $search) {
                 $query->where('name', 'like', '%' . $search . '%');
             })
-            ->when($data['type'] == 'bus', function ($query) {
+            ->when($data['type'] ?? null && $data['type'] == 'bus', function ($query) {
                 $query->whereHas('placeCategory', function ($query) {
                     $query->whereIn('name', ['Bus Stop', 'Bus Depo']);
                 });
