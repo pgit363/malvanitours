@@ -64,10 +64,10 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function ($router) 
     Route::get('/place/{id}', [PlaceController::class, 'show']);    
     
     Route::get('/stops', [PlaceController::class, 'stops']);  
-    Route::get('/searchPlace', [PlaceController::class, 'searchPlace']);  
+    Route::post('/searchPlace', [PlaceController::class, 'searchPlace']);  
 
     Route::get('/listroutes', [RouteController::class, 'listroutes']);  
-    Route::get('/routes', [RouteController::class, 'routes']);  
+    Route::post('/routes', [RouteController::class, 'routes']);  
 
     Route::get('/contacts', [ContactController::class, 'index']);  
     Route::post('/contact', [ContactController::class, 'store']);

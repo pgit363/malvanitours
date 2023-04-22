@@ -59,20 +59,20 @@ class PlaceController extends BaseController
         $validator = Validator::make($request->all(), [
             'search' => 'sometimes|nullable|string|alpha|max:255',
             'type' => 'sometimes|nullable|string|max:255|in:bus',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors(), '', 400);
+        ]);            
+    
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), '', 400);       
         }
-
+    
         $places = Place::withCount(['photos', 'comments'])
             ->with(['photos', 'city:id,name,image_url', 'placeCategory:id,name,icon']);
-
+    
         if ($request->has('search')) {
             $search = $request->input('search');
             $places = $places->where('name', 'like', '%' . $search . '%');
         }
-
+    
         if ($request->has('type') && $request->input('type') == 'bus') {
             $places = $places->whereHas('placeCategory', function ($query) {
                 $query->whereIn('name', ['Bus Stop', 'Bus Depo']);
