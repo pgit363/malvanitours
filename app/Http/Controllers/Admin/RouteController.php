@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController as BaseController;
 
-class RouteController extends Controller
+class RouteController extends BaseController
 {
     /**
      * Display a listing of the resource.

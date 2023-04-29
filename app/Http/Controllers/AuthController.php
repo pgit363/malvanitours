@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Http\Controllers\BaseController as BaseController;
 use Mail;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\BaseController as BaseController;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends BaseController
 {
@@ -50,7 +51,7 @@ class AuthController extends BaseController
             return $this->sendError($validator->errors(), '', 400);
         }
 
-        if (!$token = auth()->attempt($validator->validated(), ['exp' => \Carbon\Carbon::now()->addDays(7)->timestamp])) {
+        if (!$token = auth()->attempt($validator->validated(), ['exp' => JWTAuth::factory()->setTTL(60 * 60 * 24 * 100)])) {
             return $this->sendError('Unauthorized', '', 401);
         }
 
@@ -155,8 +156,8 @@ class AuthController extends BaseController
         $response = [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60 * 24 * 100,
-            'user' => auth()->user()
+            'expires_in' =>auth()->factory()->getTTL() * 60 * 24 * 1,
+            'user' => JWTAuth::setToken($token)->authenticate()
         ];
 
         return $this->sendResponse($response, $message);
@@ -165,8 +166,8 @@ class AuthController extends BaseController
     public function sendOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'sometimes|email',
-            'mobile' => 'sometimes',
+            'email' => 'sometimes|nullable|required_without:mobile|email|exists:users,email',
+            'mobile' => 'sometimes|nullable|required_without:email|exists:users,mobile',
         ]);
 
         if ($validator->fails()) {
@@ -182,16 +183,24 @@ class AuthController extends BaseController
             'content' => 'Hello your otp is ' . $otp
         ];
 
-        if ($request->has('email')) {
-            User::where('email', $request->email)->update(array('otp' => $otp));
+        $where_condition = array_filter($request->all());
 
-            Mail::send('email-template', $data, function ($message) use ($data) {
-                $message->to($data['email'])->subject($data['subject']);
-                $message->from('kamblepranav460@gmail.com', 'Pranav Kamble');
-            });
-        }
-        if ($request->has('mobile')) {
-            User::where('mobile', $request->mobile)->update(array('otp' => $otp));
+        $user = User::where($where_condition)->where('otp', $request->otp)->first();
+
+        if ($user) {
+            User::where($where_condition)->update(array('otp' => $otp));
+
+            if ($request->has('email')) {
+                Mail::send('email-template', $data, function ($message) use ($data) {
+                    $message->to($data['email'])->subject($data['subject']);
+                    $message->from('kamblepranav460@gmail.com', 'Pranav Kamble');
+                });
+            }
+
+            if ($request->has('mobile')) {
+                #send otp using sms gateway
+                return $otp;
+            }
         }
 
         return response(['message' => 'OTP successfully sent!']);
@@ -199,38 +208,32 @@ class AuthController extends BaseController
 
     public function verifyOtp(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'sometimes|email',
-            'mobile' => 'sometimes',
-            'otp' => 'required',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'sometimes|nullable|required_without:mobile|email|exists:users,email',
+                'mobile' => 'sometimes|nullable|required_without:email|exists:users,mobile',
+                'otp' => 'required',
+            ]);
 
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors(), '', 400);
-        }
-
-        if ($request->has('email')) {
-            $user = User::where('email', $request->email)->where('otp', $request->otp)->first();
-
-            if ($user) {
-                User::where('email', $request->email)->update(array('otp' => null));
-                return $this->createNewToken(auth()->refresh(), 'Refreshed token...!');
-            } else {
-                return $this->sendError('Invalid OTP', [], 400);
+            if ($validator->fails()) {
+                return $this->sendError($validator->errors(), '', 400);
             }
-        }
-        if ($request->has('mobile')) {
-            $user = User::where('mobile', $request->mobile)->where('otp', $request->otp)->first();
 
-            if ($user) {
-                User::where('mobile', $request->mobile)->update(array('otp' => null));
-                return $this->createNewToken(auth()->refresh(), 'Refreshed token...!');
-            } else {
+            $where_condition = array_filter($request->all());
+
+            $user = User::where($where_condition)->where('otp', $request->otp)->first();
+
+            if ($user)
+                User::where($where_condition)->update(array('otp' => null));
+            else
                 return $this->sendError('Invalid OTP', [], 400);
-            }
-        }
 
-        return response(['user' => 'failed']);
+            $token = JWTAuth::fromUser($user);
+
+            return $this->createNewToken($token, 'Refreshed token...!');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
     }
 
     public function getAllFavourites($id)

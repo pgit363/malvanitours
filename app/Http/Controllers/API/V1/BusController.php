@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\V1;
 
 use App\Models\Bus;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController as BaseController;
 
-class BusController extends Controller
+class BusController extends BaseController
 {
     /**
      * Display a listing of the resource.

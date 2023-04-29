@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\React;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController as BaseController;
 
-class ReactController extends Controller
+class ReactController extends BaseController
 {
      /**
      * Create a new AuthController instance.
