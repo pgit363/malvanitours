@@ -42,7 +42,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);  
     Route::post('/users', [AuthController::class, 'index']);    
     Route::post('/sendOtp', [AuthController::class, 'sendOtp']);
     Route::post('/verifyOtp', [AuthController::class, 'verifyOtp']);
@@ -50,6 +49,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function ($router) {
+
+    Route::get('/user-profile', [AuthController::class, 'userProfile']);  
 
     Route::get('/landingpage', [LandingPageController::class, 'index']);   
     Route::post('/search', [HomeController::class, 'search']);   
