@@ -40,7 +40,6 @@ use App\Http\Controllers\Admin\FoodController;
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::post('/users', [AuthController::class, 'index']);    
     Route::post('/sendOtp', [AuthController::class, 'sendOtp']);
@@ -51,6 +50,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function ($router) {
 
     Route::get('/user-profile', [AuthController::class, 'userProfile']);  
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/landingpage', [LandingPageController::class, 'index']);   
     Route::post('/search', [HomeController::class, 'search']);   
