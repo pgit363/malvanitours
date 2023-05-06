@@ -30,6 +30,22 @@ class RoleSeeder extends Seeder
             [
                 'name' => 'User',
                 'display_name' => 'User'
+            ],
+            [
+                'name' => 'Tourist',
+                'display_name' => 'Tourist'
+            ],
+            [
+                'name' => 'Tour Guide',
+                'display_name' => 'Tour Guide'
+            ],
+            [
+                'name' => 'Blogger',
+                'display_name' => 'Blogger'
+            ],
+            [
+                'name' => 'Vlogger',
+                'display_name' => 'Vlogger'
             ]
         );
 

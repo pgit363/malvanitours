@@ -65,48 +65,53 @@ class AuthController extends BaseController
      */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'role_id' => 'required',
-            'project_id' => 'numeric',
-            'name' => 'required|string|between:2,100',
-            'email' => 'sometimes|string|email|max:100|unique:users',
-            'mobile' => 'sometimes|string|between:2,100',
-            'password' => 'string|confirmed|min:6',
-            'profile_picture' => 'mimes:jpeg,jpg,png,webp|max:2048',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'role_id' => 'required',
+                'project_id' => 'nullable|numeric|exists:projects,id',
+                'name' => 'required|string|between:2,60',
+                'email' => 'required_if:mobile,null|nullable|string|email|max:100|unique:users',
+                'mobile' => 'required_if:email,null|nullable|string|unique:users,mobile|digits:10',
+                'password' => 'nullable|string|required_with:email|confirmed|min:6',
+                'profile_picture' => 'nullable|mimes:jpeg,jpg,png,webp|max:2048',
+            ]);
 
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors(), '', 400);
+            if ($validator->fails()) {
+                return $this->sendError($validator->errors(), '', 400);
+            }
+
+            if ($request->password == "") {
+                $password = "password";
+            } else {
+                $password = $request->password;
+            }
+
+            $input = $validator->validated();
+            $date = currentDate();
+            Log::info("upload file starting");
+
+            //upload profile Image      
+            if ($image = $request->file('profile_picture')) {
+                Log::info("inside upload profile_picture");
+
+                $profile_picture = date('YmdHis') . "." . $image->getClientOriginalExtension();
+
+                $path = $request->file('profile_picture')->store(config('constants.upload_path.profile_picture') . $request->category_id . '/' . $request->name);
+
+                $input['profile_picture'] = Storage::url($path);
+
+                Log::info("FILE STORED" . $input['profile_picture']);
+            }
+
+            $input['password'] = bcrypt($password);
+
+            $user = User::create($input);
+
+            return $this->sendResponse($user, 'User successfully registered');
+        } catch (\Throwable $th) {
+            throw $th;
+            Log::error($th->getMessage());
         }
-
-        if ($request->password == "") {
-            $password = "password";
-        } else {
-            $password = $request->password;
-        }
-
-        $input = $validator->validated();
-        $date = currentDate();
-        Log::info("upload file starting");
-
-        //upload profile Image      
-        if ($image = $request->file('profile_picture')) {
-            Log::info("inside upload profile_picture");
-
-            $profile_picture = date('YmdHis') . "." . $image->getClientOriginalExtension();
-
-            $path = $request->file('profile_picture')->store(config('constants.upload_path.profile_picture') . $request->category_id . '/' . $request->name);
-
-            $input['profile_picture'] = Storage::url($path);
-
-            Log::info("FILE STORED" . $input['profile_picture']);
-        }
-
-        $input['password'] = bcrypt($password);
-
-        $user = User::create($input);
-
-        return $this->sendResponse($user, 'User successfully registered');
     }
 
 
@@ -156,7 +161,7 @@ class AuthController extends BaseController
         $response = [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' =>auth()->factory()->getTTL() * 60 * 24 * 1,
+            'expires_in' => auth()->factory()->getTTL() * 60 * 24 * 1,
             'user' => JWTAuth::setToken($token)->authenticate()
         ];
 

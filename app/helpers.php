@@ -4,7 +4,7 @@ use App\Models\City;
 use App\Models\User;
 use App\Models\Place;
 use App\Models\Projects;
-use App\Models\Products;
+use App\Models\Product;
 use App\Models\Photos;
 use App\Models\Blog;
 use App\Models\Food;
@@ -36,7 +36,7 @@ function getData($id, $model)
         break;
 
         case 'Products':
-            $data = Products::find($id);
+            $data = Product::find($id);
         break;
 
         case 'Place':

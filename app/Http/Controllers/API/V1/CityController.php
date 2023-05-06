@@ -16,11 +16,12 @@ class CityController extends BaseController
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
-    
-     /**
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -28,10 +29,10 @@ class CityController extends BaseController
     public function index()
     {
         $cities = City::withCount(['projects', 'places', 'photos', 'comments'])
-                        ->latest()                
-                        ->paginate(10);
+            ->latest()
+            ->paginate(10);
 
-        return $this->sendResponse($cities, 'Cities successfully Retrieved...!');  
+        return $this->sendResponse($cities, 'Cities successfully Retrieved...!');
     }
 
     /**
@@ -43,47 +44,48 @@ class CityController extends BaseController
     public function show($id)
     {
         $city   =   City::withCount(['projects', 'places', 'photos', 'comments'])
-                        ->withAvg("rateable", 'rate')
-                        ->with(['projects.category' => function ($query) {
-                                    $query->select('id', 'name')
-                                        ->limit(5);
-                                },
-                                'projects' => function ($query) {
-                                    $query->select('id', 'category_id', 'name', 'logo', 'city_id')
-                                        ->limit(5);
-                                },  
-                                'projects.city'=> function ($query) {
-                                    $query->select('id', 'name', 'image_url')
-                                        ->limit(5);
-                                },
-                                'places' => function ($query) {
-                                    $query->select('id', 'name', 'city_id', 'image_url')
-                                        ->limit(5);
-                                }, 
-                                'comments' => function ($query) {
-                                    $query->select('id', 'parent_id', 'user_id', 'comment', 'commentable_type', 'commentable_id')
-                                    ->limit(5);
-                                }, 
-                                'comments.comments' => function ($query) {
-                                    $query->select('id', 'parent_id', 'user_id', 'comment', 'commentable_type', 'commentable_id')
-                                    ->limit(5);
-                                }, 
-                                'comments.users' => function ($query) {
-                                    $query->select('id', 'name', 'email', 'profile_picture');
-                                },
-                                'comments.comments.users' => function ($query) {
-                                    $query->select('id', 'name', 'email', 'profile_picture');
-                                },                            
-                                'photos'
-                                ])
-                        ->latest()
-                        ->limit(5)
-                        ->find($id);
-    
-        return $this->sendResponse($city, 'Cities successfully Retrieved...!');  
+            ->withAvg("rateable", 'rate')
+            ->with([
+                'projects.category' => function ($query) {
+                    $query->select('id', 'name')
+                        ->limit(5);
+                },
+                'projects' => function ($query) {
+                    $query->select('id', 'category_id', 'name', 'logo', 'city_id')
+                        ->limit(5);
+                },
+                'projects.city' => function ($query) {
+                    $query->select('id', 'name', 'image_url')
+                        ->limit(5);
+                },
+                'places' => function ($query) {
+                    $query->select('id', 'name', 'city_id', 'image_url')
+                        ->limit(5);
+                },
+                'comments' => function ($query) {
+                    $query->select('id', 'parent_id', 'user_id', 'comment', 'commentable_type', 'commentable_id')
+                        ->limit(5);
+                },
+                'comments.comments' => function ($query) {
+                    $query->select('id', 'parent_id', 'user_id', 'comment', 'commentable_type', 'commentable_id')
+                        ->limit(5);
+                },
+                'comments.users' => function ($query) {
+                    $query->select('id', 'name', 'email', 'profile_picture');
+                },
+                'comments.comments.users' => function ($query) {
+                    $query->select('id', 'name', 'email', 'profile_picture');
+                },
+                'photos'
+            ])
+            ->latest()
+            ->limit(5)
+            ->find($id);
+
+        return $this->sendResponse($city, 'Cities successfully Retrieved...!');
     }
 
-     /**
+    /**
      * Display a listing of the city.
      *
      * @return \Illuminate\Http\Response
@@ -91,15 +93,14 @@ class CityController extends BaseController
     public function getAllcities($id)
     {
         $cities = City::withCount(['projects', 'places', 'photos', 'comments'])
-                        ->with(['projects', 'places', 'photos', 'comments'])
-                        ->whereId($id)
-                        ->latest()
-                        ->paginate(10);
-        
+            ->with(['projects', 'places', 'photos', 'comments'])
+            ->whereId($id)
+            ->first();
+
         if (is_null($cities)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        return $this->sendResponse($cities, 'Cities successfully Retrieved...!'); 
+        return $this->sendResponse($cities, 'Cities successfully Retrieved...!');
     }
 }

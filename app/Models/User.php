@@ -107,7 +107,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function project()
     {
-        return $this->belongsTo(projects::class);
+        return $this->belongsTo(Projects::class);
     }
 
     /**
@@ -150,7 +150,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function rating(): HasMany
+    public function rating()
     {
         return $this->hasMany(Rating::class, 'user_id');
     }
