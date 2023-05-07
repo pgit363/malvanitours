@@ -226,7 +226,7 @@ class AuthController extends BaseController
 
             $where_condition = array_filter($request->all());
 
-            $user = User::where($where_condition)->where('otp', $request->otp)->first();
+            $user = User::where($where_condition)->first();
 
             if ($user)
                 User::where($where_condition)->update(array('otp' => null));
