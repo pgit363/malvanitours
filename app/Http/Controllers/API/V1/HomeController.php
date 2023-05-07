@@ -31,7 +31,7 @@ class HomeController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         $string = $request->string;

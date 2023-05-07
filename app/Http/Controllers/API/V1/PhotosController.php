@@ -60,7 +60,7 @@ class PhotosController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
       
         $input = $request->all();
@@ -138,7 +138,7 @@ class PhotosController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
     
         $input = $request->all();

@@ -62,7 +62,7 @@ class RatingController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
         // make sure that ratings could not rpeate on same project producty city or any propery7
         // $rating = Rating::where([['user_id', $request->user_id], 
@@ -133,7 +133,7 @@ class RatingController extends BaseController
         ]);            
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         $rate = Rating::find($id);

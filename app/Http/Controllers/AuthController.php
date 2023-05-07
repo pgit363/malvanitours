@@ -48,7 +48,7 @@ class AuthController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError($validator->errors(), '', 400);
+            return $this->sendError($validator->errors(), '', 200);
         }
 
         if (!$token = auth()->attempt($validator->validated(), ['exp' => JWTAuth::factory()->setTTL(60 * 60 * 24 * 100)])) {
@@ -77,7 +77,7 @@ class AuthController extends BaseController
             ]);
 
             if ($validator->fails()) {
-                return $this->sendError($validator->errors(), '', 400);
+                return $this->sendError($validator->errors(), '', 200);
             }
 
             if ($request->password == "") {
@@ -176,7 +176,7 @@ class AuthController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError($validator->errors(), '', 400);
+            return $this->sendError($validator->errors(), '', 200);
         }
 
         $otp =  random_int(100000, 999999);
@@ -221,7 +221,7 @@ class AuthController extends BaseController
             ]);
 
             if ($validator->fails()) {
-                return $this->sendError($validator->errors(), '', 400);
+                return $this->sendError($validator->errors(), '', 200);
             }
 
             $where_condition = array_filter($request->all());

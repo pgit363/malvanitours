@@ -65,7 +65,7 @@ class RolesController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError($validator->errors(), '', 400);
+            return $this->sendError($validator->errors(), '', 200);
         }
 
         $role = Roles::create($request->all());
@@ -133,7 +133,7 @@ class RolesController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError($validator->errors(), '', 400);
+            return $this->sendError($validator->errors(), '', 200);
         }
 
         $role = Roles::find($id);

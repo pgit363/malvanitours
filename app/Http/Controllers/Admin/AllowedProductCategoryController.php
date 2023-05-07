@@ -54,7 +54,7 @@ class AllowedProductCategoryController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         $allowedProductCategory = AllowedProductCategory::create($request->all());
@@ -99,7 +99,7 @@ class AllowedProductCategoryController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         $allowedProductCategory = AllowedProductCategory::find($id);

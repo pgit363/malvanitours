@@ -60,7 +60,7 @@ class ContactController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         // $data = json_encode(DB::table($request->contactable_type)->find($request->contactable_id));//getData($request->commentable_id, $request->commentable_type);
@@ -137,7 +137,7 @@ class ContactController extends BaseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         $contact = Contact::find($id);

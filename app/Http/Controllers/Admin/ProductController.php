@@ -57,7 +57,7 @@ class ProductController extends BaseController
         ]);            
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         // $data = json_encode(DB::table($request->productable_type)->find($request->productable_id));//getData($request->productable_id, $request->productable_type);

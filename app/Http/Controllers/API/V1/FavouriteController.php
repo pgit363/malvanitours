@@ -58,7 +58,7 @@ class FavouriteController extends BaseController
         ]);            
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         $data = getData($request->favouritable_id, $request->favouritable_type);

@@ -46,7 +46,7 @@ class BusTypeController extends BaseController
         ]);
 
         if($validator->fails())
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
 
         $input = $request->all();
         Log::info("upload file starting");

@@ -59,7 +59,7 @@ class AddressController extends BaseController
         ]);            
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         // $data = json_encode(DB::table($request->addressable_type)->find($request->addressable_id));//getData($request->addressable_id, $request->addressable_type);
@@ -153,7 +153,7 @@ class AddressController extends BaseController
         ]);    
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         $address = Address::find($id);

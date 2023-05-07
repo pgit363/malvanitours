@@ -61,7 +61,7 @@ class CommentController extends BaseController
         ]);            
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         // $data = json_encode(DB::table($request->commentable_type)->find($request->commentable_id));//getData($request->commentable_id, $request->commentable_type);
@@ -129,7 +129,7 @@ class CommentController extends BaseController
         ]);            
 
         if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 400);       
+            return $this->sendError($validator->errors(), '', 200);       
         }
 
         $comment = Comment::find($id);
