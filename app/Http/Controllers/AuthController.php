@@ -9,7 +9,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\BaseController as BaseController;
+use App\Models\Roles;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Str;
 
 class AuthController extends BaseController
 {
@@ -55,6 +58,15 @@ class AuthController extends BaseController
             return $this->sendError('Unauthorized', '', 401);
         }
 
+        $user = Auth::user();
+        $roles = Roles::whereIn('name', ['superadmin', 'admin'])->get();
+        if (
+            Str::startsWith($request->route()->getPrefix(), 'admin') &&
+            !in_array($user->roles->id, array_column($roles->toArray(), 'id'))
+        ) {
+            return $this->sendError('Unauthorized', '', 401);
+        }
+
         return $this->createNewToken($token, 'Logged In...!');
     }
 
@@ -66,8 +78,27 @@ class AuthController extends BaseController
     public function register(Request $request)
     {
         try {
+            $prefix = $request->route()->getPrefix();
+
+            // return [$prefix];
             $validator = Validator::make($request->all(), [
-                'role_id' => 'required',
+                'role_id' => [
+                    'required',
+                    'exists:roles,id',
+                    function ($attribute, $value, $fail) use ($prefix) {
+                        if ($value == Roles::where("name", "superadmin")->pluck('id')->first()) { // Change 1 to the ID of your superadmin role
+                            $fail('The selected :attribute is invalid. 1');
+                        }
+
+                        if ($prefix === 'admin' && $value !== Roles::where("name", $prefix)->pluck('id')->first()) {
+                            $fail('The selected :attribute is invalid. 2');
+                        }
+
+                        if ($prefix !== 'admin' && in_array($value, array_column(Roles::whereIn('name', ['superadmin', 'admin'])->get()->toArray(), 'id'))) {
+                            $fail('The selected :attribute is invalid. 5');
+                        }
+                    },
+                ],
                 'project_id' => 'nullable|numeric|exists:projects,id',
                 'name' => 'required|string|between:2,60',
                 'email' => 'required_if:mobile,null|nullable|string|email|max:100|unique:users',

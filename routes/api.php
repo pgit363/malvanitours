@@ -46,7 +46,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/verifyOtp', [AuthController::class, 'verifyOtp']);
 });
 
-
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function ($router) {
 
     Route::get('/user-profile', [AuthController::class, 'userProfile']);  

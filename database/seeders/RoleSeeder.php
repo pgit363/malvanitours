@@ -20,31 +20,31 @@ class RoleSeeder extends Seeder
     {
         $array = array(
             [
-                'name' => 'SuperAdmin',
+                'name' => 'superadmin',
                 'display_name' => 'Super Admin'
             ],
             [
-                'name' => 'Admin',
+                'name' => 'admin',
                 'display_name' => 'Admin'
             ],
             [
-                'name' => 'User',
+                'name' => 'user',
                 'display_name' => 'User'
             ],
             [
-                'name' => 'Tourist',
+                'name' => 'tourist',
                 'display_name' => 'Tourist'
             ],
             [
-                'name' => 'Tour Guide',
+                'name' => 'tour_guide',
                 'display_name' => 'Tour Guide'
             ],
             [
-                'name' => 'Blogger',
+                'name' => 'blogger',
                 'display_name' => 'Blogger'
             ],
             [
-                'name' => 'Vlogger',
+                'name' => 'vlogger',
                 'display_name' => 'Vlogger'
             ]
         );
