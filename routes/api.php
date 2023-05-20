@@ -46,6 +46,10 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/verifyOtp', [AuthController::class, 'verifyOtp']);
 });
 
+Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
+    Route::get('roleDD', [RolesController::class, 'roleDD']);   
+});
+
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function ($router) {
 
     Route::get('/user-profile', [AuthController::class, 'userProfile']);  
@@ -123,7 +127,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function ($router) 
     Route::put('/role/{id}', [RolesController::class, 'update']);   
     Route::delete('/role/{id}', [RolesController::class, 'destroy']);  
     Route::get('/role/{id}/users', [RolesController::class, 'getAllUsers']); 
-    Route::get('/roleDD', [RolesController::class, 'roleDD']);   
 
     Route::get('/comments', [CommentController::class, 'index']);   
     Route::post('/comment', [CommentController::class, 'store']);
