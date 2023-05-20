@@ -15,7 +15,7 @@ class CreateTourPackagesTable extends Migration
     {
         Schema::create('tour_packages', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('project_id')->unsigned();
             $table->string('title')->nullable();
             $table->string('tag_line')->nullable();
             $table->text('description');
@@ -31,7 +31,7 @@ class CreateTourPackagesTable extends Migration
             $table->json('social_media')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
