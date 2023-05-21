@@ -17,9 +17,13 @@ class RouteStops extends Model
      * @var string[]
      */
     protected $fillable = [
+        'serial_no',
         'route_id',
         'place_id',
-        'serial_no',
+        'arr_time',
+        'dept_time',
+        'total_time',
+        'delayed_time',
         'meta_data'
     ];
 

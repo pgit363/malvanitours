@@ -20,10 +20,10 @@ class CreateRoutesTable extends Migration
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->json('meta_data')->nullable();
-            $table->timestamp('departure_time')->nullable();
-            $table->timestamp('arrival_time')->nullable();
-            $table->timestamp('total_time')->nullable();
-            $table->timestamp('delayed_time')->nullable();
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->time('total_time')->nullable();
+            $table->time('delayed_time')->nullable();
             $table->timestamps();
 
             $table->foreign('source_place_id')->references('id')->on('places')->onDelete('cascade')->onUpdate('cascade');

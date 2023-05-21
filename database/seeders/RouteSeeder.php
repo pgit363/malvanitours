@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Place;
 use App\Models\Route;
+use DateTime;
 use Illuminate\Database\Seeder;
 
 class RouteSeeder extends Seeder
@@ -20,6 +21,9 @@ class RouteSeeder extends Seeder
         $string = '[{"Format":"I25","Content":"172284201241"}]';
 
         for ($i = 0; $i < 10; $i++) {
+            $start_time = new DateTime($faker->dateTimeThisCentury()->format('h:i:s A'));
+            $end_time = new DateTime($faker->dateTimeThisCentury($start_time)->format('h:i:s A'));
+
             $source_place =  Place::all()->random();
             $destination_place = Place::all()->except($source_place->id)->random();
 
@@ -37,9 +41,9 @@ class RouteSeeder extends Seeder
                     'name' => $source_place->name . " " . $destination_place->name,
                     'description' => $faker->text(),
                     'meta_data' => $string,
-                    'departure_time' => $faker->time(),
-                    'arrival_time' => $faker->time(),
-                    'total_time' => $faker->time(),
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'total_time' => $end_time->diff($start_time),
                     'delayed_time' => $faker->time()
                 );
 

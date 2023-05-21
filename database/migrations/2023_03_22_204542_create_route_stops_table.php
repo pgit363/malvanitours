@@ -18,6 +18,10 @@ class CreateRouteStopsTable extends Migration
             $table->integer('serial_no')->unsigned();
             $table->integer('route_id')->unsigned();
             $table->integer('place_id')->unsigned()->comment('Bus stop or Bus depo id');
+            $table->time('arr_time');
+            $table->time('dept_time');
+            $table->time('total_time')->nullable();
+            $table->time('delayed_time')->nullable();
             $table->json('meta_data')->nullable();
             $table->timestamps();
 

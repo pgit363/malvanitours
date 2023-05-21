@@ -6,7 +6,7 @@ use App\Models\RouteStops;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController as BaseController;
 
-class RouteStopsController extends Controller
+class RouteStopsController extends BaseController
 {
     /**
      * Display a listing of the resource.

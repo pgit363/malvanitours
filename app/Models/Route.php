@@ -22,8 +22,8 @@ class Route extends Model
         'name',
         'description',
         'meta_data',
-        'departure_time',
-        'arrival_time',
+        'start_time',
+        'end_time',
         'total_time',
         'delayed_time'
     ];

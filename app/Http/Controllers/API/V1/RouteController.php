@@ -33,7 +33,7 @@ class RouteController extends BaseController
                 'destinationPlace:id,name,place_category_id',
                 'destinationPlace.placeCategory:id,name,icon'
             ])
-            ->select('id', 'source_place_id', 'destination_place_id', 'name')
+            ->select('id', 'source_place_id', 'destination_place_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time')
             ->paginate();
 
         return $this->sendResponse($routes, 'Routes successfully Retrieved...!');
@@ -64,7 +64,7 @@ class RouteController extends BaseController
             ->pluck('id');
 
         $places = Route::with([
-            'routeStops:id,serial_no,route_id,place_id',
+            'routeStops:id,serial_no,route_id,place_id,arr_time,dept_time,total_time,delayed_time',
             'routeStops.place:id,name,place_category_id',
             'routeStops.place.placeCategory:id,name,icon',
             'sourcePlace:id,name,place_category_id',
@@ -72,7 +72,7 @@ class RouteController extends BaseController
             'destinationPlace:id,name,place_category_id',
             'destinationPlace.placeCategory:id,name,icon'
         ])
-            ->select('id', 'source_place_id', 'destination_place_id', 'name')
+            ->select('id', 'source_place_id', 'destination_place_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time')
             ->whereIn('id', $routeIds)
             ->get();
 
