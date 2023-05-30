@@ -85,7 +85,7 @@ class HomeController extends BaseController
         ->latest()
         ->paginate(10); //response with pagination
 
-        Log::info("Rcords fetched");
+        Log::info("Records fetched");
 
         return $this->sendResponse($records, 'Records successfully Retrieved...!');
     }

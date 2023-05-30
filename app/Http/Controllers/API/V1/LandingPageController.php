@@ -69,11 +69,16 @@ class LandingPageController extends BaseController
             ->get();
 
         #Place Categories
-        $place_catgory = PlaceCategory::withCount('places')
+        $place_catgory = PlaceCategory::with(['places' => function ($query) {
+            $query->select('id', 'name', 'city_id', 'parent_id', 'place_category_id', 'image_url', 'bg_image_url', 'visitors_count')
+                ->take(5);
+        }])
+            ->withCount('places')
             ->latest()
             ->limit(5)
             ->get();
 
+        // return $place_catgory;
         #Top Places
         //add location based filter near by famous locations
         $places = Place::withAvg("rateable", 'rate')
