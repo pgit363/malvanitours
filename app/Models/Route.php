@@ -10,7 +10,7 @@ use App\Traits\Hashidable;
 class Route extends Model
 {
     use Hashidable, HasFactory, Notifiable;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,6 +19,7 @@ class Route extends Model
     protected $fillable = [
         'source_place_id',
         'destination_place_id',
+        'bus_type_id',
         'name',
         'description',
         'meta_data',
@@ -46,7 +47,7 @@ class Route extends Model
         'total_time' => 'array',
         'delayed_time' => 'array'
     ];
-    
+
     /**
      * Get the sourcePlace that owns the Route
      *
@@ -55,9 +56,9 @@ class Route extends Model
     public function sourcePlace()
     {
         return $this->belongsTo(Place::class);
-    }    
+    }
 
-     /**
+    /**
      * Get the sourcePlace that owns the Route
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -65,7 +66,7 @@ class Route extends Model
     public function destinationPlace()
     {
         return $this->belongsTo(Place::class);
-    }   
+    }
 
     /**
      * Get all of the routeStops for the Route
@@ -75,5 +76,15 @@ class Route extends Model
     public function routeStops()
     {
         return $this->hasMany(RouteStops::class, 'route_id');
+    }
+
+    /**
+     * Get the busType that owns the Route
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function busType()
+    {
+        return $this->belongsTo(BusType::class);
     }
 }

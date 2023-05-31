@@ -17,6 +17,7 @@ class CreateRoutesTable extends Migration
             $table->increments('id');
             $table->integer('source_place_id')->unsigned()->nullable();
             $table->integer('destination_place_id')->unsigned()->nullable();
+            $table->integer('bus_type_id')->unsigned()->nullable();
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->json('meta_data')->nullable();
@@ -28,6 +29,7 @@ class CreateRoutesTable extends Migration
 
             $table->foreign('source_place_id')->references('id')->on('places')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('destination_place_id')->references('id')->on('places')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('bus_type_id')->references('id')->on('bus_types')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -70,9 +70,10 @@ class RouteController extends BaseController
             'sourcePlace:id,name,place_category_id',
             'sourcePlace.placeCategory:id,name,icon',
             'destinationPlace:id,name,place_category_id',
-            'destinationPlace.placeCategory:id,name,icon'
+            'destinationPlace.placeCategory:id,name,icon',
+            'busType:id,type,logo'
         ])
-            ->select('id', 'source_place_id', 'destination_place_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time')
+            ->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time')
             ->whereIn('id', $routeIds)
             ->get();
 

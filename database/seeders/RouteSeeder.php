@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\BusType;
 use App\Models\Place;
 use App\Models\Route;
 use DateTime;
@@ -38,7 +39,8 @@ class RouteSeeder extends Seeder
                 $data = array(
                     'source_place_id' => $source_place->id,
                     'destination_place_id' => $destination_place->id,
-                    'name' => $source_place->name . " " . $destination_place->name,
+                    'bus_type_id' => BusType::all()->random()->id,
+                    'name' => $source_place->name . "-> To ->" . $destination_place->name,
                     'description' => $faker->text(),
                     'meta_data' => $string,
                     'start_time' => $start_time,
