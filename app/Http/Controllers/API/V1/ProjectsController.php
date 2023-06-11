@@ -12,36 +12,38 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectsController extends BaseController
 {
-     /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
-    
-  /**
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        Log::info('Showing the search results for global search: '.$request->string);
+        Log::info('Showing the search results for global search: ' . $request->string);
 
         $string = $request->string;
 
         $field = getDbColumns('projects');
 
         $records = Projects::withCount(['products', 'photos', 'users', 'contacts', 'comments'])
-                            ->with(['city', 'category', 'user'])
-                            ->latest()
-                            ->Where(function ($query) use($string, $field) {
-                                for ($i = 0; $i < count($field); $i++){
-                                    $query->orwhere($field[$i], 'like',  '%' . $string .'%');
-                                }})
-                            ->paginate(10); 
+            ->with(['city', 'category', 'user'])
+            ->latest()
+            ->Where(function ($query) use ($string, $field) {
+                for ($i = 0; $i < count($field); $i++) {
+                    $query->orwhere($field[$i], 'like',  '%' . $string . '%');
+                }
+            })
+            ->paginate(10);
 
         Log::info("Records fetched");
 
@@ -89,10 +91,10 @@ class ProjectsController extends BaseController
             'link_status' => 'boolean',
         ]);
 
-        if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 200);       
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), '', 200);
         }
-      
+
         $input = $request->all();
         $date = currentDate(); //for unique naming of project folder
         Log::info("upload file starting");
@@ -100,32 +102,32 @@ class ProjectsController extends BaseController
         //Image 1 store      
         if ($image = $request->file('logo')) {
             Log::info("inside upload logo");
-            
+
             $logo = date('YmdHis') . "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('logo')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
+            $path = $request->file('logo')->store(config('constants.upload_path.project') . $request->category_id . '/' . $request->name);
 
             $input['logo'] = Storage::url($path);
-            
-            Log::info("FILE STORED".$input['logo']);
+
+            Log::info("FILE STORED" . $input['logo']);
         }
 
         //Image 2 store      
         if ($image = $request->file('fevicon')) {
             Log::info("inside upload fevicon");
-            
+
             $fevicon = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            
-            $path = $request->file('fevicon')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
+
+            $path = $request->file('fevicon')->store(config('constants.upload_path.project') . $request->category_id . '/' . $request->name);
 
             $input['fevicon'] = Storage::url($path);
-            
-            Log::info("FILE STORED".$input['fevicon']);
+
+            Log::info("FILE STORED" . $input['fevicon']);
         }
 
         $projects = Projects::create($input);
 
-        return $this->sendResponse($projects, 'Projects added successfully...!');        
+        return $this->sendResponse($projects, 'Projects added successfully...!');
     }
 
     /**
@@ -137,53 +139,58 @@ class ProjectsController extends BaseController
     public function show(Request $request, $id)
     {
         $projects = Projects::withCount(['products', 'photos', 'contacts', 'comments'])
-                            ->withAvg("rateable", 'rate')
-                            ->with(['city' => function ($query) {
-                                        $query->select('id', 'name');
-                                    }, 
-                                    'user' => function ($query) {
-                                        $query->select('id', 'name', 'email', 'profile_picture');
-                                    }, 
-                                    'category'=> function ($query) {
-                                        $query->select('id', 'name');
-                                    },
-                                    'addresses',
-                                    'category',
-                                    'category.allowedproductCategory' => function ($query) {
-                                        $query->select('id', 'category_id', 'product_category_id');
-                                    },
-                                    'category.allowedproductCategory.productCategory'=> function ($query) {
-                                        $query->select('id', 'name', 'icon', 'meta_data');
-                                    },
-                                    'category.allowedproductCategory.productCategory.products' => function ($query) use ($id){
-                                        $query->select('id', 'project_id', 'product_category_id', 'productable_type', 'productable_id')
-                                              ->where('project_id', '=', $id)
-                                              ->limit(5);                                
-                                    },
-                                    'category.allowedproductCategory.productCategory.products.productable',                        
-                                    'photos' => function ($query) {
-                                        $query->limit(10);
-                                    }, 
-                                    'comments' => function ($query) {
-                                        $query->limit(10);
-                                    },  
-                                    'comments.comments' => function ($query) {
-                                        $query->limit(5);
-                                    },
-                                    'comments.users' => function ($query) {
-                                        $query->select('id', 'name', 'email', 'profile_picture');
-                                    }, 
-                                    'comments.comments.users' => function ($query) {
-                                        $query->select('id', 'name', 'email', 'profile_picture');
-                                    }])
-                            ->latest()
-                            ->find($id);
-        
+            ->withAvg("rateable", 'rate')
+            ->with([
+                'city' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'city.places' => function ($query) {
+                    $query->select('id', 'name', 'city_id', 'description', 'latitude', 'longitude', 'contact_details',  'image_url', 'bg_image_url');
+                },
+                'user' => function ($query) {
+                    $query->select('id', 'name', 'email', 'profile_picture');
+                },
+                'category' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'addresses',
+                'category',
+                'category.allowedproductCategory' => function ($query) {
+                    $query->select('id', 'category_id', 'product_category_id');
+                },
+                'category.allowedproductCategory.productCategory' => function ($query) {
+                    $query->select('id', 'name', 'icon', 'meta_data');
+                },
+                'category.allowedproductCategory.productCategory.products' => function ($query) use ($id) {
+                    $query->select('id', 'project_id', 'product_category_id', 'productable_type', 'productable_id')
+                        ->where('project_id', '=', $id)
+                        ->limit(5);
+                },
+                'category.allowedproductCategory.productCategory.products.productable',
+                'photos' => function ($query) {
+                    $query->limit(10);
+                },
+                'comments' => function ($query) {
+                    $query->limit(10);
+                },
+                'comments.comments' => function ($query) {
+                    $query->limit(5);
+                },
+                'comments.users' => function ($query) {
+                    $query->select('id', 'name', 'email', 'profile_picture');
+                },
+                'comments.comments.users' => function ($query) {
+                    $query->select('id', 'name', 'email', 'profile_picture');
+                }
+            ])
+            ->latest()
+            ->find($id);
+
         if (is_null($projects)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        return $this->sendResponse($projects, 'Projects successfully Retrieved...!');   
+        return $this->sendResponse($projects, 'Projects successfully Retrieved...!');
     }
 
 
@@ -212,14 +219,14 @@ class ProjectsController extends BaseController
     //                                 ->whereId($id)
     //                                 ->latest()
     //                                 ->paginate(10);
-        
+
     //     if (is_null($products)) {
     //         return $this->sendError('Empty', [], 404);
     //     }
 
     //     return $this->sendResponse($products, 'Products successfully Retrieved...!'); 
     // }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -255,8 +262,8 @@ class ProjectsController extends BaseController
             'link_status' => 'boolean',
         ]);
 
-        if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 200);       
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), '', 200);
         }
 
         $projects = Projects::find($id);
@@ -271,43 +278,43 @@ class ProjectsController extends BaseController
 
         //Image 1 store      
         if ($image = $request->file('logo')) {
-            
-            if(Storage::exists($projects->logo)){
+
+            if (Storage::exists($projects->logo)) {
                 Storage::delete($projects->logo);
             }
-    
+
             Log::info("inside upload logo");
-            
+
             $logo = date('YmdHis') . "." . $image->getClientOriginalExtension();
 
-            $path = $request->file('logo')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
+            $path = $request->file('logo')->store(config('constants.upload_path.project') . $request->category_id . '/' . $request->name);
 
             $input['logo'] = Storage::url($path);
-            
-            Log::info("FILE STORED".$input['logo']);
+
+            Log::info("FILE STORED" . $input['logo']);
         }
 
         //Image 2 store      
         if ($image = $request->file('fevicon')) {
-            
-            if(Storage::exists($projects->fevicon)){
+
+            if (Storage::exists($projects->fevicon)) {
                 Storage::delete($projects->fevicon);
             }
-            
+
             Log::info("inside upload fevicon");
-            
+
             $fevicon = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            
-            $path = $request->file('fevicon')->store(config('constants.upload_path.project').$request->category_id.'/'.$request->name);
+
+            $path = $request->file('fevicon')->store(config('constants.upload_path.project') . $request->category_id . '/' . $request->name);
 
             $input['fevicon'] = Storage::url($path);
-            
-            Log::info("FILE STORED".$input['fevicon']);
+
+            Log::info("FILE STORED" . $input['fevicon']);
         }
 
         $projects->update($input);
 
-        return $this->sendResponse($projects, 'Projects updated successfully...!');   
+        return $this->sendResponse($projects, 'Projects updated successfully...!');
     }
 
     /**
@@ -324,16 +331,16 @@ class ProjectsController extends BaseController
             return $this->sendError('Empty', [], 404);
         }
 
-        if(Storage::exists($projects->logo)){
+        if (Storage::exists($projects->logo)) {
             Storage::delete($projects->logo);
         }
 
-        if(Storage::exists($projects->fevicon)){
+        if (Storage::exists($projects->fevicon)) {
             Storage::delete($projects->fevicon);
         }
-        
+
         $projects->delete($request->all());
 
-        return $this->sendResponse($projects, 'Projects deleted successfully...!');   
+        return $this->sendResponse($projects, 'Projects deleted successfully...!');
     }
 }
