@@ -145,7 +145,8 @@ class ProjectsController extends BaseController
                     $query->select('id', 'name');
                 },
                 'city.places' => function ($query) {
-                    $query->select('id', 'name', 'city_id', 'description', 'latitude', 'longitude', 'contact_details',  'image_url', 'bg_image_url');
+                    $query->select('id', 'name', 'city_id', 'description', 'latitude', 'longitude', 'contact_details',  'image_url', 'bg_image_url')
+                    ->limit(5);
                 },
                 'user' => function ($query) {
                     $query->select('id', 'name', 'email', 'profile_picture');
