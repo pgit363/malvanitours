@@ -51,8 +51,8 @@ class RouteController extends BaseController
             'destination_place_id' => 'sometimes|required_with:source_place_id|exists:places,id',
         ]);
 
-        if (!empty($data['source_place_id']) && !empty($data['destination_place_id'])) {
-            $routeIds = Route::whereHas('routeStops', function ($query) use ($data) {
+        $routeIds = Route::whereHas('routeStops', function ($query) use ($data) {
+            if (!empty($data['source_place_id']) && !empty($data['destination_place_id'])) {
                 $sourcePlaceId = $data['source_place_id'];
                 $destinationPlaceId = $data['destination_place_id'];
 
@@ -61,9 +61,9 @@ class RouteController extends BaseController
                         DB::raw("(SELECT serial_no FROM route_stops WHERE route_id = routes.id AND place_id = $sourcePlaceId)"),
                         DB::raw("(SELECT serial_no FROM route_stops WHERE route_id = routes.id AND place_id = $destinationPlaceId)"),
                     ]);
-            })
-                ->pluck('id');
-        }
+            }
+        })
+            ->pluck('id');
 
         $routes = Route::with([
             'routeStops:id,serial_no,route_id,place_id,arr_time,dept_time,total_time,delayed_time',
@@ -77,10 +77,10 @@ class RouteController extends BaseController
         ])
             ->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time');
 
-            if (!empty($data['source_place_id']) && !empty($data['destination_place_id'])) {
-                $routes = $routes->whereIn('id', $routeIds);
-            }
-            $routes = $routes->paginate(5);
+        if (!empty($data['source_place_id']) && !empty($data['destination_place_id'])) {
+            $routes = $routes->whereIn('id', $routeIds);
+        }
+        $routes = $routes->paginate(5);
 
 
         #need to test on both query for performance
