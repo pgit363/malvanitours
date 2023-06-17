@@ -13,6 +13,7 @@ use App\Models\Place;
 use App\Models\City;
 use App\Models\Blog;
 use App\Models\PlaceCategory;
+use App\Models\Route;
 
 class LandingPageController extends BaseController
 {
@@ -68,6 +69,10 @@ class LandingPageController extends BaseController
             ->limit(5)
             ->get();
 
+        $routes = Route::latest()
+            ->limit(5)
+            ->get();
+
         #Place Categories
         $place_catgory = PlaceCategory::with(['places' => function ($query) {
             $query->select('id', 'name', 'city_id', 'parent_id', 'place_category_id', 'image_url', 'bg_image_url', 'visitors_count')
@@ -99,11 +104,12 @@ class LandingPageController extends BaseController
             ->get();
 
         $records =  array(
+            'routes' => $routes,
+            'stops' => $stops,
             'categories' => $categories,
             'cities' => $cities,
             'projects' => $projects,
             // 'products'=>$products,
-            'stops' => $stops,
             'place_category' => $place_catgory,
             'places' => $places,
             'blogs' => $blogs
