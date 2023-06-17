@@ -57,15 +57,15 @@ class RouteController extends BaseController
         }
 
         $routeIds = Route::whereHas('routeStops', function ($query) use ($request) {
-            if ($request->has('source_place_id') && $request->has('destination_place_id')) {
-                $query->where('place_id', $request->source_place_id)
-                    ->whereBetween('serial_no', [
-                        DB::raw("(SELECT serial_no FROM route_stops WHERE route_id = routes.id AND place_id = $request->source_place_id)"),
-                        DB::raw("(SELECT serial_no FROM route_stops WHERE route_id = routes.id AND place_id = $request->destination_place_id)"),
-                    ]);
-            }
-        })
-            ->pluck('id');
+            $query->when($request->has('source_place_id') && $request->has('destination_place_id'), function ($subquery) use ($request) {
+               $subquery->where('place_id', $request->source_place_id)
+               ->whereBetween('serial_no', [
+                            DB::raw("(SELECT MIN(serial_no) FROM route_stops WHERE route_id = routes.id AND place_id IN ($request->source_place_id, $request->destination_place_id))"),
+                            DB::raw("(SELECT MAX(serial_no) FROM route_stops WHERE route_id = routes.id AND place_id IN ($request->source_place_id, $request->destination_place_id))"),
+                        ]);
+
+            });
+        })->pluck('id');
 
         $routes = Route::with([
             'routeStops:id,serial_no,route_id,place_id,arr_time,dept_time,total_time,delayed_time',
@@ -76,15 +76,13 @@ class RouteController extends BaseController
             'destinationPlace:id,name,place_category_id',
             'destinationPlace.placeCategory:id,name,icon',
             'busType:id,type,logo'
-        ])
-            ->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time');
-
-        if ($request->has('source_place_id') && $request->has('destination_place_id')) {
-            $routes = $routes->whereIn('id', $routeIds);
-        }
+        ])->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time');
+        
+        $routes->when($request->has('source_place_id') && $request->has('destination_place_id'), function ($query) use ($routeIds) {
+            $query->whereIn('id', $routeIds);
+        });
         
         $routes = $routes->paginate(5);
-
 
         #need to test on both query for performance
 
