@@ -6,6 +6,7 @@ use App\Models\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class RouteController extends BaseController
 {
@@ -46,20 +47,21 @@ class RouteController extends BaseController
      */
     public function routes(Request $request)
     {
-        $data = $request->validate([
-            'source_place_id' => 'sometimes|required_with:destination_place_id|exists:places,id',
-            'destination_place_id' => 'sometimes|required_with:source_place_id|exists:places,id',
+        $validator = Validator::make($request->all(), [
+            'source_place_id' => 'nullable|required_with:destination_place_id|exists:places,id',
+            'destination_place_id' => 'nullable|required_with:source_place_id|exists:places,id',
         ]);
 
-        $routeIds = Route::whereHas('routeStops', function ($query) use ($data) {
-            if (!empty($data['source_place_id']) && !empty($data['destination_place_id'])) {
-                $sourcePlaceId = $data['source_place_id'];
-                $destinationPlaceId = $data['destination_place_id'];
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), '', 200);
+        }
 
-                $query->where('place_id', $sourcePlaceId)
+        $routeIds = Route::whereHas('routeStops', function ($query) use ($request) {
+            if ($request->has('source_place_id') && $request->has('destination_place_id')) {
+                $query->where('place_id', $request->source_place_id)
                     ->whereBetween('serial_no', [
-                        DB::raw("(SELECT serial_no FROM route_stops WHERE route_id = routes.id AND place_id = $sourcePlaceId)"),
-                        DB::raw("(SELECT serial_no FROM route_stops WHERE route_id = routes.id AND place_id = $destinationPlaceId)"),
+                        DB::raw("(SELECT serial_no FROM route_stops WHERE route_id = routes.id AND place_id = $request->source_place_id)"),
+                        DB::raw("(SELECT serial_no FROM route_stops WHERE route_id = routes.id AND place_id = $request->destination_place_id)"),
                     ]);
             }
         })
@@ -77,9 +79,10 @@ class RouteController extends BaseController
         ])
             ->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time');
 
-        if (!empty($data['source_place_id']) && !empty($data['destination_place_id'])) {
+        if ($request->has('source_place_id') && $request->has('destination_place_id')) {
             $routes = $routes->whereIn('id', $routeIds);
         }
+        
         $routes = $routes->paginate(5);
 
 
