@@ -74,12 +74,16 @@ class LandingPageController extends BaseController
             ->get();
 
         #Place Categories
-        $place_catgory = PlaceCategory::with(['places' => function ($query) {
-            $query->select('id', 'name', 'city_id', 'parent_id', 'place_category_id', 'image_url', 'bg_image_url', 'visitors_count')
-                ->take(5);
+        $place_category = PlaceCategory::with(['places' => function ($query) {
+            $query->select('places.id', 'places.name', 'places.city_id', 'places.parent_id', 'places.place_category_id', 'places.image_url', 'places.bg_image_url', 'places.visitors_count')
+                ->leftJoin('places as p2', function ($join) {
+                    $join->on('places.place_category_id', '=', 'p2.place_category_id')
+                        ->whereRaw('places.id <= p2.id');
+                })
+                ->groupBy('places.id')
+                ->havingRaw('COUNT(*) <= 5');
         }])
             ->withCount('places')
-            ->latest()
             ->limit(5)
             ->get();
 
@@ -110,7 +114,7 @@ class LandingPageController extends BaseController
             'cities' => $cities,
             'projects' => $projects,
             // 'products'=>$products,
-            'place_category' => $place_catgory,
+            'place_category' => $place_category,
             'places' => $places,
             'blogs' => $blogs
         );
