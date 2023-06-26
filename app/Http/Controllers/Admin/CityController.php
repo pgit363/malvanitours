@@ -159,7 +159,7 @@ class CityController extends BaseController
     {
         Log::info($request->all());
         $validator = Validator::make($request->all(), [
-            'name' => 'string|unique:cities,name,' . $id,
+            'name' => 'string|unique:cities,name,' . $id . ',id',
             'tag_line' => 'string',
             'description' => 'string',
             'image_url' => 'mimes:jpeg,jpg,png|max:2048',

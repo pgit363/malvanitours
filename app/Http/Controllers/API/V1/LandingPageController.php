@@ -37,6 +37,7 @@ class LandingPageController extends BaseController
         #Services categories
         $categories = Category::withCount('projects')
             ->latest()
+            ->limit(8)
             ->get();
         #Top famouse cities
         $cities = City::withAvg("rateable", 'rate')
