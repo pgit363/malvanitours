@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseController;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FavouriteController extends BaseController
 {
@@ -17,10 +18,11 @@ class FavouriteController extends BaseController
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +32,7 @@ class FavouriteController extends BaseController
     {
         $favourite =  Favourite::paginate(10);
 
-        return $this->sendResponse($favourite, 'Favourites successfully Retrieved...!');  
+        return $this->sendResponse($favourite, 'Favourites successfully Retrieved...!');
     }
 
     /**
@@ -55,27 +57,38 @@ class FavouriteController extends BaseController
             'user_id' => 'nullable|numeric',
             'favouritable_type' => 'required|string',
             'favouritable_id' => 'required|numeric',
-        ]);            
+        ]);
 
-        if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 200);       
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), '', 200);
         }
 
         $data = getData($request->favouritable_id, $request->favouritable_type);
 
         if (!$data) {
-            return $this->sendError($request->favouritable_type.' Not Exist..!', '', 400);       
+            return $this->sendError($request->favouritable_type . ' Not Exist..!', '', 400);
         }
 
-        $favourite = new Favourite;
-        
-        $favourite->user_id = $request->get('user_id');
-        
-        $favourite->favouritable()->associate($data);
+        try {
+            $favourite = Favourite::where('user_id', $request->user_id)
+                ->where('favouritable_id', $request->favouritable_id)
+                ->firstOrFail();
 
-        $favourite = Favourite::create(json_decode($favourite, true));       
+            if ($favourite->favouritable instanceof \App\Models\City) {
+                $favourite->delete();
+                return $this->sendResponse(null, 'Favourite deleted successfully...!');
+            }
+        } catch (ModelNotFoundException $exception) {
+            $favourite = new Favourite;
 
-        return $this->sendResponse($favourite, 'Favourite created successfully...!');    
+            $favourite->user_id = $request->get('user_id');
+
+            $favourite->favouritable()->associate($data);
+
+            $favourite = Favourite::create(json_decode($favourite, true));
+        }
+
+        return $this->sendResponse($favourite, 'Favourite created successfully...!');
     }
 
     /**
@@ -87,20 +100,20 @@ class FavouriteController extends BaseController
     public function show($user_id)
     {
         $favourites  = Favourite::
-        // select(\DB::raw('favouritable_id, favouritable_id'))
-                               with('favouritable')
-                                // ->groupBy('favouritable_id')
-                                // ->groupBy('favouritable_type')
-                                // ->orderBy('created_at', 'desc')
-                                // ->latest()      
-                                ->where('user_id', $user_id)                  
-                                ->get();
-        
+            // select(\DB::raw('favouritable_id, favouritable_id'))
+            with('favouritable')
+            // ->groupBy('favouritable_id')
+            // ->groupBy('favouritable_type')
+            // ->orderBy('created_at', 'desc')
+            // ->latest()      
+            ->where('user_id', $user_id)
+            ->get();
+
         if (is_null($favourites)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        return $this->sendResponse($favourites, 'Favourites successfully Retrieved...!');  
+        return $this->sendResponse($favourites, 'Favourites successfully Retrieved...!');
     }
 
     /**
@@ -142,6 +155,6 @@ class FavouriteController extends BaseController
 
         $favourite->delete($id);
 
-        return $this->sendResponse($favourite, 'Favourite deleted successfully...!');   
+        return $this->sendResponse($favourite, 'Favourite deleted successfully...!');
     }
 }
