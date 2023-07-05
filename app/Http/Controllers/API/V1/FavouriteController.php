@@ -74,7 +74,9 @@ class FavouriteController extends BaseController
                 ->where('favouritable_id', $request->favouritable_id)
                 ->firstOrFail();
 
-            if ($favourite->favouritable instanceof \App\Models\City) {
+            $favouritableType = "App\\Models\\".$request->favouritable_type;
+
+            if (class_exists($favouritableType) && $favourite->favouritable instanceof $favouritableType) {
                 $favourite->delete();
                 return $this->sendResponse(null, 'Favourite deleted successfully...!');
             }
