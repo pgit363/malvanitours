@@ -40,11 +40,10 @@ class LandingPageController extends BaseController
             ->limit(8)
             ->get();
         #Top famouse cities
-        $cities = City::withAvg("rateable", 'rate')
+        $cities = City::select('id', 'name', 'tag_line', 'image_url')
+            ->withAvg("rateable", 'rate')
             // ->having('rateable_avg_rate', '>', 3)
             ->withCount('places', 'photos')
-            ->latest()
-            ->limit(5)
             ->get();
         # Top Projects
         $projects = Projects::withAvg("rateable", 'rate')

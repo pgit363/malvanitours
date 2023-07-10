@@ -17,10 +17,14 @@ class CreatePlacesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('city_id')->unsigned()->nullable();
+            $table->integer('parent_id')->unsigned()->nullable();
             $table->string('description');
             $table->json('rules')->nullable();
             $table->string('image_url')->nullable();
             $table->string('bg_image_url')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->json('meta_data')->nullable();
             $table->json('price')->nullable();
             $table->integer('rating')->nullable();
             $table->integer('visitors_count')->nullable();
@@ -28,6 +32,7 @@ class CreatePlacesTable extends Migration
             $table->json('contact_details')->nullable();
             $table->timestamps();
 
+            $table->foreign('parent_id')->references('id')->on('places')->onUpdate('cascade');
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
         });
     }

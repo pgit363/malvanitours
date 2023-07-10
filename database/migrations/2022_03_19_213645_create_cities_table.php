@@ -20,6 +20,8 @@ class CreateCitiesTable extends Migration
             $table->string('famous_for');
             $table->string('image_url')->nullable();
             $table->string('bg_image_url')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->timestamps();
         });
     }

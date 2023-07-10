@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\BusType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class BusTypeSeeder extends Seeder
 {
@@ -21,62 +23,91 @@ class BusTypeSeeder extends Seeder
         $array = array(
             [
                 'type' => 'AC-Shivnery',
+                'path' => '/AC-Shivnery.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
             ],
             [
-                'type' => 'Semi Luxury',
+                'type' => 'Hirkani Semi Luxury',
+                'path' => '/Hirkani Semi Luxury.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
-
             ],
             [
                 'type' => 'Night Express',
+                'path' => null,
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
-
             ],
             [
                 'type' => 'Ordinary Express',
+                'path' => '/Day Ordinary.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
             ],
             [
                 'type' => 'Day Ordinary',
+                'path' => '/Day Ordinary.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
-
             ],
             [
                 'type' => 'AC-Sheetal',
+                'path' => null,
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
-
             ],
             [
                 'type' => 'AC-Ashwamedh',
+                'path' => '/AC-Ashwamedh.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
             ],
             [
                 'type' => 'Volvo Ac',
+                'path' => null,
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
-
+            ],
+            [
+                'type' => 'Hirkani',
+                'path' => '/Hirkani.svg',
+                'logo' =>  $faker->imageUrl($width = 400, $height = 400),
+                'meta_data' => $string
             ],
             [
                 'type' => 'Shivshahi',
+                'path' => '/Shivshahi.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
                 'meta_data' => $string
-
             ]
         );
 
         foreach ($array as $key => $value) {
             $exist = BusType::where('type', $value['type'])->first();
 
-            if (!$exist)
+            if (!$exist) {
+                if (isValidReturn($value, 'path')) {
+                    $sourceFilePath = public_path('assets/bustypelogo' . $value['path']);
+                    $destinationFilePath = config('constants.upload_path.busType') . '/' . $value['type'] . $value['path'];
+
+                    // Copy the file from the public folder to the storage/app folder
+                    Storage::put($destinationFilePath, file_get_contents($sourceFilePath));
+
+                    // Optionally, you can also delete the original file from the public folder
+                    // unlink($sourceFilePath);
+
+                    // Get the downloadable URL for the file
+
+                    $value['logo'] = Storage::url($destinationFilePath);
+
+                    Log::info("FILE STORED" . $value['logo']);
+                }
+
+                unset($value['path']);
+
                 BusType::create($value);
+            }
         }
     }
 }

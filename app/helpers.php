@@ -78,4 +78,27 @@ function getModels($path){
     }
     return $out;
 }
+
+
+
+function isValidReturn($value, $key = null, $ret = null)
+{
+    if ($key == null) {
+        if (is_array($value) && !isset($value[$key]))
+            return $ret;
+        else if (is_array($value) && isset($value[$key]))
+            return $value[$key];
+        else
+            return (($value === 'null' || $value === null || trim($value) == '') ? $ret : trim($value));
+    }
+    return ((!isset($value[$key])
+        || $value[$key] === null
+        || (!is_array($value[$key]) && strtolower($value[$key]) === 'null')
+        || (!is_array($value[$key]) && trim($value[$key]) == ''))
+        ? $ret
+        : ((!is_array($value[$key]) && is_string($value[$key]))
+            ? trim($value[$key])
+            : $value[$key]));
+}
+
 ?>

@@ -24,6 +24,8 @@ class City extends Model
         'description',
         'image_url',
         'bg_image_url',
+        'latitude',
+        'longitude'
     ];
 
     /**

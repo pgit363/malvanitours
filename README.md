@@ -75,7 +75,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 Storage accees
 
-http://127.0.0.1:8000/storage/files/szaBdrNRQgBkm4PxPquENU9cVMHBKgxUgazTZKZH.png
+http://127.0.0.1:8000/storage/assets/busType/AC-Shivnery/AC-Shivnery.svg
 
 blog: https://medium.com/@arvind.mailto/how-to-create-custom-routes-for-protected-admin-manager-area-in-laravel-8-75e5b5a20b88
 
