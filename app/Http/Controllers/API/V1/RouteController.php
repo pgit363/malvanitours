@@ -77,11 +77,11 @@ class RouteController extends BaseController
             'destinationPlace.placeCategory:id,name,icon',
             'busType:id,type,logo'
         ])->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time');
-        
+
         $routes->when($request->has('source_place_id') && $request->has('destination_place_id'), function ($query) use ($routeIds) {
             $query->whereIn('id', $routeIds);
         });
-        
+
         $routes = $routes->paginate(5);
 
         #need to test on both query for performance
@@ -91,11 +91,20 @@ class RouteController extends BaseController
         //     'destination_place_id' => 'exists:places,id|required_with:source_place_id',
         // ]);
 
-        // $places = Route::with(['routeStops:id,serial_no,route_id,place_id'])
-        //     ->select('id', 'name')
-        //     ->whereHas('routeStops', function ($query) use ($data) {
-        //         $sourcePlaceId = $data['source_place_id'];
-        //         $destinationPlaceId = $data['destination_place_id'];
+
+        // $routes = Route::with([
+        //     'routeStops:id,serial_no,route_id,place_id,arr_time,dept_time,total_time,delayed_time',
+        //     'routeStops.place:id,name,place_category_id',
+        //     'routeStops.place.placeCategory:id,name,icon',
+        //     'sourcePlace:id,name,place_category_id',
+        //     'sourcePlace.placeCategory:id,name,icon',
+        //     'destinationPlace:id,name,place_category_id',
+        //     'destinationPlace.placeCategory:id,name,icon',
+        //     'busType:id,type,logo'
+        // ])->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time')
+        //     ->whereHas('routeStops', function ($query) use ($request) {
+        //         $sourcePlaceId = $request->source_place_id;
+        //         $destinationPlaceId = $request->destination_place_id;
 
         //         $query->where('place_id', $sourcePlaceId)
         //             ->whereExists(function ($subquery) use ($sourcePlaceId, $destinationPlaceId) {
@@ -111,7 +120,7 @@ class RouteController extends BaseController
         //                     });
         //             });
         //     })
-        //     ->get();
+        //     ->paginate(5);
 
         return $this->sendResponse($routes, 'available routes successfully Retrieved...!');
     }
