@@ -37,7 +37,7 @@ class BusTypeSeeder extends Seeder
                 'type' => 'Night Express',
                 'path' => null,
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => '[{"color_code":"I25","Content":"172284201241"}]'
+                'meta_data' => '[{"color_code":"#7d377f","Content":"172284201241"}]'
             ],
             [
                 'type' => 'Ordinary Express',
