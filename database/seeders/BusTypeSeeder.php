@@ -18,68 +18,68 @@ class BusTypeSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        $string = '[{"Format":"I25","Content":"172284201241"}]';
+        $string = '[{"color_code":"I25","Content":"172284201241"}]';
 
         $array = array(
             [
                 'type' => 'AC-Shivnery',
                 'path' => '/AC-Shivnery.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#87b4d5","Content":"172284201241"}]'
             ],
             [
                 'type' => 'Hirkani Semi Luxury',
                 'path' => '/Hirkani Semi Luxury.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#7d377f","Content":"172284201241"}]'
             ],
             [
                 'type' => 'Night Express',
                 'path' => null,
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"I25","Content":"172284201241"}]'
             ],
             [
                 'type' => 'Ordinary Express',
                 'path' => '/Day Ordinary.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#c42a2e","Content":"172284201241"}]'
             ],
             [
                 'type' => 'Day Ordinary',
                 'path' => '/Day Ordinary.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#c42a2e","Content":"172284201241"}]'
             ],
             [
                 'type' => 'AC-Sheetal',
                 'path' => null,
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#e7e8e7","Content":"172284201241"}]'
             ],
             [
                 'type' => 'AC-Ashwamedh',
                 'path' => '/AC-Ashwamedh.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#eb552c","Content":"172284201241"}]'
             ],
             [
                 'type' => 'Volvo Ac',
                 'path' => null,
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#e7e8e7","Content":"172284201241"}]'
             ],
             [
                 'type' => 'Hirkani',
                 'path' => '/Hirkani.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#3cac6c","Content":"172284201241"}]'
             ],
             [
                 'type' => 'Shivshahi',
                 'path' => '/Shivshahi.svg',
                 'logo' =>  $faker->imageUrl($width = 400, $height = 400),
-                'meta_data' => $string
+                'meta_data' => '[{"color_code":"#e7e8e7","Content":"172284201241"}]'
             ]
         );
 

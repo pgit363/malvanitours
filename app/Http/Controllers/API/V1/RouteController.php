@@ -75,7 +75,7 @@ class RouteController extends BaseController
             'sourcePlace.placeCategory:id,name,icon',
             'destinationPlace:id,name,place_category_id',
             'destinationPlace.placeCategory:id,name,icon',
-            'busType:id,type,logo'
+            'busType:id,type,logo,meta_logo'
         ])->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time');
 
         $routes->when($request->has('source_place_id') && $request->has('destination_place_id'), function ($query) use ($routeIds) {
