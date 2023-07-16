@@ -32,8 +32,11 @@ class LandingPageController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        logger($request->ip());
+        logger($request->header());
+        logger($request->header('user-agent'));
         #Services categories
         $categories = Category::withCount('projects')
             ->latest()
@@ -44,6 +47,8 @@ class LandingPageController extends BaseController
             ->withAvg("rateable", 'rate')
             // ->having('rateable_avg_rate', '>', 3)
             ->withCount('places', 'photos')
+            ->latest()
+            ->limit(4)
             ->get();
         # Top Projects
         $projects = Projects::withAvg("rateable", 'rate')
