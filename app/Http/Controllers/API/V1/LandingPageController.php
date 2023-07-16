@@ -82,7 +82,7 @@ class LandingPageController extends BaseController
             'sourcePlace.placeCategory:id,name,icon',
             'destinationPlace:id,name,place_category_id',
             'destinationPlace.placeCategory:id,name,icon',
-            'busType:id,type,logo'
+            'busType:id,type,logo,meta_data'
         ])->select('id', 'source_place_id', 'destination_place_id', 'bus_type_id', 'name', 'start_time', 'end_time', 'total_time', 'delayed_time')
             ->latest()
             ->limit(5)
