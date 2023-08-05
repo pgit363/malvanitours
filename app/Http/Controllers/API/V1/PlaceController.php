@@ -79,7 +79,7 @@ class PlaceController extends BaseController
             });
         }
         $places = $places->select('id', 'name', 'city_id', 'parent_id', 'place_category_id', 'image_url', 'bg_image_url', 'visitors_count')
-            ->get();
+            ->paginate();
 
         return $this->sendResponse($places, 'Stops successfully Retrieved...!');
     }
