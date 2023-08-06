@@ -142,7 +142,7 @@ class AuthController extends BaseController
 
                 Storage::put($directory . '/' . $imageName, base64_decode($image));
 
-                $input['profile_picture'] = Storage::url($directory . '/' . $imageName);
+                $input['profile_picture'] = Storage::url($directory . $imageName);
 
                 Log::info("FILE STORED" . $input['profile_picture']);
             }
@@ -164,7 +164,7 @@ class AuthController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function updateProfile(Request $request, $id)
+    public function updateProfile(Request $request)
     {
         try {
             $user = auth()->user();
@@ -199,7 +199,7 @@ class AuthController extends BaseController
 
                 Storage::put($directory . '/' . $imageName, base64_decode($image));
 
-                $input['profile_picture'] = Storage::url($directory . '/' . $imageName);
+                $input['profile_picture'] = Storage::url($directory . $imageName);
 
                 Log::info("FILE STORED" . $input['profile_picture']);
             }
