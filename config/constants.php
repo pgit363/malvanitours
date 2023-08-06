@@ -16,7 +16,7 @@ return [
         'placecategory'     => 'public/assets/placecategory/',
         'productCategory'   => 'public/assets/productcategory/',
         'food'              => 'public/assets/food/',
-        'profile_image'     => 'public/assets/profile_image/',
+        'profile_picture'     => 'public/assets/profile_picture/',
         'tourpackage'       => 'public/assets/tourpackage/',
         'accomCategory'     => 'public/assets/accomCategory/',
         'busType'           => 'public/assets/busType'
