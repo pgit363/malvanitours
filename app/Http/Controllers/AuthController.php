@@ -13,6 +13,7 @@ use App\Models\Roles;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class AuthController extends BaseController
 {
@@ -104,7 +105,8 @@ class AuthController extends BaseController
                 'email' => 'required_if:mobile,null|nullable|string|email|max:100|unique:users',
                 'mobile' => 'required_if:email,null|nullable|string|unique:users,mobile|digits:10',
                 'password' => 'nullable|string|required_with:email|confirmed|min:6',
-                'profile_picture' => 'nullable|mimes:jpeg,jpg,png,webp|max:2048',
+                // 'profile_picture' => 'nullable|mimes:jpeg,jpg,png,webp|max:2048',
+                'profile_picture' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -122,14 +124,25 @@ class AuthController extends BaseController
             Log::info("upload file starting");
 
             //upload profile Image      
-            if ($image = $request->file('profile_picture')) {
-                Log::info("inside upload profile_picture");
+            if ($request->has('profile_picture')) {
 
-                $profile_picture = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $directory = config('constants.upload_path.profile_picture') . $request->name;
 
-                $path = $request->file('profile_picture')->store(config('constants.upload_path.profile_picture') . $request->category_id . '/' . $request->name);
+                $image_64 = $request->input('profile_picture');
 
-                $input['profile_picture'] = Storage::url($path);
+                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
+
+                $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
+
+                $image = str_replace($replace, '', $image_64);
+
+                $image = str_replace(' ', '+', $image);
+
+                $imageName = Str::random(10) . '.' . $extension;
+
+                Storage::put($directory . '/' . $imageName, base64_decode($image));
+
+                $input['profile_picture'] = Storage::url($directory . '/' . $imageName);
 
                 Log::info("FILE STORED" . $input['profile_picture']);
             }
@@ -139,6 +152,61 @@ class AuthController extends BaseController
             $user = User::create($input);
 
             return $this->sendResponse($user, 'User successfully registered');
+        } catch (\Throwable $th) {
+            throw $th;
+            Log::error($th->getMessage());
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateProfile(Request $request, $id)
+    {
+        try {
+            $user = auth()->user();
+
+            // Validate the incoming request data
+            $validator = Validator::make($request->all(), [
+                'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+                'profile_picture' => 'sometimes|required|string'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError($validator->errors(), '', 200);
+            }
+
+            $input = $validator->validated();
+
+            if ($request->has('profile_picture')) {
+
+                $directory = config('constants.upload_path.profile_picture') . $request->name;
+
+                $image_64 = $request->input('profile_picture');
+
+                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
+
+                $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
+
+                $image = str_replace($replace, '', $image_64);
+
+                $image = str_replace(' ', '+', $image);
+
+                $imageName = Str::random(10) . '.' . $extension;
+
+                Storage::put($directory . '/' . $imageName, base64_decode($image));
+
+                $input['profile_picture'] = Storage::url($directory . '/' . $imageName);
+
+                Log::info("FILE STORED" . $input['profile_picture']);
+            }
+
+            $user->update($input);
+
+            return $this->sendResponse($user, 'User successfully updated');
         } catch (\Throwable $th) {
             throw $th;
             Log::error($th->getMessage());
