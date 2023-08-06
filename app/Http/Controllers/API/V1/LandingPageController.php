@@ -12,6 +12,7 @@ use App\Models\Products;
 use App\Models\Place;
 use App\Models\City;
 use App\Models\Blog;
+use App\Models\Favourite;
 use App\Models\PlaceCategory;
 use App\Models\Route;
 
@@ -37,19 +38,31 @@ class LandingPageController extends BaseController
         logger($request->ip());
         logger($request->header());
         logger($request->header('user-agent'));
+
+        $user = auth()->user();
+
         #Services categories
         $categories = Category::withCount('projects')
             ->latest()
             ->limit(8)
             ->get();
+
         #Top famouse cities
         $cities = City::select('id', 'name', 'tag_line', 'image_url')
             ->withAvg("rateable", 'rate')
             // ->having('rateable_avg_rate', '>', 3)
             ->withCount('places', 'photos')
+            ->selectSub(function ($query) use ($user) {
+                $query->selectRaw('COUNT(*)')
+                    ->from('favourites')
+                    ->whereColumn('cities.id', 'favourites.favouritable_id')
+                    ->where('favourites.favouritable_type', City::class)
+                    ->where('favourites.user_id', $user->id);
+            }, 'is_favorite')
             ->latest()
             ->limit(4)
             ->get();
+
         # Top Projects
         $projects = Projects::withAvg("rateable", 'rate')
             // ->having('rateable_avg_rate', '>', 3) //this condition is working
@@ -105,15 +118,23 @@ class LandingPageController extends BaseController
         // return $place_catgory;
         #Top Places
         //add location based filter near by famous locations
-        $places = Place::withAvg("rateable", 'rate')
+        $places = Place::select('id', 'name', 'city_id', 'place_category_id', 'parent_id', 'rating', 'visitors_count')
+            ->withAvg("rateable", 'rate')
             // ->having('rateable_avg_rate', '>', 3)
-            ->orWhere('visitors_count', '>=', 5)
+            // ->orWhere('visitors_count', '>=', 5)
             ->withCount('photos')
             ->with(['placeCategory' => function ($query) {
                 $query->select('id', 'name', 'icon');
             }, 'city' => function ($query) {
                 $query->select('id', 'name', 'image_url');
             }])
+            ->selectSub(function ($query) use ($user) {
+                $query->selectRaw('COUNT(*)')
+                    ->from('favourites')
+                    ->whereColumn('places.id', 'favourites.favouritable_id')
+                    ->where('favourites.favouritable_type', Place::class)
+                    ->where('favourites.user_id', $user->id);
+            }, 'is_favorite')
             ->latest()
             ->limit(5)
             ->get();

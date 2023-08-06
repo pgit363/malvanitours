@@ -106,4 +106,9 @@ class City extends Model
     {
         return $this->morphMany(Rating::class, 'rateable');
     }
+
+    public function favorites()
+    {
+        return $this->morphMany(Favourite::class, 'favouritable');
+    }
 }
