@@ -124,7 +124,7 @@ class AuthController extends BaseController
             Log::info("upload file starting");
 
             //upload profile Image      
-            if ($request->has('profile_picture')) {
+            if (isValidReturn($input, 'profile_picture')) {
 
                 $directory = config('constants.upload_path.profile_picture') . $request->name;
 
@@ -181,7 +181,7 @@ class AuthController extends BaseController
 
             $input = $validator->validated();
 
-            if ($request->has('profile_picture')) {
+            if (isValidReturn($input, 'profile_picture')) {
 
                 $directory = config('constants.upload_path.profile_picture') . $request->name;
 
