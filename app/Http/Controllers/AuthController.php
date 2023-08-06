@@ -47,8 +47,8 @@ class AuthController extends BaseController
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -56,10 +56,11 @@ class AuthController extends BaseController
         }
 
         if (!$token = auth()->attempt($validator->validated(), ['exp' => JWTAuth::factory()->setTTL(60 * 60 * 24 * 100)])) {
-            return $this->sendError('Unauthorized', '', 401);
+            return $this->sendError('invalid credentials', '', 200);
         }
 
         $user = Auth::user();
+
         $roles = Roles::whereIn('name', ['superadmin', 'admin'])->get();
         if (
             Str::startsWith($request->route()->getPrefix(), 'admin') &&
@@ -149,7 +150,7 @@ class AuthController extends BaseController
 
             $input['password'] = bcrypt($password);
 
-            $user->update(array_filter($input));
+            $user = User::create(array_filter($input));
 
             return $this->sendResponse($user, 'User successfully registered');
         } catch (\Throwable $th) {
