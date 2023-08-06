@@ -55,8 +55,8 @@ class ContactController extends BaseController
             'email' => 'sometimes|string|email|between:2,200',
             'phone' => 'sometimes|numeric',           
             'message' => 'required',
-            'contactable_type' => 'nullable|required_with:contactable_id|string',
-            'contactable_id' => 'nullable|required_with:contactable_type|numeric',
+            'contactable_type' => 'sometimes|required_with:contactable_id|string',
+            'contactable_id' => 'sometimes|required_with:contactable_type|numeric',
         ]);
 
         if($validator->fails()){
