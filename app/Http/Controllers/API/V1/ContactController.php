@@ -10,12 +10,13 @@ use App\Http\Controllers\BaseController as BaseController;
 
 class ContactController extends BaseController
 {
-     /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
 
@@ -53,21 +54,14 @@ class ContactController extends BaseController
             'user_id' => 'required|numeric|exists:users,id',
             'name' => 'required|string|between:2,100',
             'email' => 'sometimes|string|email|between:2,200',
-            'phone' => 'sometimes|numeric',           
+            'phone' => 'sometimes|numeric',
             'message' => 'required',
             'contactable_type' => 'sometimes|required_with:contactable_id|string',
             'contactable_id' => 'sometimes|required_with:contactable_type|numeric',
         ]);
 
-        if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 200);       
-        }
-
-        // $data = json_encode(DB::table($request->contactable_type)->find($request->contactable_id));//getData($request->commentable_id, $request->commentable_type);
-        $data = getData($request->contactable_id, $request->contactable_type);
-
-        if (!$data) {
-            return $this->sendError($request->contactable_type.' Not Exist..!', '', 400);       
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), '', 200);
         }
 
         $contact = new Contact;
@@ -75,19 +69,29 @@ class ContactController extends BaseController
         $contact->user_id = $request->get('user_id');
 
         $contact->name = $request->get('name');
-        
+
         $contact->email = $request->get('email');
-        
+
         $contact->phone = $request->get('phone');
-        
+
         $contact->message = $request->get('message');
 
-        $contact->contactable()->associate($data);
+        if ($request->has('contactable_id') && $request->has('contactable_type')) {
+            // $data = json_encode(DB::table($request->contactable_type)->find($request->contactable_id));//getData($request->commentable_id, $request->commentable_type);
+
+            $data = getData($request->contactable_id, $request->contactable_type);
+
+            if (!$data) {
+                return $this->sendError($request->contactable_type . ' Not Exist..!', '', 400);
+            }
+
+            $contact->contactable()->associate($data);
+        }
 
         // $contact = $contact->save();       
         $contact = Contact::create(json_decode($contact, true));
 
-        return $this->sendResponse($contact, 'Query submited successfully...!');    
+        return $this->sendResponse($contact, 'Query submited successfully...!');
     }
 
     /**
@@ -99,12 +103,12 @@ class ContactController extends BaseController
     public function show($id)
     {
         $contact = Contact::find($id);
-        
+
         if (is_null($contact)) {
             return $this->sendError('Empty', [], 404);
         }
 
-        return $this->sendResponse($contact, 'Contact successfully Retrieved...!');  
+        return $this->sendResponse($contact, 'Contact successfully Retrieved...!');
     }
 
     /**
@@ -132,12 +136,12 @@ class ContactController extends BaseController
             'user_id' => 'numeric|exists:users,id',
             'name' => 'string|between:2,100',
             'email' => 'sometimes|string|email|between:2,200',
-            'phone' => 'sometimes|numeric',           
+            'phone' => 'sometimes|numeric',
             'message' => 'required',
         ]);
 
-        if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 200);       
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), '', 200);
         }
 
         $contact = Contact::find($id);
@@ -148,7 +152,7 @@ class ContactController extends BaseController
 
         $contact->update($request->all());
 
-        return $this->sendResponse($contact, 'contacts updated successfully...!');   
+        return $this->sendResponse($contact, 'contacts updated successfully...!');
     }
 
     /**
@@ -167,6 +171,6 @@ class ContactController extends BaseController
 
         $contact->delete($id);
 
-        return $this->sendResponse($contact, 'contact deleted successfully...!');   
+        return $this->sendResponse($contact, 'contact deleted successfully...!');
     }
 }
