@@ -142,7 +142,7 @@ class AuthController extends BaseController
 
                 Storage::put($directory . '/' . $imageName, base64_decode($image));
 
-                $input['profile_picture'] = Storage::url($directory . $imageName);
+                $input['profile_picture'] = Storage::url($directory . '/' . $imageName);
 
                 Log::info("FILE STORED" . $input['profile_picture']);
             }
@@ -171,7 +171,7 @@ class AuthController extends BaseController
 
             // Validate the incoming request data
             $validator = Validator::make($request->all(), [
-                'email' => 'sometimes|email|unique:users,email,' . $user->id,
+                'email' => 'sometimes|nullable|email|unique:users,email,' . $user->id,
                 'profile_picture' => 'sometimes|nullable|string'
             ]);
 
@@ -199,7 +199,7 @@ class AuthController extends BaseController
 
                 Storage::put($directory . '/' . $imageName, base64_decode($image));
 
-                $input['profile_picture'] = Storage::url($directory . $imageName);
+                $input['profile_picture'] = Storage::url($directory . '/' . $imageName);
 
                 Log::info("FILE STORED" . $input['profile_picture']);
             }
