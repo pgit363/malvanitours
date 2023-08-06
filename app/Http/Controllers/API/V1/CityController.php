@@ -32,10 +32,10 @@ class CityController extends BaseController
 
         $cities = City::withCount(['projects', 'places', 'photos', 'comments'])
             ->selectSub(function ($query) use ($user) {
-                $query->selectRaw('COUNT(*)')
+                $query->selectRaw('CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END')
                     ->from('favourites')
                     ->whereColumn('cities.id', 'favourites.favouritable_id')
-                    ->where('favourites.favouritable_type', Place::class)
+                    ->where('favourites.favouritable_type', City::class)
                     ->where('favourites.user_id', $user->id);
             }, 'is_favorite')
             ->latest()

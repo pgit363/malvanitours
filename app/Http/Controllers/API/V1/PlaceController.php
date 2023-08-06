@@ -22,7 +22,7 @@ class PlaceController extends BaseController
         $places = Place::withCount(['photos', 'comments'])
             ->with('photos', 'city:id,name,image_url')
             ->selectSub(function ($query) use ($user) {
-                $query->selectRaw('COUNT(*)')
+                $query->selectRaw('CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END')
                     ->from('favourites')
                     ->whereColumn('places.id', 'favourites.favouritable_id')
                     ->where('favourites.favouritable_type', Place::class)

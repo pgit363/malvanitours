@@ -53,7 +53,7 @@ class LandingPageController extends BaseController
             // ->having('rateable_avg_rate', '>', 3)
             ->withCount('places', 'photos')
             ->selectSub(function ($query) use ($user) {
-                $query->selectRaw('COUNT(*)')
+                $query->selectRaw('CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END')
                     ->from('favourites')
                     ->whereColumn('cities.id', 'favourites.favouritable_id')
                     ->where('favourites.favouritable_type', City::class)
@@ -129,7 +129,7 @@ class LandingPageController extends BaseController
                 $query->select('id', 'name', 'image_url');
             }])
             ->selectSub(function ($query) use ($user) {
-                $query->selectRaw('COUNT(*)')
+                $query->selectRaw('CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END')
                     ->from('favourites')
                     ->whereColumn('places.id', 'favourites.favouritable_id')
                     ->where('favourites.favouritable_type', Place::class)
