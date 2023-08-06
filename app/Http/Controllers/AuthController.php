@@ -149,7 +149,7 @@ class AuthController extends BaseController
 
             $input['password'] = bcrypt($password);
 
-            $user = User::create($input);
+            $user->update(array_filter($input));
 
             return $this->sendResponse($user, 'User successfully registered');
         } catch (\Throwable $th) {
@@ -204,7 +204,7 @@ class AuthController extends BaseController
                 Log::info("FILE STORED" . $input['profile_picture']);
             }
 
-            $user->update($input);
+            $user->update(array_filter($input));
 
             return $this->sendResponse($user, 'User successfully updated');
         } catch (\Throwable $th) {
