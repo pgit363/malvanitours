@@ -28,7 +28,16 @@ class CityController extends BaseController
      */
     public function index()
     {
+        $user = auth()->user();
+
         $cities = City::withCount(['projects', 'places', 'photos', 'comments'])
+            ->selectSub(function ($query) use ($user) {
+                $query->selectRaw('COUNT(*)')
+                    ->from('favourites')
+                    ->whereColumn('cities.id', 'favourites.favouritable_id')
+                    ->where('favourites.favouritable_type', Place::class)
+                    ->where('favourites.user_id', $user->id);
+            }, 'is_favorite')
             ->latest()
             ->paginate(10);
 

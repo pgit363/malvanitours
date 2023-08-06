@@ -17,8 +17,17 @@ class PlaceController extends BaseController
      */
     public function index()
     {
+        $user = auth()->user();
+
         $places = Place::withCount(['photos', 'comments'])
             ->with('photos', 'city:id,name,image_url')
+            ->selectSub(function ($query) use ($user) {
+                $query->selectRaw('COUNT(*)')
+                    ->from('favourites')
+                    ->whereColumn('places.id', 'favourites.favouritable_id')
+                    ->where('favourites.favouritable_type', Place::class)
+                    ->where('favourites.user_id', $user->id);
+            }, 'is_favorite')
             ->paginate(10);
         return $this->sendResponse($places, 'Places successfully Retrieved...!');
     }
@@ -59,20 +68,20 @@ class PlaceController extends BaseController
         $validator = Validator::make($request->all(), [
             'search' => 'sometimes|nullable|string|alpha|max:255',
             'type' => 'sometimes|nullable|string|max:255|in:bus',
-        ]);            
-    
-        if($validator->fails()){
-            return $this->sendError($validator->errors(), '', 200);       
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), '', 200);
         }
-    
+
         $places = Place::withCount(['photos', 'comments'])
             ->with(['photos', 'city:id,name,image_url', 'placeCategory:id,name,icon']);
-    
+
         if ($request->has('search')) {
             $search = $request->input('search');
             $places = $places->where('name', 'like', '%' . $search . '%');
         }
-    
+
         if ($request->has('type') && $request->input('type') == 'bus') {
             $places = $places->whereHas('placeCategory', function ($query) {
                 $query->whereIn('name', ['Bus Stop', 'Bus Depo']);
