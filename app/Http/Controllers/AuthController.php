@@ -171,8 +171,8 @@ class AuthController extends BaseController
 
             // Validate the incoming request data
             $validator = Validator::make($request->all(), [
-                'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
-                'profile_picture' => 'sometimes|required|string'
+                'email' => 'sometimes|email|unique:users,email,' . $user->id,
+                'profile_picture' => 'sometimes|string'
             ]);
 
             if ($validator->fails()) {
