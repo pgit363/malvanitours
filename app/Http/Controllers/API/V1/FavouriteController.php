@@ -70,12 +70,12 @@ class FavouriteController extends BaseController
         }
 
         try {
+            $favouritableType = "App\\Models\\" . $request->favouritable_type;
             $favourite = Favourite::where('user_id', $request->user_id)
                 ->where('favouritable_id', $request->favouritable_id)
-                ->where('favouritable_type', $request->favouritable_type)
+                ->where('favouritable_type', $favouritableType)
                 ->firstOrFail();
 
-            $favouritableType = "App\\Models\\" . $request->favouritable_type;
 
             if (class_exists($favouritableType) && $favourite->favouritable instanceof $favouritableType) {
                 $favourite->delete();
