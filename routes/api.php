@@ -56,7 +56,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function ($router) {
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function ($router) {
 
-    Route::post('/addAppVersion', [AppVersionController::class, 'store']);
+    Route::post('/addAppVersion', [AppVersionController::class, 'addAppVersion']);
+    Route::get('/getAppVersion', [AppVersionController::class, 'getAppVersion']);
 
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::post('/updateProfile', [AuthController::class, 'updateProfile']);
